@@ -1,6 +1,7 @@
-﻿# Haptic Quest (fun-haptic)
+﻿# 햅틱 체험관 (fun-haptic)
 
-브라우저에서 DualSense HD 햅틱을 체험하는 3D 모험 게임. 서버 코드 없이 정적 파일만으로 동작합니다.
+DualSense를 산 사람이 HD 햅틱·적응형 트리거·컨트롤러 스피커·모션 센서를 바로 느껴볼 수 있는 브라우저 체험 모음.
+게임 요소 없이 1인칭 체험 6개: 비, 권총, 소총, 활, 발소리, 굴리기. (이전 게임 버전은 git 태그 `game-v1`)
 
 ## 실행 (로컬 미리보기)
 - Windows: `serve.bat` → `http://localhost:8765/play/`
@@ -11,29 +12,22 @@
 ## 구조
 ```
 index.html            랜딩 페이지 (ko/en, 애드센스 자리)
-play/                 게임
-  index.html, style.css
-  js/main.js          부팅, 화면 전환, 메인 루프, 온보딩/일시정지/결과
-  js/ds.js            DualSense WebHID 입출력 (라이트바, 적응형 트리거, 구형 진동)
-  js/haptics.js       HD 햅틱(USB 오디오 ch3/ch4) + 구형 진동/게임패드 대체
-  js/sound.js         효과음(기본 출력) + 샘플 뱅크
-  js/feel.js          촉감 어휘: 발소리, 착지, 코인, UI 틱, 보물 탐지 핑, 파내기 …
-  js/input.js         DualSense > 표준 게임패드 > 키보드·마우스 통합 입력
-  js/assets.js        GLB 모델 레지스트리 (자동 크기 맞춤, custom.json 교체)
-  js/engine.js        렌더러, 하늘, 3인칭 카메라, 파티클
-  js/world.js         걸을 수 있는 표면 패치(평판/경사/원판) + 충돌
-  js/player.js        캐릭터 조작 (걷기/달리기, 점프, 호버 제트)
-  js/hub.js           허브 섬 + 스테이지 포털 7개
-  js/stage1.js        스테이지 ① 발밑의 세계 (손끝으로 보물 찾기)
-  js/stage2..7.js     스테이지 ②~⑦
-  js/combat.js        무기 6종(트리거 효과·촉감), 조준+자이로, 적, 투사체, 회피
-  js/arena.js         전투 스테이지 공용(웨이브, 횃불, 벽)
-  js/i18n.js          한국어/영어
-  assets/models/      CC0 모델 (CREDITS.txt), custom.json
-  assets/sfx/         CC0 효과음 (CREDITS.txt)
-  tools/viewer.html   모델 미리보기 (?m=robot,arena/tree)
+play/                 체험관
+  js/main.js          체험 목록 메뉴, 온보딩, 일시정지, 메인 루프
+  js/fp.js            1인칭 시점(스틱/마우스/자이로), 걷기 + 머리 흔들림, 반동, 뷰모델
+  js/xp/rain.js       비 — R2 빗줄기, L2 우산, △ 천둥, 웅덩이 발소리
+  js/xp/guns.js       권총(딸깍 끊기는 트리거) / 소총(떨리는 트리거, 과열 시 굳음)
+  js/xp/bow.js        활 — R2가 시위(점점 무거워짐), 끝까지 당기면 떨림
+  js/xp/walk.js       발소리 — 8가지 바닥 위를 1인칭으로 걷기
+  js/xp/tilt.js       굴리기 — 컨트롤러 기울여 쇠·나무·고무공 굴리기
+  js/xp/common.js     표적, 총소리, 탄피 등 공용
+  js/ds.js            DualSense WebHID (라이트바, 적응형 트리거, 구형 진동)
+  js/haptics.js       HD 햅틱(USB 오디오 ch3/ch4) + 지속 음성 + 구형 진동/게임패드 대체
+  js/sound.js         효과음(PC 출력) + 손 안의 소리는 컨트롤러 스피커(pad:true)
+  js/feel.js          촉감 어휘: 발소리, 착지, UI 틱 …
+  js/input.js         DualSense > 표준 게임패드 > 키보드·마우스
 vendor/three/         three.js 0.164.1 (MIT)
-lab/                  초기 실험실 (파이썬 브리지 포함, 참고용)
+lab/                  초기 실험실 (참고용)
 ```
 
 ## 모델 바꾸기
@@ -49,8 +43,8 @@ lab/                  초기 실험실 (파이썬 브리지 포함, 참고용)
 - 크롬은 출력 장치 이름을 보려면 미디어 권한이 필요해서, HD 햅틱 켤 때 마이크 권한을 한 번 요청합니다(스트림은 즉시 닫음).
 
 ## 진행 상황
-- [x] 엔진, 온보딩, 허브, 스테이지 ①
-- [x] 스테이지 ②검(막기·패리·반사) ③사격(권총·기관총) ④활(바람) ⑤도끼(던지기·회수) ⑥폭풍(번개 생존) ⑦보스(3페이즈)
+- [x] 체험 6개 (비, 권총, 소총, 활, 발소리, 굴리기)
+- [ ] 체험 추가 후보: 운전(브레이크·엑셀 트리거), 낚시(릴 장력), 심장박동
 - [ ] 사이트: 가이드 글, 개인정보처리방침, ads.txt, 배포
 
 ## 라이선스

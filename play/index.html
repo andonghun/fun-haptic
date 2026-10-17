@@ -16,15 +16,14 @@
 <section id="boot" class="screen on"><div class="dim" data-t="loading"></div></section>
 
 <section id="title" class="screen">
-  <div class="logo" data-t="title"></div>
-  <div class="tagline" data-t="tagline"></div>
-  <div class="menu">
-    <button class="btn primary" id="bStart" data-t="start"></button>
-    <button class="btn" id="bSetup" data-t="ob_title"></button>
-    <button class="btn" id="bLang" data-t="language"></button>
+  <div class="menu-wrap">
+    <div class="logo" data-t="title"></div>
+    <div class="tagline" data-t="tagline"></div>
+    <div class="status-row"><span id="stPad" class="chip"></span><span id="stHD" class="chip"></span><button class="btn small" id="bSetup" data-t="ob_title"></button><button class="btn small" id="bLang" data-t="language"></button></div>
+    <div class="xp-grid" id="xpGrid"></div>
+    <!-- Ad slot: only on menus, never during play -->
+    <div class="ad-slot" id="adTitle"></div>
   </div>
-  <!-- Ad slot: only on menus, never during play -->
-  <div class="ad-slot" id="adTitle"></div>
 </section>
 
 <section id="onboard" class="screen">
@@ -58,8 +57,8 @@
     <button class="btn" id="pOut"></button>
     <button class="btn" id="pInvert"></button>
     <button class="btn" id="pLang" data-t="language"></button>
-    <button class="btn" id="pRestart" data-t="restart"></button>
-    <button class="btn" id="pHub" data-t="to_hub"></button>
+    <button class="btn" id="pGyro"></button>
+    <button class="btn" id="pHub" data-t="to_menu"></button>
   </div>
 </section>
 

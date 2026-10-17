@@ -100,9 +100,28 @@ export const H = {
     const now = performance.now() + t*1000, [l, r] = panGains(pan), m = clamp(amp/1.2, 0, 1), low = freq < 140 ? 1 : 0.35;
     this.rumbles.push({t0:now, t1:now + Math.max(40, dur*1000), s:m*l*(0.55 + 0.45*low)*1.4, w:m*r*(0.75 + 0.25*(1 - low))*1.4, sustain});
   },
+  // Continuous voice (rolling, engines, rain hiss): filtered noise + optional tone, set(level, freq, pan) every frame.
+  voices: new Set(),
+  voice(o = {}){
+    const v = {level:0, freq:o.f || 120, pan:0, dead:false, set(level, freq, pan){ this.level = level; if(freq) this.freq = freq; if(pan != null) this.pan = pan; this.apply && this.apply(); }, stop(){ this.dead = true; this.level = 0; this.apply && this.apply(); this.kill && setTimeout(this.kill, 200); H.voices.delete(this); }};
+    if(this.hd){
+      const c = this.ctx;
+      if(!this.noiseBuf){ this.noiseBuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = this.noiseBuf.getChannelData(0); for(let i = 0; i < d.length; i++) d[i] = Math.random()*2 - 1; }
+      const src = c.createBufferSource(); src.buffer = this.noiseBuf; src.loop = true;
+      const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = o.q || 0.9; bp.frequency.value = v.freq;
+      const g = c.createGain(), gl = c.createGain(), gr = c.createGain(); g.gain.value = 0;
+      src.connect(bp).connect(g); g.connect(gl).connect(this.busL); g.connect(gr).connect(this.busR);
+      let os = null, og = null; if(o.tone){ os = c.createOscillator(); os.frequency.value = v.freq*0.5; og = c.createGain(); og.gain.value = o.tone; os.connect(og).connect(g); os.start(); }
+      src.start();
+      v.apply = () => { const t = c.currentTime, [l, r] = panGains(v.pan); g.gain.setTargetAtTime(clamp(v.level, 0, 1.4), t, 0.03); bp.frequency.setTargetAtTime(Math.max(20, v.freq), t, 0.05); if(os) os.frequency.setTargetAtTime(Math.max(15, v.freq*0.5), t, 0.05); gl.gain.setTargetAtTime(l, t, 0.03); gr.gain.setTargetAtTime(r, t, 0.03); };
+      v.kill = () => { try{ src.stop(); os && os.stop(); }catch(e){} };
+    }
+    this.voices.add(v); return v;
+  },
   // called once per frame
   update(now){
     let s = 0, w = 0;
+    if(!this.hd) for(const v of this.voices){ const [l, r] = panGains(v.pan), m = clamp(v.level, 0, 1), low = v.freq < 140 ? 1 : 0.4; s = Math.max(s, m*l*(0.5 + 0.5*low)); w = Math.max(w, m*r); }
     for(let i = this.rumbles.length - 1; i >= 0; i--){
       const r = this.rumbles[i]; if(now > r.t1){ this.rumbles.splice(i, 1); continue; } if(now < r.t0) continue;
       const k = r.sustain ? 1 : 1 - (now - r.t0)/(r.t1 - r.t0); s = Math.max(s, r.s*k); w = Math.max(w, r.w*k);

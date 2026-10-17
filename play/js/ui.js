@@ -22,8 +22,16 @@ export const UI = {
     const it = this.items(); if(!it.length) return true;
     if(!it.includes(this.focus)) this.setFocus(it[0], true);
     const i = it.indexOf(this.focus);
-    if(IN.pressed('down')) this.setFocus(it[(i + 1) % it.length]);
-    if(IN.pressed('up')) this.setFocus(it[(i - 1 + it.length) % it.length]);
+    const f0 = this.focus, slider = f0 && f0.type === 'range';
+    // grids: left/right move one item, up/down move one row (by on-screen position)
+    const move = dir => { const r = f0.getBoundingClientRect(), cx = r.left + r.width/2, cy = r.top + r.height/2; let best = null, bd = 1e9;
+      for(const el of it){ if(el === f0) continue; const q = el.getBoundingClientRect(), x = q.left + q.width/2, y = q.top + q.height/2, dx = x - cx, dy = y - cy;
+        const ok = dir === 'down' ? dy > 10 : dir === 'up' ? dy < -10 : dir === 'right' ? dx > 10 && Math.abs(dy) < r.height/2 : dx < -10 && Math.abs(dy) < r.height/2; if(!ok) continue;
+        const d = (dir === 'up' || dir === 'down') ? Math.abs(dy)*1 + Math.abs(dx)*0.6 : Math.abs(dx) + Math.abs(dy)*3; if(d < bd){ bd = d; best = el; } }
+      if(best) this.setFocus(best); else if(dir === 'down' || dir === 'right') this.setFocus(it[(i + 1) % it.length]); else this.setFocus(it[(i - 1 + it.length) % it.length]); };
+    if(IN.pressed('down')) move('down'); else if(IN.pressed('up')) move('up');
+    else if(!slider && IN.pressed('right')) move('right'); else if(!slider && IN.pressed('left')) move('left');
+    if(this.focus !== f0 && this.focus) this.focus.scrollIntoView({block:'nearest'});
     const f = this.focus;
     if(f && f.type === 'range' && (IN.pressed('left') || IN.pressed('right'))){ const st = +f.step || 0.1; f.value = +f.value + (IN.pressed('right') ? st : -st); f.dispatchEvent(new Event('input')); Feel.uiMove(); }
     else if(f && f.type !== 'range' && (IN.pressed('jump') || (IN.source === 'kb' && IN.pressed('ok')))) f.click();

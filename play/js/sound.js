@@ -73,10 +73,11 @@ export const SND = {
   notes(list, step, o = {}){ list.forEach((f, i) => this.tone({...o, f, t:(o.t || 0) + i*step, dur:o.dur || 0.22})); },
   // continuous filtered-noise bed (wind, stream, rain); returns a handle with set(gain)
   bed(o){
-    this.init(); const c = this.ctx, src = c.createBufferSource(); src.buffer = this.noiseBuf(); src.loop = true;
+    this.init(); const pad = o.pad && this.padActive, c = pad ? H.ctx : this.ctx, src = c.createBufferSource(); src.buffer = this.noiseBuf(); src.loop = true;
     const rec = {o, level:0, dead:false};
     const f = c.createBiquadFilter(); f.type = o.type || 'lowpass'; f.frequency.value = o.f || 800; f.Q.value = o.q || 0.7;
-    const g = c.createGain(); g.gain.value = 0; src.connect(f).connect(g).connect(this.amb); src.start();
+    const g = c.createGain(); g.gain.value = 0; src.connect(f).connect(g).connect(pad ? this.padBus : this.amb); src.start();
+    rec.freq = (v, tc = 0.05) => f.frequency.setTargetAtTime(v, c.currentTime, tc);
     let lfo = null; if(o.lfo){ lfo = c.createOscillator(); const lg = c.createGain(); lfo.frequency.value = o.lfo; lg.gain.value = (o.f || 800)*0.3; lfo.connect(lg).connect(f.frequency); lfo.start(); }
     Object.assign(rec, {
       set:(v, tc = 0.3) => { rec.level = v; g.gain.setTargetAtTime(v, c.currentTime, tc); },
