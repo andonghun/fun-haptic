@@ -1,0 +1,4 @@
+robot.glb — "RobotExpressive" by Tomás Laulhé (Quaternius), CC0 1.0; modifications by Don McCurdy. via three.js examples.
+platformer/ — Kenney Starter-Kit-3D-Platformer (https://github.com/KenneyNL/Starter-Kit-3D-Platformer), Kenney assets CC0 / repo MIT.
+fps/        — Kenney Starter-Kit-FPS (https://github.com/KenneyNL/Starter-Kit-FPS), Kenney assets CC0 / repo MIT.
+arena/      — Kenney "Mini Arena" 1.0 (via Starter-Kit-Basic-Scene), CC0 1.0. Additional credit: Tony Schär.

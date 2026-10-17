@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haptic Quest — 햅틱 퀘스트</title>
+<meta name="description" content="DualSense HD 햅틱을 브라우저에서 체험하는 작은 3D 모험. A tiny 3D adventure you feel through DualSense HD haptics, right in your browser.">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{"imports":{"three":"../vendor/three/three.module.min.js","three/addons/":"../vendor/three/addons/"}}</script>
+<!-- AdSense: put the site-wide script here once approved, e.g.
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<div id="game"></div>
+
+<section id="boot" class="screen on"><div class="dim" data-t="loading"></div></section>
+
+<section id="title" class="screen">
+  <div class="logo" data-t="title"></div>
+  <div class="tagline" data-t="tagline"></div>
+  <div class="menu">
+    <button class="btn primary" id="bStart" data-t="start"></button>
+    <button class="btn" id="bSetup" data-t="ob_title"></button>
+    <button class="btn" id="bLang" data-t="language"></button>
+  </div>
+  <!-- Ad slot: only on menus, never during play -->
+  <div class="ad-slot" id="adTitle"></div>
+</section>
+
+<section id="onboard" class="screen">
+  <div class="card">
+    <h2 data-t="ob_title"></h2>
+    <div class="steps">
+      <div class="step" id="obS1"><h3><span data-t="ob_step1"></span><span class="badge" id="obB1"></span></h3>
+        <div class="row" style="margin-top:8px"><button class="btn primary small" id="obConnect" data-t="ob_ds"></button><button class="btn small" id="obOther" data-t="ob_other"></button></div>
+        <div class="msg" id="obM1"></div></div>
+      <div class="step" id="obS2"><h3><span data-t="ob_step2"></span><span class="badge" id="obB2"></span></h3>
+        <div class="msg" data-t="ob_hd_why"></div>
+        <div class="row" style="margin-top:8px"><button class="btn primary small" id="obHD" data-t="ob_hd_btn"></button><button class="btn small" id="obSkip" data-t="ob_hd_skip"></button></div>
+        <div class="msg" id="obM2"></div></div>
+      <div class="step" id="obS3"><h3><span data-t="ob_step3"></span><span class="badge" id="obB3"></span></h3>
+        <div class="row" style="margin-top:8px"><button class="btn small" id="obTest" data-t="ob_test"></button><button class="btn small" id="obYes" data-t="ob_yes"></button><button class="btn small" id="obNo" data-t="ob_no"></button></div>
+        <div class="msg" id="obM3"></div></div>
+    </div>
+    <button class="btn primary" id="obGo" data-t="ob_go" style="margin-top:16px"></button>
+  </div>
+</section>
+
+<section id="pause" class="screen">
+  <div class="card" style="max-width:460px">
+    <h2 data-t="pause"></h2>
+    <button class="btn primary" id="pResume" data-t="resume"></button>
+    <div class="set">
+      <span data-t="haptic_level"></span><input type="range" id="pHap" min="0" max="1.6" step="0.1">
+      <span data-t="volume"></span><input type="range" id="pVol" min="0" max="1" step="0.05">
+      <span data-t="sens"></span><input type="range" id="pSens" min="0.4" max="2" step="0.1">
+    </div>
+    <button class="btn" id="pInvert"></button>
+    <button class="btn" id="pLang" data-t="language"></button>
+    <button class="btn" id="pRestart" data-t="restart"></button>
+    <button class="btn" id="pHub" data-t="to_hub"></button>
+  </div>
+</section>
+
+<section id="results" class="screen">
+  <div class="card" style="max-width:460px;text-align:center">
+    <h2 id="rTitle"></h2>
+    <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+    <div id="rGoals" style="text-align:left"></div>
+    <p class="dim" id="rTime"></p>
+    <button class="btn primary" id="rNext" data-t="next"></button>
+    <button class="btn" id="rRetry" data-t="retry"></button>
+    <div class="ad-slot" id="adResults"></div>
+  </div>
+</section>
+
+<div id="hud">
+  <div class="hud-tl"><b id="hTitle"></b><div id="hSub" class="dim"></div><div class="bar" id="hBarW" style="display:none"><i id="hBar"></i></div></div>
+  <div class="hud-tr" id="hRight"></div>
+  <div class="hud-prompt" id="hPrompt"></div>
+  <div class="hud-zone" id="hZone"></div>
+  <div class="hud-ctl" id="hCtl"></div>
+  <div class="sonar" id="hSonar"></div>
+  <div id="labels"></div>
+</div>
+<div id="toast"></div>
+<div id="fade"></div>
+<div class="foot" id="foot"><span data-t="footer_credits"></span> · <a href="../index.html">Home</a></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

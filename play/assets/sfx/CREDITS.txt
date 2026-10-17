@@ -1,0 +1,2 @@
+footstep_*, impactPlate_* — Kenney "Impact Sounds" (CC0).
+coin, jump, land, break, fall, walking — Kenney Starter-Kit-3D-Platformer (CC0 assets / MIT repo).

@@ -1,26 +1,54 @@
-﻿# fun-haptic (DualSense Lab)
+﻿# Haptic Quest (fun-haptic)
 
-USB로 연결한 DualSense를 WebHID로 직접 다루는 실험 프로젝트. 3D 컨트롤러 모델 + 걷기/봇 굴리기 등 햅틱 모드.
+브라우저에서 DualSense HD 햅틱을 체험하는 3D 모험 게임. 서버 코드 없이 정적 파일만으로 동작합니다.
 
-## 실행
-- Windows: `run.bat` (venv 생성 후 `pip install -r requirements.txt` 먼저)
-- macOS/Linux: `sh run.sh`
-- 브라우저는 Chrome (WebHID 필요), 주소는 `http://localhost:8765/index.html` (file:// 불가). DualSense를 USB로 연결 후 페이지에서 연결 버튼.
+## 실행 (로컬 미리보기)
+- Windows: `serve.bat` → `http://localhost:8765/play/`
+- macOS/Linux: `sh serve.sh`
+- 데스크톱 Chrome/Edge. DualSense는 **USB**로 연결해야 HD 햅틱이 나옵니다 (블루투스는 일반 진동).
+- Steam이 켜져 있으면 Steam Input이 컨트롤러를 가로채 HD 햅틱이 막힙니다.
 
-## 구성
-- `index.html` — 앱 전체 (three.js 장면, HID 입출력, 센서 퓨전, 적응형 트리거, 모드들). `#mode=walk` 처럼 해시로 모드 직행 가능.
-- `server.py` — 정적 서버 + 4채널 햅틱 오디오 브리지(sounddevice). `POST /h`로 이벤트를 받아 ch3/4(보이스코일)로 재생.
-- `tools_chtest.py` — 채널별 단독 진동 테스트 (Windows WASAPI device=16 하드코딩, 환경에 맞게 수정 필요).
-- `game.js` — 미니 봇 어드벤처(3D 플랫포머 모드). 효과음은 `sounds/game/`(Kenney, 출처 CREDITS.txt) + 합성음, 모든 이벤트에 소리와 좌우 햅틱이 붙음.
-- `sounds/` — Kenney Impact Sounds (CC0).
+## 구조
+```
+index.html            랜딩 페이지 (ko/en, 애드센스 자리)
+play/                 게임
+  index.html, style.css
+  js/main.js          부팅, 화면 전환, 메인 루프, 온보딩/일시정지/결과
+  js/ds.js            DualSense WebHID 입출력 (라이트바, 적응형 트리거, 구형 진동)
+  js/haptics.js       HD 햅틱(USB 오디오 ch3/ch4) + 구형 진동/게임패드 대체
+  js/sound.js         효과음(기본 출력) + 샘플 뱅크
+  js/feel.js          촉감 어휘: 발소리, 착지, 코인, UI 틱, 보물 탐지 핑, 파내기 …
+  js/input.js         DualSense > 표준 게임패드 > 키보드·마우스 통합 입력
+  js/assets.js        GLB 모델 레지스트리 (자동 크기 맞춤, custom.json 교체)
+  js/engine.js        렌더러, 하늘, 3인칭 카메라, 파티클
+  js/world.js         걸을 수 있는 표면 패치(평판/경사/원판) + 충돌
+  js/player.js        캐릭터 조작 (걷기/달리기, 점프, 호버 제트)
+  js/hub.js           허브 섬 + 스테이지 포털 7개
+  js/stage1.js        스테이지 ① 발밑의 세계 (손끝으로 보물 찾기)
+  js/i18n.js          한국어/영어
+  assets/models/      CC0 모델 (CREDITS.txt), custom.json
+  assets/sfx/         CC0 효과음 (CREDITS.txt)
+  tools/viewer.html   모델 미리보기 (?m=robot,arena/tree)
+vendor/three/         three.js 0.164.1 (MIT)
+lab/                  초기 실험실 (파이썬 브리지 포함, 참고용)
+```
 
-## 현재 상태 / 이어서 할 일
-- 체험 여정(튜토리얼): 왼쪽 패널 "🎮 체험 여정 시작" — 11단계 미션, 점수/별점, OPTIONS 버튼으로 건너뛰기.
-- 동작: WebHID 입력(자이로·스틱·트리거·터치패드), 라이트바, 구형 진동 모터, 적응형 트리거, 샘플 기반 발소리, 공 물리.
-- **해결(원인): 출력 리포트의 구형 진동 호환 비트(valid_flag0 bit0, valid_flag2 bit2)가 켜져 있으면 액추에이터가 오디오가 아니라 구형 모터 값으로 구동돼 USB 오디오 ch3/ch4(좌/우 보이스코일)가 무시된다.** 에뮬레이터(Kyty)도 오디오 햅틱 중엔 구형 진동을 0으로 끈다. 지금은 "HID 구형 진동 모드: 자동"(진동 값이 있을 때만 비트 ON)이 기본. 채널 1은 왼쪽 스피커라 진동 없음(정상).
-- 맥에서: `server.py`의 `find_device()`는 WASAPI 전용이라 CoreAudio용으로 고쳐야 함. DualSense가 4채널 장치로 보이는지 먼저 확인.
-- HID 출력 리포트: 0x02(USB 47바이트) / 0x31+CRC32(BT). `d[7]` 라우팅 바이트는 좌측 스피커 채널을 죽이므로 쓰지 말 것.
-- Sony/게임 제작 햅틱 파형은 사용하지 않음(독점). 샘플 → 햅틱 변환은 `makeHaptic`(JS)/`make_haptic`(Py) 참고.
+## 모델 바꾸기
+`play/assets/models/custom.json`에 덮어쓸 항목을 적습니다. 모델은 +Z 방향을 바라보면 되고, 크기/바닥 위치는 자동으로 맞춥니다.
+```json
+{ "player": { "url": "custom/hero.glb", "height": 1.6, "anims": { "idle": "Idle", "walk": "Walk", "run": "Run", "jump": "Jump" } } }
+```
+키 목록과 기본값은 `play/js/assets.js`의 `MODELS` 참고. 미리보기: `/play/tools/viewer.html?m=custom/hero`.
+
+## HD 햅틱 핵심 사실
+- USB 연결 시 컨트롤러는 4채널 오디오 장치. ch3/ch4 = 왼손/오른손 보이스코일.
+- 출력 리포트의 구형 진동 호환 비트(valid_flag0 bit0, valid_flag2 bit2)가 켜져 있으면 액추에이터가 오디오를 무시합니다. → HD 햅틱 중에는 구형 진동을 보내지 않음 (`DS.allowRumble = false`).
+- 크롬은 출력 장치 이름을 보려면 미디어 권한이 필요해서, HD 햅틱 켤 때 마이크 권한을 한 번 요청합니다(스트림은 즉시 닫음).
+
+## 진행 상황
+- [x] 엔진, 온보딩, 허브, 스테이지 ①
+- [ ] 스테이지 ②검 ③사격 ④활 ⑤도끼 ⑥폭풍 ⑦보스
+- [ ] 사이트: 가이드 글, 개인정보처리방침, ads.txt, 배포
 
 ## 라이선스
-코드: 자유 사용. 사운드: Kenney (CC0). three.js r128: MIT.
+코드: 라이선스 미정(저장소 소유자). 모델/효과음: CC0 (Quaternius, Kenney) — `play/assets/*/CREDITS.txt`. three.js: MIT.

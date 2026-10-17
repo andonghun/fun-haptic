@@ -1,0 +1,31 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Model Viewer</title>
+<style>html,body{margin:0;background:#1d2533;color:#fff;font:12px sans-serif}#info{position:fixed;left:8px;top:8px;white-space:pre;background:#0008;padding:6px;max-height:95vh;overflow:auto}</style>
+<script type="importmap">{"imports":{"three":"../../vendor/three/three.module.min.js","three/addons/":"../../vendor/three/addons/"}}</script>
+</head><body><div id="info"></div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+const names = (new URLSearchParams(location.search).get('m') || 'robot,platformer/character,arena/character-soldier,fps/enemy-flying,arena/tree,arena/column,arena/statue,arena/weapon-sword,fps/blaster,fps/blaster-repeater,platformer/coin,platformer/flag,platformer/grass,platformer/cloud,platformer/brick,arena/banner,arena/trophy,arena/wall,arena/floor,arena/block,platformer/platform,platformer/platform-grass-large-round,fps/wall-high,arena/weapon-spear').split(',');
+const r = new THREE.WebGLRenderer({antialias:true}); r.setSize(innerWidth, innerHeight); r.toneMapping = THREE.ACESFilmicToneMapping; document.body.appendChild(r.domElement);
+const sc = new THREE.Scene(); sc.background = new THREE.Color(0x8fb7e0);
+sc.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.6)); const d = new THREE.DirectionalLight(0xffffff, 2.2); d.position.set(5,10,7); sc.add(d);
+const cam = new THREE.PerspectiveCamera(30, innerWidth/innerHeight, 0.1, 500);
+const L = new GLTFLoader(), info = []; const cols = 6, sp = 4;
+let i = 0;
+for(const n of names){
+  try{
+    const g = await L.loadAsync('../assets/models/' + n + '.glb');
+    const o = g.scene, b = new THREE.Box3().setFromObject(o), s = b.getSize(new THREE.Vector3());
+    const k = 2.6 / Math.max(s.x, s.y, s.z); o.scale.setScalar(k);
+    const b2 = new THREE.Box3().setFromObject(o), c = b2.getCenter(new THREE.Vector3());
+    const x = (i % cols - (cols-1)/2) * sp, z = Math.floor(i / cols) * sp;
+    o.position.set(x - c.x, -b2.min.y, z - c.z); o.rotation.y = 0; sc.add(o);
+    info.push(`${i} ${n}: size ${s.x.toFixed(2)} x ${s.y.toFixed(2)} x ${s.z.toFixed(2)}  anims[${g.animations.map(a => a.name).join(',')}]`);
+  }catch(e){ info.push(n + ' ERR ' + e.message); }
+  i++;
+}
+const rows = Math.ceil(names.length / cols);
+cam.position.set(0, 9 + rows*2.5, rows*sp + 10); cam.lookAt(0, 0, rows*sp/2 - 1);
+r.render(sc, cam); document.getElementById('info').textContent = info.join('\n'); document.title = 'ready';
+</script></body></html>
