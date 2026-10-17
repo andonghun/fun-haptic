@@ -14,6 +14,7 @@ export class Player {
     this.w = world; this.m = spawn('player'); world.add(this.m.root);
     this.p = new THREE.Vector3(); this.v = new THREE.Vector3(); this.face = 0; this.ground = true; this.key = 'grass';
     this.coyote = 0; this.buf = 0; this.hover = 0; this.hoverT = 0; this.stepAcc = 0; this.foot = 0; this.air = 0; this.safe = new THREE.Vector3(); this.locked = false; this.anim = '';
+    this.speedMul = 1; this.faceLock = null; this.dashT = 0; this.dashV = new THREE.Vector2(); this.noJump = false;
     this.jet = new THREE.PointLight(0x66ccff, 0, 4); this.m.root.add(this.jet); this.jet.position.y = 0.2;
   }
   place(x, y, z, face = 0){ this.p.set(x, y, z); this.v.set(0, 0, 0); this.face = face; this.safe.copy(this.p); this.m.root.position.copy(this.p); this.m.root.rotation.y = face; Cam.snap(this.p.clone().setY(y + 1.2)); }
@@ -24,12 +25,14 @@ export class Player {
     let ix = 0, iz = 0, mag = 0;
     if(!this.locked){ const f = Cam.fwd(), r = Cam.right(); ix = f[0]*(-IN.my) + r[0]*IN.mx; iz = f[1]*(-IN.my) + r[1]*IN.mx; mag = Math.min(1, Math.hypot(ix, iz)); if(mag > 0){ ix /= mag; iz /= mag; } }
     const water = this.key === 'water';
-    const want = mag < 0.05 ? 0 : (mag > 0.85 ? RUN : WALK*clamp(mag/0.85, 0.35, 1))*(water ? 0.65 : 1), acc = this.ground ? 14 : 5;
-    this.v.x = damp(this.v.x, ix*want, acc, dt); this.v.z = damp(this.v.z, iz*want, acc, dt);
+    const want = (mag < 0.05 ? 0 : (mag > 0.85 ? RUN : WALK*clamp(mag/0.85, 0.35, 1))*(water ? 0.65 : 1))*this.speedMul, acc = this.ground ? 14 : 5;
+    this.input = {x:ix*mag, z:iz*mag};
+    if(this.dashT > 0){ this.dashT -= dt; this.v.x = this.dashV.x; this.v.z = this.dashV.y; }
+    else { this.v.x = damp(this.v.x, ix*want, acc, dt); this.v.z = damp(this.v.z, iz*want, acc, dt); }
     const spd = Math.hypot(this.v.x, this.v.z);
-    if(spd > 0.3) this.face = Math.atan2(this.v.x, this.v.z);
+    if(this.faceLock != null) this.face = this.faceLock; else if(spd > 0.3 && this.dashT <= 0) this.face = Math.atan2(this.v.x, this.v.z);
     // --- jump / hover
-    this.buf = IN.pressed('jump') && !this.locked ? 0.12 : Math.max(0, this.buf - dt);
+    this.buf = IN.pressed('jump') && !this.locked && !this.noJump ? 0.12 : Math.max(0, this.buf - dt);
     this.coyote = this.ground ? 0.12 : this.coyote - dt;
     if(this.buf > 0 && this.coyote > 0){ this.v.y = JUMP; this.ground = false; this.coyote = 0; this.buf = 0; this.hoverT = HOVER_T; this.cut = false; Feel.jump(false); this.setAnim('jump', {restart:true, speed:1.3}); }
     if(!this.ground && !IN.b.jump && this.v.y > 3 && !this.cut){ this.v.y *= 0.5; this.cut = true; }
@@ -71,6 +74,7 @@ export class Player {
     const r = this.m.root; r.position.copy(this.p);
     let d = this.face - r.rotation.y; d = Math.atan2(Math.sin(d), Math.cos(d)); r.rotation.y += d*Math.min(1, dt*14);
   }
+  dash(x, z, speed, t){ const n = Math.hypot(x, z) || 1; this.dashV.set(x/n*speed, z/n*speed); this.dashT = t; }
   // Hover jets: fast alternating left/right buzz like little thrusters under each hand.
   jetFx(dt){
     this.hov = (this.hov || 0) + dt;

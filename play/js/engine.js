@@ -40,16 +40,19 @@ function makeSky(){
 
 // Third-person orbit camera with smoothing and shake.
 export const Cam = {
-  yaw: 0, pitch: 0.42, dist: 7.5, target: new THREE.Vector3(), cur: new THREE.Vector3(), shakeA: 0, ground: () => 0, minPitch: 0.08, maxPitch: 1.25,
-  snap(p){ this.target.copy(p); this.cur.copy(p); },
+  yaw: 0, pitch: 0.42, dist: 7.5, side: 0, sideCur: 0, distCur: 7.5, fov: 50, fovCur: 50, target: new THREE.Vector3(), cur: new THREE.Vector3(), shakeA: 0, ground: () => 0, minPitch: 0.08, maxPitch: 1.25,
+  snap(p){ this.target.copy(p); this.cur.copy(p); this.distCur = this.dist; this.sideCur = this.side; },
   update(dt, look){
     if(look){ this.yaw -= look.x*dt*2.6; this.pitch = clamp(this.pitch + look.y*dt*1.6, this.minPitch, this.maxPitch); }
     this.cur.x = damp(this.cur.x, this.target.x, 10, dt); this.cur.y = damp(this.cur.y, this.target.y, 6, dt); this.cur.z = damp(this.cur.z, this.target.z, 10, dt);
     const c = E.camera, cp = Math.cos(this.pitch);
-    c.position.set(this.cur.x + this.dist*cp*Math.sin(this.yaw), this.cur.y + this.dist*Math.sin(this.pitch), this.cur.z + this.dist*cp*Math.cos(this.yaw));
+    this.sideCur = damp(this.sideCur, this.side, 10, dt); this.distCur = damp(this.distCur, this.dist, 8, dt); this.fovCur = damp(this.fovCur, this.fov, 8, dt);
+    if(Math.abs(c.fov - this.fovCur) > 0.01){ c.fov = this.fovCur; c.updateProjectionMatrix(); }
+    const D = this.distCur, rx = Math.cos(this.yaw)*this.sideCur, rz = -Math.sin(this.yaw)*this.sideCur;
+    c.position.set(this.cur.x + D*cp*Math.sin(this.yaw) + rx, this.cur.y + D*Math.sin(this.pitch), this.cur.z + D*cp*Math.cos(this.yaw) + rz);
     const gy = this.ground(c.position.x, c.position.z) + 0.4; if(c.position.y < gy) c.position.y = gy;
     if(this.shakeA > 0.001){ c.position.x += (Math.random() - 0.5)*this.shakeA; c.position.y += (Math.random() - 0.5)*this.shakeA; this.shakeA *= Math.exp(-dt*9); }
-    c.lookAt(this.cur.x, this.cur.y + 0.2, this.cur.z);
+    c.lookAt(this.cur.x + rx, this.cur.y + 0.2, this.cur.z + rz);
   },
   shake(a){ this.shakeA = Math.max(this.shakeA, a); },
   // world-space directions on the ground plane for stick input
@@ -75,6 +78,14 @@ export const FX = {
       if(p.t > p.life){ E.scene.remove(p.m); p.m.material.dispose(); this.list.splice(i, 1); continue; }
       p.v.y -= p.g*dt; p.m.position.addScaledVector(p.v, dt); const k = 1 - p.t/p.life; p.m.material.opacity = k; p.m.scale.setScalar(p.s*(0.4 + 0.6*k)); }
   }
+};
+
+// global time scale for hit-stop and slow motion
+export const Time = {
+  scale: 1, until: 0, target: 1,
+  slow(k, sec){ this.scale = k; this.until = performance.now() + sec*1000; },
+  stop(ms){ this.slow(0.02, ms/1000); },
+  update(now){ if(now > this.until) this.scale = damp(this.scale, 1, 12, 0.016); }
 };
 
 export const Fade = {

@@ -1,5 +1,5 @@
 // Boot, screens, scene switching and the main loop.
-import { E, Cam, FX, Fade } from './engine.js';
+import { E, Cam, FX, Fade, Time } from './engine.js';
 import { preload } from './assets.js';
 import { DS } from './ds.js';
 import { H } from './haptics.js';
@@ -10,9 +10,15 @@ import { UI, Save, translate, $ } from './ui.js';
 import { t, getLang, setLang } from './i18n.js';
 import { makeHub } from './hub.js';
 import { makeStage1 } from './stage1.js';
+import { makeStage2 } from './stage2.js';
+import { makeStage3 } from './stage3.js';
+import { makeStage4 } from './stage4.js';
+import { makeStage5 } from './stage5.js';
+import { makeStage6 } from './stage6.js';
+import { makeStage7 } from './stage7.js';
 
 const G = { scene:null, playing:false, results:null, lastStage:null };
-const STAGE_MAKERS = { st1: makeStage1 };
+const STAGE_MAKERS = { st1: makeStage1, st2: makeStage2, st3: makeStage3, st4: makeStage4, st5: makeStage5, st6: makeStage6, st7: makeStage7 };
 
 async function setScene(make, arg){
   if(G.scene && G.scene.exit) G.scene.exit();
@@ -42,14 +48,22 @@ G.finishStage = r => {
   UI.show('results');
   r.got.forEach((g, i) => { if(g) setTimeout(() => { stars[i].classList.add('on'); Feel.star(i); }, 500 + i*450); });
 };
+G.failStage = r => {
+  G.playing = false; UI.prompt(null); G.results = r;
+  $('rTitle').textContent = t(r.id) + ' — ' + t('fail');
+  $('rTime').textContent = r.note || '';
+  $('rGoals').innerHTML = r.goals.map(g => `<div class="goal"><span>${g}</span><b>☆</b></div>`).join('');
+  document.querySelectorAll('#results .star').forEach(s => s.classList.remove('on'));
+  UI.show('results'); UI.setFocus($('rRetry'), true);
+};
 
 // ---- title / onboarding ------------------------------------------------------
-function applyLang(){ translate(); $('pInvert').textContent = `${t('invert')}: ${IN.invertY ? t('on') : t('off')}`; if(G.scene && G.scene.refresh) G.scene.refresh(); }
+function applyLang(){ translate(); $('pInvert').textContent = `${t('invert')}: ${IN.invertY ? t('on') : t('off')}`; $('pOut').textContent = `${t('snd_out')}: ${SND.padOn ? t('on') : t('off')}`; $('pOut').style.display = H.hd ? '' : 'none'; if(G.scene && G.scene.refresh) G.scene.refresh(); }
 $('bLang').onclick = $('pLang').onclick = () => { setLang(getLang() === 'ko' ? 'en' : 'ko'); applyLang(); };
 $('bStart').onclick = async () => {
   SND.unlock();
   if(!Save.d.onboarded){ openOnboard(); return; }
-  if(DS.connected && !DS.bt && Save.get('hd') && !H.hd){ const r = await H.enableHD(); if(!r.ok){ openOnboard(); return; } }
+  if(DS.connected && !DS.bt && Save.get('hd') && !H.hd){ const r = await H.enableHD(); if(!r.ok){ openOnboard(); return; } SND.attachPad(); }
   startGame();
 };
 $('bSetup').onclick = () => { SND.unlock(); openOnboard(); };
@@ -74,7 +88,7 @@ $('obOther').onclick = () => { step(1, 'done', '—'); $('obM1').textContent = t
 $('obHD').onclick = async () => {
   $('obM2').textContent = '…';
   const r = await H.enableHD();
-  if(r.ok){ step(2, 'done', '✓'); $('obM2').textContent = t('ob_hd_ok', {ch:r.channels}); Save.set('hd', true); step(3, 'active', ''); setTimeout(() => Feel.sweep(), 300); }
+  if(r.ok){ step(2, 'done', '✓'); $('obM2').textContent = t('ob_hd_ok', {ch:r.channels}); Save.set('hd', true); SND.attachPad(); step(3, 'active', ''); setTimeout(() => Feel.sweep(), 300); }
   else { $('obM2').textContent = t('ob_err_' + r.reason, {ch:r.channels}); $('obM2').className = 'msg warn'; Feel.uiError(); }
 };
 $('obSkip').onclick = () => { step(2, 'done', '—'); step(3, 'active', ''); UI.focusFirst(); setTimeout(() => Feel.sweep(), 200); };
@@ -85,7 +99,7 @@ $('obGo').onclick = () => { Save.d.onboarded = true; Save.write(); startGame(); 
 DS.on(e => { if(e.type === 'connect' && UI.screen === 'onboard') onConnected(); });
 
 // ---- pause ----------------------------------------------------------------------
-function openPause(){ G.playing = false; UI.show('pause'); document.exitPointerLock && document.exitPointerLock(); $('pRestart').style.display = G.scene && G.scene.id !== 'hub' ? '' : 'none'; $('pHub').style.display = G.scene && G.scene.id !== 'hub' ? '' : 'none'; }
+function openPause(){ G.playing = false; applyLang(); UI.show('pause'); document.exitPointerLock && document.exitPointerLock(); $('pRestart').style.display = G.scene && G.scene.id !== 'hub' ? '' : 'none'; $('pHub').style.display = G.scene && G.scene.id !== 'hub' ? '' : 'none'; }
 function closePause(){ UI.hide(); G.playing = true; IN.lockMouse(E.renderer.domElement); }
 $('pResume').onclick = closePause;
 $('pHub').onclick = () => G.toHub(G.scene.id);
@@ -95,6 +109,8 @@ $('pVol').value = Save.get('vol', 0.8); SND.vol = +$('pVol').value; $('pVol').on
 $('pSens').value = IN.sens = Save.get('sens', 1); $('pSens').oninput = e => { IN.sens = +e.target.value; Save.set('sens', IN.sens); };
 IN.invertY = Save.get('invert', false);
 $('pInvert').onclick = () => { IN.invertY = !IN.invertY; Save.set('invert', IN.invertY); applyLang(); };
+SND.padOn = Save.get('padSfx', true);
+$('pOut').onclick = () => { SND.padOn = !SND.padOn; Save.set('padSfx', SND.padOn); applyLang(); Feel.coin(); };
 $('rNext').onclick = () => G.toHub(G.results.id);
 $('rRetry').onclick = () => { UI.hide(); G.enterStage(G.results.id); };
 
@@ -107,7 +123,8 @@ function frame(now){
     UI.nav();
     if(UI.screen === 'pause' && (IN.pressed('pause') || IN.pressed('dodge'))) closePause();
   } else if(G.playing && IN.pressed('pause')) openPause();
-  if(G.scene) G.scene.update(dt, now/1000, G.playing && !UI.screen);
+  Time.update(now);
+  if(G.scene) G.scene.update(dt*Time.scale, now/1000, G.playing && !UI.screen);
   FX.update(dt);
   H.update(now); Light.update(now); DS.flush(now);
   E.render();
@@ -118,6 +135,7 @@ async function boot(){
   E.init($('game')); FX.init(); Fade.init($('fade')); applyLang();
   E.renderer.domElement.addEventListener('click', () => { if(G.playing && !UI.screen) IN.lockMouse(E.renderer.domElement); });
   await preload(['player', 'buddy', 'tree', 'column', 'columnBroken', 'statue', 'banner', 'trophy', 'grass', 'grassSmall', 'cloud']);
+  preload(['soldier', 'drone', 'sword', 'blaster', 'repeater', 'wallHigh', 'rack', 'wall', 'block', 'flag', 'coin']);
   await setScene(makeHub);
   DS.reconnect();
   UI.show('title'); UI.hud(false);

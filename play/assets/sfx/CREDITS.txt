@@ -1,2 +1,4 @@
 footstep_*, impactPlate_* — Kenney "Impact Sounds" (CC0).
 coin, jump, land, break, fall, walking — Kenney Starter-Kit-3D-Platformer (CC0 assets / MIT repo).
+blaster, blaster_repeater, enemy_attack, enemy_destroy, enemy_hurt, weapon_change — Kenney Starter-Kit-FPS (CC0 assets / MIT repo).
+impact_heavy — Kenney Starter-Kit-Racing (impact.ogg).

@@ -55,6 +55,7 @@
       <span data-t="volume"></span><input type="range" id="pVol" min="0" max="1" step="0.05">
       <span data-t="sens"></span><input type="range" id="pSens" min="0.4" max="2" step="0.1">
     </div>
+    <button class="btn" id="pOut"></button>
     <button class="btn" id="pInvert"></button>
     <button class="btn" id="pLang" data-t="language"></button>
     <button class="btn" id="pRestart" data-t="restart"></button>
@@ -75,7 +76,12 @@
 </section>
 
 <div id="hud">
-  <div class="hud-tl"><b id="hTitle"></b><div id="hSub" class="dim"></div><div class="bar" id="hBarW" style="display:none"><i id="hBar"></i></div></div>
+  <div class="hud-tl"><b id="hTitle"></b><div id="hSub" class="dim"></div><div id="hHearts" class="hearts" style="display:none"></div><div class="bar" id="hBarW" style="display:none"><i id="hBar"></i></div></div>
+  <div class="hud-weap" id="hWeap" style="display:none"></div>
+  <div class="reticle" id="hRet" style="display:none"><i></i></div>
+  <div class="hitmark" id="hHit"></div>
+  <div class="vignette" id="hVig"></div>
+  <div class="hud-boss" id="hBoss" style="display:none"><b id="hBossName"></b><div class="bbar"><i id="hBossBar"></i></div></div>
   <div class="hud-tr" id="hRight"></div>
   <div class="hud-prompt" id="hPrompt"></div>
   <div class="hud-zone" id="hZone"></div>

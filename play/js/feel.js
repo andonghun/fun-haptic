@@ -44,11 +44,11 @@ export const Feel = {
     SND.play('land', {rate:1.1 - k*0.2, gain:0.4 + k*0.3}); H.play(SND.hapOf('land', 0), 1.1 - k*0.2, 1.0 + k, 0);
     H.pulse(46, 0.6 + k*0.8, 0.1 + k*0.2); if(key) this.step(key, true, true, 0.5 + k*0.4);
   },
-  coin(pan = 0, n = 0){ SND.play('coin', {gain:0.55, rate:1 + n*0.06, pan}); H.pulse(840 + n*40, 0.7, 0.022, pan); H.pulse(1180 + n*40, 0.6, 0.025, pan, 0.055); Light.flash([255,215,60], 160); },
+  coin(pan = 0, n = 0){ SND.play('coin', {gain:0.55, rate:1 + n*0.06, pan, pad:true}); H.pulse(840 + n*40, 0.7, 0.022, pan); H.pulse(1180 + n*40, 0.6, 0.025, pan, 0.055); Light.flash([255,215,60], 160); },
   // UI: tiny crisp ticks so menus feel physical
-  uiMove(){ SND.tone({f:1400, dur:0.03, gain:0.05, type:'triangle'}); H.pulse(420, 0.35, 0.018); },
-  uiSelect(){ SND.notes([880, 1320], 0.05, {gain:0.07, type:'triangle', dur:0.1}); H.pulse(300, 0.8, 0.03); H.pulse(140, 0.6, 0.06, 0, 0.03); },
-  uiBack(){ SND.tone({f:600, fEnd:350, dur:0.1, gain:0.06, type:'triangle'}); H.pulse(200, 0.5, 0.04); },
+  uiMove(){ SND.tone({f:1400, dur:0.03, gain:0.05, type:'triangle', pad:true}); H.pulse(420, 0.35, 0.018); },
+  uiSelect(){ SND.notes([880, 1320], 0.05, {gain:0.07, type:'triangle', dur:0.1, pad:true}); H.pulse(300, 0.8, 0.03); H.pulse(140, 0.6, 0.06, 0, 0.03); },
+  uiBack(){ SND.tone({f:600, fEnd:350, dur:0.1, gain:0.06, type:'triangle', pad:true}); H.pulse(200, 0.5, 0.04); },
   uiError(){ SND.tone({f:180, dur:0.18, gain:0.1, type:'square'}); H.pulse(60, 0.9, 0.14); H.pulse(60, 0.9, 0.14, 0, 0.18); },
   // two-hand sweep used to test/teach left vs right
   sweep(){ for(let i = 0; i < 10; i++){ const p = -1 + i*2/9; H.pulse(120 + i*12, 0.8, 0.06, p, i*0.06); } SND.notes([523, 659, 784, 1047], 0.12, {gain:0.08}); },
@@ -56,16 +56,16 @@ export const Feel = {
   enterPortal(){ SND.noise({f:300, fEnd:4000, q:0.8, dur:0.9, att:0.3, gain:0.25}); SND.notes([392, 523, 784, 1047], 0.09, {gain:0.08}); for(let i = 0; i < 12; i++) H.pulse(60 + i*25, 0.4 + i*0.06, 0.06, Math.sin(i*1.3)*0.8, i*0.05); H.pulse(40, 1.5, 0.5, 0, 0.62); Light.flash([180,120,255], 900); },
   // treasure radar "heartbeat": k = closeness 0..1, pan = direction relative to the camera
   ping(k, pan){ const a = 0.18 + 0.75*k*k; H.pulse(70 + 90*k, a, 0.07, pan); H.pulse(50 + 60*k, a*0.7, 0.09, pan*0.8, 0.13);
-    if(k > 0.55) SND.tone({f:420 + 500*k, dur:0.05, gain:0.025 + 0.04*k, pan:pan*0.6, type:'sine'}); },
+    if(k > 0.55) SND.tone({f:420 + 500*k, dur:0.05, gain:0.04 + 0.06*k, pan:pan*0.6, type:'sine', pad:true}); },
   // digging texture per surface; k = how hard you rub (0..1)
   dig(key, k, pan = 0){
     const g = 0.25 + 0.6*k;
-    if(key === 'snow'){ H.noise({f:rnd(160, 240), q:0.8, dur:0.06, gain:g, pan}); SND.noise({type:'highpass', f:3000, dur:0.06, gain:0.08*g}); }
-    else if(key === 'gravel' || key === 'stone'){ for(let i = 0; i < 3; i++) H.pulse(rnd(220, 420), g*0.8, 0.02, pan, i*0.018); SND.noise({type:'highpass', f:rnd(2500, 4500), dur:0.04, gain:0.08*g}); }
-    else if(key === 'metal'){ H.pulse(rnd(300, 380), g*0.7, 0.03, pan); SND.tone({f:rnd(1800, 2400), dur:0.06, gain:0.03*g}); }
-    else if(key === 'wood'){ H.pulse(rnd(140, 200), g*0.8, 0.04, pan); SND.noise({f:900, q:2, dur:0.05, gain:0.08*g}); }
-    else if(key === 'water'){ H.noise({f:rnd(80, 140), dur:0.12, gain:g, pan}); SND.noise({f:rnd(700, 1400), q:1.4, dur:0.1, gain:0.08*g}); }
-    else { H.noise({f:rnd(110, 170), q:0.7, dur:0.07, gain:g, pan}); SND.noise({f:rnd(400, 900), q:0.8, dur:0.07, gain:0.07*g}); }
+    if(key === 'snow'){ H.noise({f:rnd(160, 240), q:0.8, dur:0.06, gain:g, pan}); SND.noise({pad:true, type:'highpass', f:3000, dur:0.06, gain:0.08*g}); }
+    else if(key === 'gravel' || key === 'stone'){ for(let i = 0; i < 3; i++) H.pulse(rnd(220, 420), g*0.8, 0.02, pan, i*0.018); SND.noise({pad:true, type:'highpass', f:rnd(2500, 4500), dur:0.04, gain:0.08*g}); }
+    else if(key === 'metal'){ H.pulse(rnd(300, 380), g*0.7, 0.03, pan); SND.tone({pad:true, f:rnd(1800, 2400), dur:0.06, gain:0.03*g}); }
+    else if(key === 'wood'){ H.pulse(rnd(140, 200), g*0.8, 0.04, pan); SND.noise({pad:true, f:900, q:2, dur:0.05, gain:0.08*g}); }
+    else if(key === 'water'){ H.noise({f:rnd(80, 140), dur:0.12, gain:g, pan}); SND.noise({pad:true, f:rnd(700, 1400), q:1.4, dur:0.1, gain:0.08*g}); }
+    else { H.noise({f:rnd(110, 170), q:0.7, dur:0.07, gain:g, pan}); SND.noise({pad:true, f:rnd(400, 900), q:0.8, dur:0.07, gain:0.07*g}); }
   },
   reveal(pan = 0){
     SND.play('break', {gain:0.7, rate:1.15}); H.play(SND.hapOf('break', 0), 1.1, 1.6, pan);

@@ -34,7 +34,7 @@ export function surfaceTexture(key, repeat = 4){
   if(!cache[key]){ seed = 12345 + key.length*977; const [c, g] = canvas(); DRAW[key](g); const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; cache[key] = t; }
   const t = cache[key].clone(); t.needsUpdate = true; t.repeat.set(repeat, repeat); return t;
 }
-export const SURF_PARAMS = {grass:{roughness:0.95}, wood:{roughness:0.8}, metal:{roughness:0.35, metalness:0.75}, snow:{roughness:0.9}, stone:{roughness:0.85}, gravel:{roughness:1}, sand:{roughness:1}, water:{roughness:0.15, metalness:0.1, transparent:true, opacity:0.85}};
+export const SURF_PARAMS = {grass:{roughness:0.95}, wood:{roughness:0.8}, metal:{roughness:0.45, metalness:0.35}, snow:{roughness:0.9}, stone:{roughness:0.85}, gravel:{roughness:1}, sand:{roughness:1}, water:{roughness:0.15, metalness:0.1, transparent:true, opacity:0.85}};
 export function surfaceMaterial(key, w, d, tile = 4){
   const t = surfaceTexture(key); t.repeat.set(w/tile, d/tile);
   return new THREE.MeshStandardMaterial({map:t, ...SURF_PARAMS[key]});

@@ -14,12 +14,12 @@ import { t } from './i18n.js';
 
 export const STAGES = [
   {id:'st1', icon:'👣', color:0x7ee0a0, need:0, ready:true},
-  {id:'st2', icon:'⚔️', color:0xff8a7a, need:2, ready:false},
-  {id:'st3', icon:'🎯', color:0xffc86b, need:4, ready:false},
-  {id:'st4', icon:'🏹', color:0x9fe06b, need:6, ready:false},
-  {id:'st5', icon:'🪓', color:0x8fd8ff, need:8, ready:false},
-  {id:'st6', icon:'⛈️', color:0xb59bff, need:10, ready:false},
-  {id:'st7', icon:'👑', color:0xffe27a, need:14, ready:false}
+  {id:'st2', icon:'⚔️', color:0xff8a7a, need:0, ready:true},
+  {id:'st3', icon:'🎯', color:0xffc86b, need:0, ready:true},
+  {id:'st4', icon:'🏹', color:0x9fe06b, need:0, ready:true},
+  {id:'st5', icon:'🪓', color:0x8fd8ff, need:0, ready:true},
+  {id:'st6', icon:'⛈️', color:0xb59bff, need:0, ready:true},
+  {id:'st7', icon:'👑', color:0xffe27a, need:0, ready:true}
 ];
 
 function iconSprite(emoji, color){
@@ -81,7 +81,7 @@ export function makeHub(G){
   function refresh(){
     const total = Save.total();
     portals.forEach(p => {
-      p.open = p.ready && total >= p.need; const st = Save.stars(p.id).filter(Boolean).length;
+      p.open = p.ready && (total >= p.need || /unlock/.test(location.search)); const st = Save.stars(p.id).filter(Boolean).length;
       p.label.innerHTML = `${t(p.id)}<small>${p.ready ? (p.open ? '★'.repeat(st) + '☆'.repeat(3 - st) : t('locked', {n:p.need})) : t('soon')}</small>`;
       p.ring.material.emissiveIntensity = p.open ? 1.6 : 0.25; p.beam.material.opacity = p.open ? 0.13 : 0.04; p.light.intensity = p.open ? 4 : 0.6; p.icon.material.opacity = p.open ? 1 : 0.45;
     });

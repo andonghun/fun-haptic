@@ -33,7 +33,7 @@ export const H = {
     // master gain → tanh soft clip (keeps punch without harsh clipping) → ch3 (left coil) / ch4 (right coil)
     const cv = new Float32Array(2048); for(let i = 0; i < 2048; i++){ const x = i/1023.5 - 1; cv[i] = Math.tanh(x*1.6)/Math.tanh(1.6); }
     const mk = ch => { const g = ctx.createGain(), sh = ctx.createWaveShaper(); sh.curve = cv; g.connect(sh); sh.connect(merger, 0, ch); return g; };
-    this.busL = mk(2); this.busR = mk(3); this.ctx = ctx; this.hd = true; this.label = dev.label || 'DualSense';
+    this.busL = mk(2); this.busR = mk(3); this.ctx = ctx; this.merger = merger; this.hd = true; this.label = dev.label || 'DualSense';
     this.setLevel(this.level);
     if(ctx.state === 'suspended') await ctx.resume();
     DS.allowRumble = false;

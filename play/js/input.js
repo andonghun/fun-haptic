@@ -14,7 +14,7 @@ document.addEventListener('pointerlockchange', () => { mouse.locked = !!document
 addEventListener('contextmenu', e => { if(mouse.locked) e.preventDefault(); });
 
 const DEAD = 0.14, dz = v => Math.abs(v) < DEAD ? 0 : (v - Math.sign(v)*DEAD)/(1 - DEAD);
-const NAMES = ['jump', 'attack', 'dodge', 'interact', 'l1', 'r1', 'pause', 'up', 'down', 'left', 'right', 'back', 'touch'];
+const NAMES = ['jump', 'attack', 'dodge', 'interact', 'l1', 'r1', 'pause', 'up', 'down', 'left', 'right', 'back', 'touch', 'wprev', 'wnext'];
 
 export const IN = {
   source: 'kb',           // 'ds' | 'pad' | 'kb' — used to show the right button glyphs
@@ -38,14 +38,14 @@ export const IN = {
       mx = dz(ax[0] || 0); my = dz(ax[1] || 0); lx = dz(ax[2] || 0); ly = dz(ax[3] || 0);
       l2 = pad.buttons[6] ? pad.buttons[6].value : 0; r2 = pad.buttons[7] ? pad.buttons[7].value : 0;
       b.jump = B(0); b.dodge = B(1); b.attack = B(2); b.interact = B(3); b.l1 = B(4); b.r1 = B(5); b.back = B(8); b.pause = B(9);
-      b.up = B(12); b.down = B(13); b.left = B(14); b.right = B(15);
+      b.up = B(12); b.down = B(13); b.left = B(14); b.right = B(15); b.wprev = b.left; b.wnext = b.right;
     }
     if(DS.connected){
       const s = DS.s, B = s.b;
       if(Object.values(B).some(Boolean) || Math.abs(s.lx) > 0.3 || Math.abs(s.ly) > 0.3) this.source = 'ds';
       mx = dz(s.lx); my = dz(s.ly); lx = dz(s.rx); ly = dz(s.ry); l2 = s.l2; r2 = s.r2;
       b.jump = B.cross; b.dodge = B.circle; b.attack = B.square; b.interact = B.tri; b.l1 = B.l1; b.r1 = B.r1; b.pause = B.options; b.back = B.create;
-      b.up = B.up; b.down = B.down; b.left = B.left; b.right = B.right; b.touch = B.tpad;
+      b.up = B.up; b.down = B.down; b.left = B.left; b.right = B.right; b.touch = B.tpad; b.wprev = B.left; b.wnext = B.right;
       // touchpad rubbing speed (pixels/frame normalised) — used for digging
       let rub = 0, down = false;
       s.touch.forEach((t, i) => { if(t.down){ down = true; const p = this._tp[i]; if(p) rub += Math.hypot(t.x - p.x, t.y - p.y); this._tp[i] = {x:t.x, y:t.y}; } else this._tp[i] = null; });
@@ -61,8 +61,8 @@ export const IN = {
       b.jump = b.jump || K('Space'); b.dodge = b.dodge || K('ShiftLeft') || K('ShiftRight'); b.attack = b.attack || K('KeyJ') || (mouse.locked && mouse.l);
       b.interact = b.interact || K('KeyE'); b.l1 = b.l1 || K('KeyQ'); b.r1 = b.r1 || K('KeyR'); b.pause = b.pause || K('Escape') || K('KeyP');
       b.up = b.up || K('ArrowUp') || K('KeyW'); b.down = b.down || K('ArrowDown') || K('KeyS'); b.left = b.left || K('ArrowLeft') || K('KeyA'); b.right = b.right || K('ArrowRight') || K('KeyD');
-      b.back = b.back || K('Backspace'); b.ok = K('Enter') || K('Space');
-      if(mouse.locked && mouse.r) l2 = 1; if(K('KeyF') || (mouse.locked && mouse.l)) r2 = 1;
+      b.back = b.back || K('Backspace'); b.ok = K('Enter') || K('Space'); b.wprev = b.wprev || K('KeyZ'); b.wnext = b.wnext || K('KeyC') || K('Tab');
+      if((mouse.locked && mouse.r) || K('KeyG')) l2 = 1; if(K('KeyF') || (mouse.locked && mouse.l)) r2 = 1;
       if(this.source === 'kb' && K('KeyE')){ this.touchRub = 0.8; this.touchDown = true; }
     }
     this.mouseDX = mouse.dx*this.sens; this.mouseDY = mouse.dy*this.sens*(this.invertY ? -1 : 1); mouse.dx = mouse.dy = 0;
