@@ -49,6 +49,7 @@ small{color:var(--dim)}
   </div>
   <div class="row" style="margin-top:6px"><small>채널 단독 진동(0.6초)</small><button class="chT" data-c="0">1</button><button class="chT" data-c="1">2</button><button class="chT" data-c="2">3</button><button class="chT" data-c="3">4</button></div>
   <label><span class="n">왼쪽 햅틱 = 채널</span><select id="mapL"><option>1</option><option>2</option><option selected>3</option><option>4</option></select></label>
+  <label><span class="n">HID 구형 진동 모드</span><select id="hidMode"><option value="auto" selected>자동 (진동 있을 때만 켬)</option><option value="off">끔 (구형 진동 없음)</option><option value="haptsel">끔 + HAPTICS_SELECT</option><option value="always">항상 켬 (이전 동작)</option></select></label>
   <label><span class="n">오른쪽 햅틱 = 채널</span><select id="mapR"><option>1</option><option>2</option><option>3</option><option selected>4</option></select></label>
   <label><span class="n">햅틱 세기</span><input type="range" id="hapGain" min="0.3" max="4" step="0.1" value="2.2"></label>
   <p><small id="hapStatus" style="color:var(--warn)">꺼짐 — 지금은 구형 모터만 울립니다. 아스트로봇 같은 느낌은 이걸 켜야 납니다. (Windows 소리 설정에서 DualSense 스피커 볼륨도 100%로)</small></p>
@@ -368,14 +369,17 @@ function crc32(b){ let c = 0xFFFFFFFF; for(const x of b) c = crcT[(c^x)&255] ^ (
 let firstOut = true, btSeq = 0, lastSent = '', lastSentAt = 0, sending = false;
 function buildCommon(){
   const d = new Uint8Array(47);
-  d[0] = 0x01|0x02|0x04|0x08 | 0x20;                        // + 스피커 볼륨 적용
+  // 구형 진동 호환 비트(valid0 bit0, valid2 bit2)가 켜지면 액추에이터가 오디오가 아니라 모터 값으로 구동된다 (에뮬레이터 분석).
+  const m = $('hidMode').value, rum = (out.weak|out.strong) > 0;
+  const compat = m === 'always' || (m === 'auto' && rum);
+  d[0] = 0x04|0x08 | 0x20 | (compat ? 0x01 : 0) | (m === 'haptsel' ? 0x02 : 0);
   d[1] = 0x01|0x04|0x10;
-  d[2] = out.weak & 255; d[3] = out.strong & 255;
+  d[2] = compat ? out.weak & 255 : 0; d[3] = compat ? out.strong & 255 : 0;
   d[5] = 0x64;                                             // 스피커 볼륨
   d[8] = out.mic ? 1 : 0;
   d[37] = 0x02;                                            // 스피커 프리앰프 +6dB
   d.set(out.trigR, 10); d.set(out.trigL, 21);
-  d[38] = 0x04 | (firstOut ? 0x02 : 0);
+  d[38] = (compat ? 0x04 : 0) | (firstOut ? 0x02 : 0);
   d[41] = firstOut ? 2 : 0;
   d[43] = out.players & 0x1f;
   d[44] = out.rgb[0]; d[45] = out.rgb[1]; d[46] = out.rgb[2];
@@ -511,6 +515,7 @@ $('hapGain').oninput = e => { if(hap.ready) hap.busL.gain.value = hap.busR.gain.
 $('btnHap').onclick = () => hapInit().catch(e => $('hapStatus').textContent = '실패: ' + e.message);
 function remap(){ if(!hap.ready) return; hap.shs.forEach(x => x.disconnect()); hap.shs[0].connect(hap.merger, 0, +$('mapL').value-1); hap.shs[1].connect(hap.merger, 0, +$('mapR').value-1); }
 $('mapL').onchange = $('mapR').onchange = remap;
+$('hidMode').onchange = () => { lastSent = ''; };
 document.querySelectorAll('.chT').forEach(b => b.onclick = () => { if(hx.on){ hx.send({t:'chan', c:+b.dataset.c}); return; } if(!hap.ready) return; const c = hap.ctx, t = c.currentTime, o = c.createOscillator(), g = c.createGain();
   o.frequency.value = 170; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.9,t+0.02); g.gain.setValueAtTime(0.9,t+0.5); g.gain.linearRampToValueAtTime(0,t+0.6);
   o.connect(g).connect(hap.merger, 0, +b.dataset.c); o.start(t); o.stop(t+0.65); });
