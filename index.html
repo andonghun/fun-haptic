@@ -33,6 +33,14 @@ input[type=color]{width:44px;height:26px;border:none;background:none;padding:0}
 #big{position:absolute;right:16px;top:12px;text-align:right;font-size:12px;color:var(--dim);pointer-events:none}
 #big b{display:block;font-size:26px;color:var(--fg)}
 small{color:var(--dim)}
+#quest{position:fixed;left:380px;right:20px;top:14px;display:none;background:rgba(18,22,31,.92);border:1px solid var(--acc);border-radius:12px;padding:12px 16px;z-index:5;max-width:640px}
+#quest .qh{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+#quest b{font-size:16px}
+#qHint{color:var(--dim);margin:4px 0 8px}
+#qBar{height:10px;background:#0b0e14;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
+#qBar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--ok));transition:width .15s}
+#quest .qf{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px}
+#qBanner{position:fixed;left:360px;right:0;top:38%;text-align:center;font-size:54px;font-weight:800;color:#ffd75e;text-shadow:0 0 24px #ff9d00;pointer-events:none;opacity:0;transition:opacity .25s;z-index:6}
 </style>
 </head>
 <body>
@@ -54,6 +62,7 @@ small{color:var(--dim)}
   <label><span class="n">햅틱 세기</span><input type="range" id="hapGain" min="0.3" max="4" step="0.1" value="2.2"></label>
   <p><small id="hapStatus" style="color:var(--warn)">꺼짐 — 지금은 구형 모터만 울립니다. 아스트로봇 같은 느낌은 이걸 켜야 납니다. (Windows 소리 설정에서 DualSense 스피커 볼륨도 100%로)</small></p>
 
+  <button id="btnQuest" class="primary" style="margin-bottom:6px">🎮 체험 여정 시작 (튜토리얼)</button>
   <h2>체험 모드</h2>
   <div id="modes"></div>
   <p id="modeDesc"></p>
@@ -83,7 +92,11 @@ small{color:var(--dim)}
 </aside>
 
 <main id="view">
-  <canvas id="c"></canvas>
+  <div id="quest"><div class="qh"><b id="qTitle"></b><span id="qStep" style="color:var(--dim)"></span></div>
+<div id="qHint"></div><div id="qBar"><i></i></div>
+<div class="qf"><span id="qScore"></span><span><button id="qSkip">건너뛰기 (OPTIONS)</button> <button id="qStop">끝내기</button></span></div></div>
+<div id="qBanner"></div>
+<canvas id="c"></canvas>
   <div id="big"><b id="bigBat">--</b><span id="bigRate"></span></div>
   <div id="hud"></div>
 </main>
@@ -544,6 +557,7 @@ function applyManual(){ out.trigL = cfgBytes(trigCfg.L); out.trigR = cfgBytes(tr
 
 let prevR2 = 0, shots = 0, shotClock = 0, hbClock = 0, tprev = [null,null], bowPeak = 0, bowT = 0;
 const ball = {x:0, z:0, vx:0, vz:0};
+const EV = {}, evt = n => { EV[n] = (EV[n]||0) + 1; };
 const lp = (s, w, ms) => { if(!hapAny()) pulse(s, w, ms); };     // HD 햅틱 중엔 구형 진동 생략 (호환 비트가 켜지면 HD 햅틱이 눌림)
 const rnd = (a, b) => a + Math.random()*(b-a), at = (ms, f) => setTimeout(f, ms);
 const axe = {st:'hand', t:0, tk:0, spin:0, prevR2:0, from:1}, rainS = {acc:0, prevTri:false, flash:0};
@@ -566,7 +580,7 @@ const modes = {
     enter(){ applyManual(); }, update(){} },
   pistol:{ name:'권총', desc:'R2를 천천히 당기면 "딸깍" 하는 지점에서 저항이 끊기며 반동이 옵니다. 총구 섬광과 함께 강한 진동, HD 햅틱 타격음.',
     enter(){ out.trigL = TRG.off(); out.trigR = TRG.weapon(5, 7, 8); },
-    update(){ if(S.r2 > 0.85 && prevR2 <= 0.85){ shots++; lp(255,200,110); hapPulseP(330,1.2,0.03,0); hapPulse(52,1.5,0.25); hapPulse(130,1.0,0.1); flashI = 6; fx.color=[255,170,60]; } prevR2 = S.r2; } },
+    update(){ if(S.r2 > 0.85 && prevR2 <= 0.85){ shots++; evt('shot'); lp(255,200,110); hapPulseP(330,1.2,0.03,0); hapPulse(52,1.5,0.25); hapPulse(130,1.0,0.1); flashI = 6; fx.color=[255,170,60]; } prevR2 = S.r2; } },
   mg:{ name:'기관총', desc:'R2를 깊이 누르면 트리거가 연발 진동하고 초당 12발의 반동이 이어집니다. L2는 무거운 저항.',
     enter(){ out.trigL = TRG.feedback(4,4); out.trigR = TRG.vibration(3, 6, 28); },
     update(dt){ if(S.r2 > 0.35){ shotClock += dt; if(shotClock > 1/12){ shotClock = 0; shots++; lp(120,255,45); hapPulseP(260,0.7,0.025,shots%2?-0.4:0.4); hapPulse(80,1.1,0.06); flashI = 4; fx.color=[255,150,40]; } } else shotClock = 0.08; } },
@@ -576,7 +590,7 @@ const modes = {
       const t = S.r2; if(!hapAny()){ fx.weakAdd = t*70; fx.strongAdd = t > 0.6 ? (t-0.6)*160 : 0; }
       fx.color = [Math.round(80+t*175), Math.round(200-t*150), 60];
       if(t > bowPeak){ bowPeak = t; bowT = now; }
-      if(bowPeak > 0.6 && t < 0.15){ lp(255,255,160); hapPulseP(300,1.1,0.03,0); hapPulse(80,1.5,0.4); hapPulse(180,0.9,0.15); bowPeak = 0; }
+      if(bowPeak > 0.6 && t < 0.15){ evt('bow'); lp(255,255,160); hapPulseP(300,1.1,0.03,0); hapPulse(80,1.5,0.4); hapPulse(180,0.9,0.15); bowPeak = 0; }
       if(t < 0.05) bowPeak = 0; } },
   heart:{ name:'심장박동', desc:'쿵-쿵 두 번의 박동이 손바닥과 라이트바로 전해집니다. L2를 누르면 심박수가 올라갑니다.',
     enter(){ out.trigL = TRG.ramp(2); out.trigR = TRG.off(); hbClock = 0; },
@@ -594,7 +608,7 @@ const modes = {
       S.touch.forEach((t,i)=>{
         if(!t.down){ tprev[i] = null; return; }
         const gx = Math.floor(t.x/70), gy = Math.floor(t.y/70);
-        const p = tprev[i]; if(p && (p.gx !== gx || p.gy !== gy)){ pulse(0,210,26); hapPulse(210,0.65,0.035); sp++; }
+        const p = tprev[i]; if(p && (p.gx !== gx || p.gy !== gy)){ pulse(0,210,26); hapPulse(210,0.65,0.035); sp++; evt('tex'); }
         tprev[i] = {gx, gy};
         const h = t.x/1920*360; fx.color = hsl(h, 1, 0.5);
       });
@@ -632,7 +646,7 @@ const modes = {
       fx.color = [Math.round(120+t*135), Math.round(90-t*60), 30];
       if(t > bowPeak){ bowPeak = t; bowT = now; }
       if(bowPeak > 0.5 && t < bowPeak - 0.3){                // 시위를 놓음
-        const k = 0.6 + 0.5*bowPeak; bowPeak = 0; shots++; flashI = 5; fx.color = [255,200,120];
+        const k = 0.6 + 0.5*bowPeak; evt(bowPeak > 0.9 ? 'lbowFull' : 'lbow'); bowPeak = 0; shots++; flashI = 5; fx.color = [255,200,120];
         lp(255,255,220);
         hapPulseP(360, 1.4, 0.03, 0);                         // 딱: 시위가 손을 떠나는 순간
         hapPulse(40, 1.6*k, 0.55);                            // 쿵: 활 몸체의 큰 반동
@@ -647,7 +661,7 @@ const modes = {
     update(dt){
       const tri = !!S.btn.tri, A = axe; A.t += dt;
       if(A.st === 'hand' && S.r2 > 0.85 && A.prevR2 <= 0.85){      // 던지기
-        A.st = 'fly'; A.t = 0; A.tk = 0; shots++; lp(255,200,90);
+        A.st = 'fly'; A.t = 0; A.tk = 0; shots++; evt('axeThrow'); lp(255,200,90);
         hapPulseP(280, 1.1, 0.03, 0); hapPulse(70, 1.3, 0.18); at(40, () => hapPulseP(500, 0.5, 0.05, 0.3));
         const keep = out.trigR; out.trigR = TRG.off(); at(250, () => { if(curMode === 'axe') out.trigR = keep; });
       }
@@ -671,7 +685,7 @@ const modes = {
         fx.color = [120+Math.round(135*u), 190+Math.round(65*u), 255];
         if(!tri){ A.st = 'stuck'; A.t = 0; out.trigL = TRG.feedback(2,3); }
         else if(u >= 1){                                       // 손에 잡힘
-          A.st = 'hand'; A.t = 0; flashI = 8; out.trigL = TRG.feedback(2,3); lp(255,255,200);
+          A.st = 'hand'; A.t = 0; flashI = 8; evt('axeCatch'); out.trigL = TRG.feedback(2,3); lp(255,255,200);
           hapPulseP(300, 1.4, 0.04, 0); hapPulse(55, 1.7, 0.3); at(85, () => hapPulse(75, 1.0, 0.16));
         }
       }
@@ -684,7 +698,7 @@ const modes = {
         if(hapAny()){ if(Math.random() < 0.12) hapPulseP(rnd(110,160), rnd(0.5,0.8)*(0.5+I), 0.06, rnd(-1,1)); else hapPulseP(rnd(240,520), rnd(0.1,0.32)*(0.4+I), rnd(0.015,0.035), rnd(-1,1)); }
         else if(Math.random() < 0.3) pulse(0, 70, 25);
       }
-      if(S.btn.tri && !rainS.prevTri){ flashI = 8; rainS.flash = 0.25;
+      if(S.btn.tri && !rainS.prevTri){ flashI = 8; evt('thunder'); rainS.flash = 0.25;
         at(rnd(350,1400), () => { hapPulseP(420, 1.2, 0.04, 0); hapPulse(32, 1.7, 1.0); for(let i = 0; i < 9; i++) at(100 + i*90, () => hapPulseP(rnd(26,48), 1.3*Math.pow(0.8,i), 0.2, rnd(-0.8,0.8))); lp(255,255,600); }); }
       rainS.prevTri = !!S.btn.tri; rainS.flash = Math.max(0, rainS.flash - dt);
       fx.color = rainS.flash > 0 ? [255,255,255] : [20, Math.round(70 + 90*I), 255]; } },
@@ -899,7 +913,7 @@ function ensureRoll(){
   });
 }
 function rollSilence(){ hx.send({t:'roll', lv:bots.map(()=>0), pn:bots.map(()=>0), f:bots.map(()=>100), l:bots.map(()=>4)}); if(rollV) rollV.forEach(v => { const t = hap.ctx.currentTime; v.vol.gain.setTargetAtTime(0,t,0.02); v.vol2.gain.setTargetAtTime(0,t,0.02); }); }
-function botImpact(x, v, kind){
+function botImpact(x, v, kind){ evt('botHit');
   const pan = clamp(x/6, -1, 1), a = clamp(v/9, 0.2, 1.3), A = audioOut(), SM = getSamples(A.ctx), rate = kind==='ball' ? 1.35 : 0.95 + Math.random()*0.1;
   if(SM && SM.metal){ const ix = Math.random()*5|0, pk = SM.metal[ix]; playBuf(A.ctx, pk.snd, A.dest, rate, 0.55*a);
     hapSample('metal', ix, pk, rate, 1.4*a, pan); }
@@ -1018,11 +1032,80 @@ L2 ${(S.l2*100).toFixed(0).padStart(3)}%   R2 ${(S.r2*100).toFixed(0).padStart(3
   $('bigBat').textContent = S.battery >= 0 ? S.battery + '%' + (S.charging===1 ? ' ⚡' : '') : '--';
   $('bigRate').textContent = hid.dev ? rate.toFixed(0) + ' reports/s · ' + (hid.bt ? 'BT' : 'USB') : '';
 }
+
+/* =========================================================
+   체험 여정 (튜토리얼 + 게이미피케이션)
+   ========================================================= */
+const QUESTS = [
+  {mode:'free',    title:'컨트롤러 깨우기',   hint:'아무 버튼이나 누르거나 스틱을 움직여 보세요. 3D 모델이 그대로 따라 움직입니다.', goal:1, prog:(q)=> q.any ? 1 : 0},
+  {mode:'pistol',  title:'권총 사격',         hint:'R2를 천천히 당기면 딸깍 하는 지점에서 저항이 끊기며 반동이 옵니다. 3발 쏴 보세요.', goal:3, prog:(q)=> EV.shot - q.b.shot},
+  {mode:'mg',      title:'기관총 연사',       hint:'R2를 깊이 누른 채 2초 유지. 트리거가 떨리고 연발 반동이 이어집니다.', goal:2, prog:(q)=> q.acc, tick:(q,dt)=>{ if(S.r2 > 0.35) q.acc += dt; }},
+  {mode:'bow',     title:'활 쏘기',           hint:'R2를 당기면 저항이 점점 커집니다. 끝까지 당겼다 놓기를 2번.', goal:2, prog:(q)=> EV.bow - q.b.bow},
+  {mode:'longbow', title:'대형 활',           hint:'이번엔 묵직한 장궁. 팔이 떨릴 때까지 끝까지 당긴 뒤 놓아 보세요. 쿵, 그리고 시위가 울립니다.', goal:1, prog:(q)=> EV.lbowFull - q.b.lbowFull},
+  {mode:'heart',   title:'심장박동',          hint:'L2를 꾹 눌러 심박수를 올려 보세요. 3초 유지.', goal:3, prog:(q)=> q.acc, tick:(q,dt)=>{ if(S.l2 > 0.5) q.acc += dt; }},
+  {mode:'tex',     title:'터치패드 질감',     hint:'터치패드를 문질러 격자 요철을 넘는 느낌을 느껴 보세요.', goal:25, prog:(q)=> EV.tex - q.b.tex},
+  {mode:'walk',    title:'걷기 — 세 가지 바닥', hint:'왼쪽 스틱으로 걷고 오른쪽 스틱으로 시점을 돌립니다. 서로 다른 바닥 3종류를 밟아 보세요. (철판·나무·풀·눈·돌·물)', goal:3, prog:(q)=> q.set.size, tick:(q)=>{ if(curMode === 'walk') q.set.add(walker.zone); }},
+  {mode:'ball',    title:'봇 굴리기',         hint:'컨트롤러를 기울여 봇을 굴리고, 위로 휙 던졌다 받아 보세요. 부딪힘 10번!', goal:10, prog:(q)=> EV.botHit - q.b.botHit},
+  {mode:'axe',     title:'도끼 던지기·회수',  hint:'R2로 던지고, 박히면 △를 누른 채 기다리세요. 끌려오다 손에 탁 잡힙니다.', goal:1, prog:(q)=> EV.axeCatch - q.b.axeCatch},
+  {mode:'rain',    title:'비 오는 날',        hint:'R2로 비를 세게, L2로 약하게. △로 번개를 치고 천둥이 오기를 기다려 보세요.', goal:1, prog:(q)=> EV.thunder - q.b.thunder},
+];
+const Q = {on:false, i:0, score:0, t:0, state:'play', clearT:0, q:null, flash:0, prevOpt:false};
+const qEl = id => document.getElementById(id);
+function qBanner(txt, ms){ const b = qEl('qBanner'); b.textContent = txt; b.style.opacity = 1; setTimeout(() => b.style.opacity = 0, ms || 1100); }
+function qBegin(i){
+  Q.i = i; Q.state = 'play'; Q.t = 0;
+  const d = QUESTS[i]; Q.q = {b:{...EV}, acc:0, set:new Set(), any:false};
+  ['shot','bow','lbowFull','tex','botHit','axeCatch','thunder'].forEach(k => Q.q.b[k] = EV[k] || 0);
+  setMode(d.mode);
+  qEl('qTitle').textContent = d.title; qEl('qStep').textContent = (i+1) + ' / ' + QUESTS.length;
+  qEl('qHint').textContent = d.hint + (hapAny() ? '' : '  (※ 위의 ① HD 햅틱을 켜면 훨씬 생생합니다)');
+  qEl('qBar').firstElementChild.style.width = '0%'; qEl('qScore').textContent = '점수 ' + Q.score;
+}
+function qStart(){ Q.on = true; Q.score = 0; qEl('quest').style.display = 'block'; qEl('btnQuest').textContent = '🎮 여정 다시 시작'; qBanner('START!', 900); qBegin(0); }
+function qStop(){ Q.on = false; qEl('quest').style.display = 'none'; }
+function qFinish(){
+  Q.state = 'end'; const stars = Q.score >= QUESTS.length*130 ? 3 : Q.score >= QUESTS.length*105 ? 2 : 1;
+  let best = 0; try{ best = +localStorage.getItem('dsl_best') || 0; if(Q.score > best){ best = Q.score; localStorage.setItem('dsl_best', best); } }catch(e){}
+  qEl('qTitle').textContent = '여정 완료! ' + '★'.repeat(stars) + '☆'.repeat(3-stars);
+  qEl('qStep').textContent = '';
+  qEl('qHint').textContent = '총점 ' + Q.score + ' (최고 ' + best + '). 모든 모드를 체험했어요. 아래 버튼으로 마음에 드는 모드를 다시 즐겨 보세요.';
+  qEl('qBar').firstElementChild.style.width = '100%'; qBanner('ALL CLEAR ' + '★'.repeat(stars), 2400);
+  [0,120,240,380,540].forEach((d,i) => at(d, () => hapPulseP(120 + i*60, 0.9 + i*0.1, 0.12, i%2 ? 0.6 : -0.6))); at(700, () => hapPulse(50, 1.7, 0.5));
+}
+function qClear(){
+  Q.state = 'clear'; Q.clearT = 1.7; Q.flash = 0.9;
+  const bonus = Math.max(0, Math.round(50 - Q.t*1.5)); Q.score += 100 + bonus;
+  qEl('qScore').textContent = '점수 ' + Q.score + (bonus ? '  (+' + bonus + ' 속도 보너스)' : '');
+  qEl('qBar').firstElementChild.style.width = '100%'; qBanner('CLEAR!', 1300);
+  hapPulseP(180, 1.0, 0.07, -0.5); at(90, () => hapPulseP(260, 1.1, 0.07, 0.5)); at(190, () => hapPulseP(380, 1.3, 0.1, 0)); at(260, () => hapPulse(60, 1.5, 0.25));
+}
+function questTick(dt){
+  if(!Q.on || Q.state === 'end') {
+    if(Q.on && S.btn.options && !Q.prevOpt) qStop(); Q.prevOpt = !!S.btn.options; return; }
+  const d = QUESTS[Q.i], B = S.btn;
+  if(Q.state === 'play'){
+    Q.t += dt;
+    if(Math.abs(S.lx)+Math.abs(S.ly)+Math.abs(S.rx)+Math.abs(S.ry) > 0.6 || S.l2 > 0.2 || S.r2 > 0.2 || Object.entries(B).some(([k,v]) => v && k !== 'tpad_')) Q.q.any = true;
+    if(d.tick) d.tick(Q.q, dt);
+    const p = clamp(d.prog(Q.q) / d.goal, 0, 1);
+    qEl('qBar').firstElementChild.style.width = (p*100).toFixed(0) + '%';
+    if(p >= 1) qClear();
+    if(B.options && !Q.prevOpt){ Q.score += 0; qEl('qBar').firstElementChild.style.width = '100%'; Q.state = 'clear'; Q.clearT = 0.2; }
+  } else if(Q.state === 'clear'){
+    Q.clearT -= dt; if(Q.clearT <= 0){ if(Q.i + 1 < QUESTS.length) qBegin(Q.i + 1); else qFinish(); }
+  }
+  Q.prevOpt = !!B.options;
+  if(Q.flash > 0){ Q.flash -= dt; fx.color = [255, 200 + Math.round(55*Math.sin(Q.flash*20)), 60]; }
+}
+qEl('btnQuest').onclick = qStart;
+qEl('qSkip').onclick = () => { if(Q.state === 'play'){ Q.state = 'clear'; Q.clearT = 0.2; } else if(Q.state === 'end') qStop(); };
+qEl('qStop').onclick = qStop;
 let last = performance.now();
 function frame(now){
   const dt = Math.min(0.05, (now - last)/1000); last = now;
   fx.color = null; fx.weakAdd = 0; fx.strongAdd = 0;
   modes[curMode].update(dt, now);
+  questTick(dt);
   // 진동 합성
   const t = performance.now(); let ps = +$('rumS').value, pw = +$('rumW').value;
   for(let i=pulses.length-1;i>=0;i--){ if(pulses[i].until < t) pulses.splice(i,1); else { ps = Math.max(ps, pulses[i].s); pw = Math.max(pw, pulses[i].w); } }
