@@ -44,6 +44,8 @@ def make_haptic(x, f, fc):
 
 print('샘플 로딩/변환 중...', flush=True)
 HAPT = {k: [make_haptic(load(os.path.join('sounds', fn)), HAP_F[k], HAP_C[k]) for fn in v] for k, v in FILES.items()}
+GH = {'coin': (260, 700), 'jump': (95, 300), 'land': (55, 260), 'break': (120, 420), 'fall': (70, 200)}
+HAPG = {k: make_haptic(load(os.path.join('sounds', 'game', k + '.ogg')), *v) for k, v in GH.items() if os.path.exists(os.path.join('sounds', 'game', k + '.ogg'))}
 print('완료', flush=True)
 
 lock = threading.Lock(); voices = []; rolls = []; master = 2.2
@@ -122,6 +124,13 @@ def handle(d):
         if abs(r - 1) > 0.01:
             n = int(len(buf) / r); buf = np.interp(np.linspace(0, len(buf) - 1, n), np.arange(len(buf)), buf)
         add_voice(buf, pan_w(float(d.get('p', 0))), float(d.get('g', 1)))
+    elif t == 'gsample':
+        buf = HAPG.get(d['k'])
+        if buf is not None:
+            r = float(d.get('r', 1))
+            if abs(r - 1) > 0.01:
+                n = int(len(buf) / r); buf = np.interp(np.linspace(0, len(buf) - 1, n), np.arange(len(buf)), buf)
+            add_voice(buf, pan_w(float(d.get('p', 0))), float(d.get('g', 1)))
     elif t == 'pulse': add_voice(synth_pulse(d['f'], 1.0, d['d']), pan_w(float(d.get('p', 0))), float(d['a']))
     elif t == 'noise': add_voice(synth_noise(d['f'], d['q'], d['d'], 1.0, d['att']), pan_w(float(d.get('p', 0))), float(d['g']))
     elif t == 'chan':

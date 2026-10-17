@@ -1,0 +1,1 @@
+Kenney Starter-Kit-3D-Platformer sounds (break, coin, fall, jump, land, walking) - https://github.com/KenneyNL/Starter-Kit-3D-Platformer (MIT; Kenney assets are CC0). Other sounds: Kenney Impact Sounds (CC0).

@@ -11,6 +11,7 @@ USB로 연결한 DualSense를 WebHID로 직접 다루는 실험 프로젝트. 3D
 - `index.html` — 앱 전체 (three.js 장면, HID 입출력, 센서 퓨전, 적응형 트리거, 모드들). `#mode=walk` 처럼 해시로 모드 직행 가능.
 - `server.py` — 정적 서버 + 4채널 햅틱 오디오 브리지(sounddevice). `POST /h`로 이벤트를 받아 ch3/4(보이스코일)로 재생.
 - `tools_chtest.py` — 채널별 단독 진동 테스트 (Windows WASAPI device=16 하드코딩, 환경에 맞게 수정 필요).
+- `game.js` — 미니 봇 어드벤처(3D 플랫포머 모드). 효과음은 `sounds/game/`(Kenney, 출처 CREDITS.txt) + 합성음, 모든 이벤트에 소리와 좌우 햅틱이 붙음.
 - `sounds/` — Kenney Impact Sounds (CC0).
 
 ## 현재 상태 / 이어서 할 일
