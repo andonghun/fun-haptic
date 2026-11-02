@@ -47,7 +47,7 @@ export function makeGallery(stage, start){
       const done = m.loop ? false : (mod.act ? cur.t >= end : cur.done());
       if(done){ wait += dt; if(wait > 0.9) load(); }
       stage.auto.update(dt);
-      hud(m.name, `${CATS[ci].name} · ${ei + 1} / ${CATS[ci].ids.length}`, `<small style="max-width:360px;display:block;opacity:.8">${m.desc}</small>`,
+      hud(m.name, `${CATS[ci].name} · ${ei + 1} / ${CATS[ci].ids.length}`, '',
         `<span class="key">◀▶</span> ${t('x_effect')} · <span class="key">▲▼</span> ${t('x_category')} · ${UI.key('jump')} ${t('x_replay')} · ${UI.key('pause')} ${t('menu')}`);
     }
   };

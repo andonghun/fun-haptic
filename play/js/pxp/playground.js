@@ -1,6 +1,5 @@
-// Playground: a side-scrolling pixel field with straw dummies. Walk, run, dash and jump across eight surfaces — every step,
-// skid and landing is felt — and beat the dummies up with swords, hammer and spear (scripted pixelfx moves, hit-stop and all),
-// or shoot them with pistol, SMG and bow (adaptive triggers). △ toggles rain.
+// Playground: a side-scrolling area with straw dummies on a wooden deck and a brick floor. Walk, run, dash and jump;
+// melee weapons play pixelfx moves (combo on Square, heavy on R2), guns and bow use adaptive triggers.
 import { effects, rnd, clamp, hud } from './common.js';
 import { PX } from '../px.js';
 import { posed, poseAt, lerpPose, Target, READY, STAND, hex } from '../../../vendor/pixelfx/src/core/index.js';
@@ -52,7 +51,7 @@ function buildWorld(){
       if(y >= FLOOR){ const gy = y - FLOOR, r = ((x*7 + y*13) ^ (x >> 2)*3) & 15;
         if(key === 'water' && gy < 3) col = gy === 0 ? c[2] : c[1];
         else if(gy === 0) col = c[2];
-        else if(key === 'wood') col = (x % 16 === 0 || gy % 6 === 5) ? c[3] : (r < 3 ? c[2] : c[1]);
+        else if(key === 'wood'){ const row = (gy - 1)/5 | 0, seam = (gy - 1) % 5 === 4, joint = (x + row*29) % 56 === 0, grain = ((x*3 + row*7) >> 3) % 5 === 0; col = seam || joint ? c[3] : grain ? c[0] : (r < 2 ? c[2] : c[1]); }
         else if(key === 'metal') col = (x % 20 === 0 || gy % 10 === 9) ? c[3] : ((x + gy) % 7 === 0 ? c[2] : c[1]);
         else if(key === 'stone') col = (gy % 7 === 0 || (x + ((gy/7 | 0) % 2)*9) % 18 === 0) ? c[3] : (r < 2 ? c[2] : r > 13 ? c[0] : c[1]);
         else col = r < 2 ? c[2] : r < 5 ? c[0] : gy > 20 ? c[3] : c[1];
@@ -179,7 +178,6 @@ export function makePlayground(stage){
       if(live){
         if(IN.pressed('wnext') || IN.pressed('r1')){ wi = (wi + 1) % LIST.length; swap(); }
         if(IN.pressed('wprev') || IN.pressed('l1')){ wi = (wi - 1 + LIST.length) % LIST.length; swap(); }
-        if(IN.pressed('interact')){ if(rain){ stage.remove(rain); rain = null; } else rain = stage.fx(effects['weather/rain'], {x:160, y:FLOOR + 22, keep:true, density:0.8}); SND.notes(rain ? [392, 523] : [523, 392], 0.08, {gain:0.06, pad:true}); }
       }
       // movement
       const mx = live && !atk && !(w === 'bow' && bow.draw > 0.1) ? IN.mx : 0, run = Math.abs(mx) > 0.85;
@@ -230,13 +228,11 @@ export function makePlayground(stage){
         if(a.y > FLOOR || a.x < 0 || a.x > WORLD) a.dead = true; }
       arrows = arrows.filter(a => !a.dead);
       targets.forEach(g => g.step(dt));
-      // rain on top, felt as drops
-      if(rain){ rain.options.x = cam + 160; rainDrop += dt*40; while(rainDrop >= 1){ rainDrop--; H.pulse(rnd(260, 520), rnd(0.06, 0.18), rnd(0.012, 0.03), rnd(-1, 1)); } }
       this._q = pose(dt);
       this.camera(dt);
       const key = zoneAt(P.x); if(key !== this._zone){ this._zone = key; UI.zone(t(key === 'stone' ? 'surf_brick' : 'surf_' + key), SURF_RGB[key]); Light.base = SURF_RGB[key].map(v => v*0.5); }
       hud(t('w_' + w), t(key === 'stone' ? 'surf_brick' : 'surf_' + key), `${t('hits')} ${hits}`,
-        `${t('ctl_move')} · ${UI.key('jump')} ${t('ctl_jump')} · ${UI.key('dodge')} ${t('pg_dash')} · ${UI.key('attack')}/<span class="key">R2</span> ${t('pg_attack')} · <span class="key">L1 R1</span> ${t('pg_weapon')} · ${UI.key('interact')} ${t('x_rain')}`);
+        `${t('ctl_move')} · ${UI.key('jump')} ${t('ctl_jump')} · ${UI.key('dodge')} ${t('pg_dash')} · ${UI.key('attack')}/<span class="key">R2</span> ${t('pg_attack')} · <span class="key">L1 R1</span> ${t('pg_weapon')}`);
     },
     camera(dt){
       cam += (clamp(P.x - 160 + P.face*30, 0, WORLD - W) - cam)*Math.min(1, dt*6); const c = Math.round(cam);

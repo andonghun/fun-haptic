@@ -3,8 +3,9 @@ import { createFrame, clearFrame, composite, backdrop, createFx, createAct } fro
 import { effects } from './vendor/pixelfx/src/fx/index.js';
 
 const P = {
-  playground:{act:'moves/sword-combo', x:40}, rain:{fx:'weather/rain', y:170, bg:'sky'}, pistol:{act:'moves/pistol-shots', x:50},
-  rifle:{fx:'projectiles/muzzle-smg', x:140}, bow:{act:'moves/arrow-shot', x:16}, melee:{act:'melee/hammer-smash', x:110},
+  playground:{act:'moves/sword-combo', x:40}, weather:{cycle:['weather/rain', 'weather/storm', 'weather/snow', 'weather/blizzard', 'weather/aurora', 'weather/cherry-blossoms'], y:170, bg:'sky', dur:4},
+  tray:{cycle:['pickups/chest-open', 'pickups/coin-spin', 'pickups/collect-burst'], dur:2.4}, pistol:{act:'moves/pistol-shots', x:50},
+  rifle:{act:'moves/pistol-shots', x:50}, bow:{act:'moves/arrow-shot', x:16}, melee:{act:'melee/hammer-smash', x:110},
   gallery:{cycle:['fire/campfire', 'explosions/big-explosion', 'lightning/plasma-ball', 'ice/frost-nova', 'water/fountain', 'holy/heal', 'pickups/chest-open', 'weather/aurora']}
 };
 class View {
@@ -15,7 +16,7 @@ class View {
     const y = p.y ?? (p.cycle ? 140 : 150); this.bg = backdrop(p.bg || (p.cycle ? (m.bg || 'dark') : 'ground'), 320, 180, y);
     const x = p.x ?? (p.cycle ? 160 : m.origin[0] + (320 - m.size[0])/2);
     if(p.act){ this.cur = createAct(mod, {x, y}); const k = mod.act.poses; this.end = Math.max(m.duration, k[k.length - 1][0]) - Math.min(0, k[0][0]) + 0.6; this.act = true; }
-    else { this.cur = createFx(mod, {x, y}); this.end = p.cycle ? 3.2 : (m.loop ? Infinity : m.duration + 0.6); this.act = false; }
+    else { this.cur = createFx(mod, {x, y}); this.end = p.cycle ? (p.dur || 3.2) : (m.loop ? Infinity : m.duration + 0.6); this.act = false; }
     this.age = 0;
   }
   tick(dt){

@@ -1,8 +1,8 @@
-// Weather lab: a little figure under twelve skies. ◀▶ changes the weather, R2 turns it up, L2 opens an umbrella,
-// △ calls lightning. Each sky has its own touch: drops tap, snow whispers, blizzards gust from one side,
-// fog swells, leaves and petals land, fireflies and shooting stars flicker through the auto-haptics.
+// Weather lab: twelve skies. ◀▶ changes the weather, R2 sets the intensity, △ calls lightning in rain and storm.
+// Haptics per sky: rain taps, snow ticks, gusts that move across the hands, swells for fog/aurora/rays,
+// and auto-haptics from the light for fireflies and shooting stars.
 import { effects, rnd, clamp, hud } from './common.js';
-import { PX, drawFigure } from '../px.js';
+
 import { IN } from '../input.js';
 import { DS, TRG } from '../ds.js';
 import { H } from '../haptics.js';
@@ -26,7 +26,6 @@ const SKY = [
   {id:'rays', fx:'weather/god-rays', wave:0.5, bed:[['bandpass', 600]], light:[255, 210, 140]},
   {id:'clouds', fx:'weather/clouds', gust:0.15, bed:[['lowpass', 400]], light:[150, 180, 220]}
 ].filter(s => effects[s.fx]);
-const C = {cloth:PX.hex('#2f9e86'), cloth2:PX.hex('#1f6b5c'), rim:PX.hex('#9fe8d4'), pole:PX.hex('#2a2430')};
 
 export function makeWeather(stage){
   let i = 0, sky = null, fx = null, beds = [], voice = null, strike = null, sx = 0, si = 0, acc = 0, ph = 0, gust = 0, gustPan = 0, drip = 0;
@@ -45,23 +44,15 @@ export function makeWeather(stage){
     enter(){
       stage.clear(); load(); voice = H.voice({f:160, q:0.6});
       DS.out.trigR = TRG.ramp(0, 1, 5); DS.out.trigL = TRG.feedback(3, 4);
-      stage.paint = p => {
-        drawFigure(stage.frame, 160, FLOOR, st.open > 0.3 ? {...PX.READY, fx:6, fy:-30, bx:4, by:-28} : {...PX.READY});
-        const o = st.open; if(o < 0.05) return;
-        const top = FLOOR - 50 - Math.round(o*8), r = Math.round(4 + o*18);
-        p.line(166, FLOOR - 28, 166, top, C.pole);
-        for(let dx = -r; dx <= r; dx++){ const yy = top - Math.round(Math.sqrt(Math.max(0, r*r - dx*dx))*0.45); p.line(166 + dx, yy, 166 + dx, top, (dx/2 | 0) % 2 ? C.cloth : C.cloth2); p.dot(166 + dx, yy, C.rim); }
-      };
       UI.toast(t('wx_tip'), 4600);
     },
-    exit(){ stage.paint = null; beds.forEach(b => b.stop()); voice && voice.stop(); stage.auto.enabled = false; stage.auto.sound = true; stage.auto.stop(); stage.clear(); DS.out.trigL = TRG.off(); DS.out.trigR = TRG.off(); },
+    exit(){ beds.forEach(b => b.stop()); voice && voice.stop(); stage.auto.enabled = false; stage.auto.sound = true; stage.auto.stop(); stage.clear(); DS.out.trigL = TRG.off(); DS.out.trigR = TRG.off(); },
     update(dt, live){
       if(live){
         if(IN.pressed('right') || IN.pressed('wnext') || IN.pressed('r1')){ i = (i + 1) % SKY.length; load(); }
         if(IN.pressed('left') || IN.pressed('wprev') || IN.pressed('l1')){ i = (i - 1 + SKY.length) % SKY.length; load(); }
       }
       const I = st.I = live ? 0.15 + 0.85*IN.r2 : st.I;
-      st.open += ((live && IN.l2 > 0.3 && sky.umbrella ? 1 : 0) - st.open)*Math.min(1, dt*8);
       const open = st.open;
       fx.options.density = 0.15 + 1.7*I; fx.update(dt*(sky.id === 'rain' ? 0 : 0.6*I));     // stage advances it too; extra speed when cranked
       // drops on palms / drumming on the canopy
@@ -98,8 +89,8 @@ export function makeWeather(stage){
           Light.flash([235, 240, 255], 200); stage.shake = [Math.round(rnd(-2, 2)), 1]; setTimeout(() => stage.shake = [0, 0], 120); }
         if(strike.done()){ stage.remove(strike); strike = null; }
       }
-      hud(t('wx_' + sky.id), `${i + 1} / ${SKY.length} · ${t('x_rain_int')} ${Math.round(I*100)}%${open > 0.5 ? ' · ' + t('x_rain_l2') : ''}`, '',
-        `<span class="key">◀▶</span> ${t('wx_change')} · <span class="key">R2</span> ${t('wx_more')}${sky.umbrella ? ` · <span class="key">L2</span> ${t('x_rain_l2')}` : ''}${sky.bolt ? ` · ${UI.key('interact')} ${t('x_thunder')}` : ''} · ${UI.key('pause')} ${t('menu')}`);
+      hud(t('wx_' + sky.id), `${i + 1} / ${SKY.length} · ${t('x_rain_int')} ${Math.round(I*100)}%`, '',
+        `<span class="key">◀▶</span> ${t('wx_change')} · <span class="key">R2</span> ${t('wx_more')}${sky.bolt ? ` · ${UI.key('interact')} ${t('x_thunder')}` : ''} · ${UI.key('pause')} ${t('menu')}`);
     }
   };
 }

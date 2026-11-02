@@ -10,7 +10,7 @@
     $$('[data-ko]').forEach(function(el){el.innerHTML=l==='ko'?el.dataset.ko:EN[el.dataset.i]});
     $('#langBtn').textContent=l==='ko'?'English':'한국어';
     var inp=$('.rs-input'); if(inp) inp.placeholder=l==='ko'?'가이드 검색, 예: “Steam”':'Search the guide, e.g. “Steam”';
-    document.title=l==='ko'?'Pixel Haptics — 브라우저에서 DualSense를 느껴보세요':'Pixel Haptics — feel your DualSense in the browser';
+    document.title=l==='ko'?'Pixel Haptics — 브라우저에서 DualSense 진동':'Pixel Haptics — DualSense haptics in the browser';
     finding(cur); trigMode(curMode);
   }
   $('#langBtn').addEventListener('click',function(){setLang(document.documentElement.lang==='ko'?'en':'ko')});
@@ -18,15 +18,16 @@
 
   /* ---- home: experience tabs drive the live preview ---- */
   var FIND={
-    playground:['Footsteps that change with the floor, a sweep across your palms on a dash, and a hit-stop thud when a weapon lands.','바닥에 따라 바뀌는 발소리, 대시할 때 손바닥을 쓸고 가는 느낌, 무기가 맞는 순간 멈칫하는 쿵.'],
-    rain:['Hundreds of tiny taps spread over both palms; an umbrella turns them into a low drumming.','양손에 흩어지는 수백 개의 작은 톡톡. 우산을 펴면 낮게 두드리는 소리로 바뀝니다.'],
-    pistol:['A clean click in R2, then a hard kick, then the impact arriving in your right hand.','R2의 깔끔한 딸깍, 강한 반동, 그리고 오른손에 도착하는 명중감.'],
-    rifle:['The trigger buzzes under your finger twelve times a second until it overheats and locks.','과열돼서 잠길 때까지 손가락 밑에서 초당 12번 떨리는 트리거.'],
-    bow:['Resistance that builds with the draw, a tremble at full pull, then the string ringing left and right.','당길수록 쌓이는 저항, 끝까지 당기면 떨림, 그리고 좌우로 울리는 시위.'],
-    melee:['A swish that crosses your hands before contact, then a hit whose weight matches the swing.','맞기 전에 손을 가로지르는 바람 소리, 그리고 휘두른 무게만큼의 타격.'],
-    gallery:['Whatever lights up the screen lights up your hands: bursts hit, glows hum, colour sets the pitch.','화면에서 빛나는 것이 손에서도 빛납니다. 터지면 치고, 빛나면 웅웅거리고, 색이 음높이를 정합니다.']
+    playground:['Footsteps vibrate on the side of the foot that lands. Dashes move across both hands. Hits vibrate harder for heavier weapons.','발이 닿는 쪽 손에 발소리 진동이 옵니다. 대시는 양손을 가로지르고, 무거운 무기일수록 타격 진동이 셉니다.'],
+    weather:['Rain taps both hands, snow ticks lightly, wind moves from one hand to the other.','비는 양손을 톡톡 치고, 눈은 가볍게 닿고, 바람은 한쪽 손에서 다른 쪽으로 이동합니다.'],
+    tray:['Each ball vibrates on the side it is on. Each coin taps where it lands.','공이 있는 쪽 손이 진동하고, 코인은 떨어진 자리에서 톡 칩니다.'],
+    pistol:['A click in R2, a recoil kick, then the hit on the right.','R2 딸깍, 반동, 그리고 오른쪽에서 명중.'],
+    rifle:['The trigger vibrates with each round until it overheats and locks.','과열돼 잠길 때까지 한 발마다 트리거가 떨립니다.'],
+    bow:['Resistance increases as you pull, vibrates at full draw, and the string vibrates on release.','당길수록 저항이 커지고, 끝까지 당기면 떨리고, 놓으면 시위가 진동합니다.'],
+    melee:['A short sweep before the hit, then a hit timed to the move.','타격 직전 짧은 휘두름, 그리고 동작에 맞춘 타격.'],
+    gallery:['Flashes become hits, steady light becomes a hum, and the side follows the effect.','번쩍이면 탁, 계속 빛나면 웅웅, 좌우는 이펙트 위치를 따라갑니다.']
   };
-  var NAMES={playground:['Playground','플레이그라운드'],rain:['Rain','비'],pistol:['Pistol','권총'],rifle:['Machine gun','기관총'],bow:['Bow','활'],melee:['Melee','근접 무기'],gallery:['Effect gallery','이펙트 갤러리']};
+  var NAMES={playground:['Playground','플레이그라운드'],weather:['Weather lab','날씨 실험실'],tray:['Treasure tray','보물 쟁반'],pistol:['Pistol','권총'],rifle:['Machine gun','기관총'],bow:['Bow','활'],melee:['Melee','근접 무기'],gallery:['Effect gallery','이펙트 갤러리']};
   var cur='playground';
   function finding(id){var f=FIND[id];$('[data-k=finding]').textContent=L(f[0],f[1]);$('[data-k=title]').textContent=L(NAMES[id][0],NAMES[id][1])}
   $$('.p-home .task').forEach(function(b){b.addEventListener('click',function(){
@@ -37,7 +38,7 @@
   })});
 
   /* ---- trigger modes: draw the resistance curve ---- */
-  var MODES={click:['Resistance rises, then breaks at the click — the pistol.','저항이 올라가다 딸깍 끊깁니다 — 권총.'],ramp:['Heavier the further you pull — the bow.','당길수록 무거워집니다 — 활.'],buzz:['The trigger vibrates under your finger — the machine gun.','손가락 밑에서 트리거가 떨립니다 — 기관총.'],wall:['A hard stop partway down — an overheated barrel.','중간에서 딱 막힙니다 — 과열된 총열.']};
+  var MODES={click:['Resistance builds, then drops at the click. Used by the pistol.','저항이 올라가다 딸깍 하고 풀립니다. 권총에 씁니다.'],ramp:['Resistance increases with the pull. Used by the bow.','당길수록 저항이 커집니다. 활에 씁니다.'],buzz:['The trigger vibrates. Used by the machine gun.','트리거가 떨립니다. 기관총에 씁니다.'],wall:['A hard stop partway down. Used when the gun overheats.','중간에서 막힙니다. 총이 과열됐을 때 씁니다.']};
   var curMode='click';
   function trigMode(m){
     curMode=m; var d='';
@@ -51,13 +52,6 @@
     $$('#trigModes .role').forEach(function(b){b.classList.toggle('on',b.dataset.mode===m)});
   }
   $$('#trigModes .role').forEach(function(b){b.addEventListener('click',function(){trigMode(b.dataset.mode)})});
-
-  /* ---- surfaces ---- */
-  var SURF=[['Grass','풀','#4f9a3c'],['Wood','나무','#9a6232'],['Steel','철판','#7d889a'],['Stone','돌','#76737f'],['Gravel','자갈','#8c7d6a'],['Snow','눈','#c9d6e6'],['Water','물','#3a78b0'],['Sand','모래','#d4b070']];
-  var st=$('#surfTiles');
-  SURF.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.className='surf'+(i?'':' on');b.style.background='linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),'+s[2];b.innerHTML='<span data-ko="'+s[1]+'">'+s[0]+'</span>';
-    b.addEventListener('click',function(){$$('.surf').forEach(function(x){x.classList.toggle('on',x===b)});toast(L('Try it in the Playground: walk onto '+s[0].toLowerCase(),'플레이그라운드에서 '+s[1]+' 위를 걸어 보세요'))});st.appendChild(b)});
-  $$('.surf [data-ko]').forEach(function(el){el.dataset.i='s'+el.textContent;EN['s'+el.textContent]=el.innerHTML});
 
   /* ---- weapon chips, rain timeline, proof numbers ---- */
   $$('.p-home .model').forEach(function(b){b.addEventListener('click',function(){$$('.p-home .model').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')})})});

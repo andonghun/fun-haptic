@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta name="description" content="A free browser playground for the DualSense controller: HD haptics, adaptive triggers and the controller speaker, wired to 244 pixel-art effects. Plug in with USB and play — nothing to install.">
+<meta name="description" content="Free browser demos for the DualSense controller: HD haptics, adaptive triggers and the controller speaker. Works in desktop Chrome and Edge. Other gamepads and keyboard also supported.">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pixel Haptics — feel your DualSense in the browser</title>
+<title>Pixel Haptics — DualSense haptics in the browser</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
 /* Portrait slots: replace data-face / data-img placeholders with real image files (see SKILL.md step 6). */
@@ -954,14 +954,14 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
 <section class="page p-home" data-page="home">
   <div class="hero">
     <div class="hero-glow" aria-hidden="true"></div>
-    <a class="announce" href="#changelog"><span class="new">NEW</span><span data-ko="플레이그라운드 — 무기 7종, 바닥 8종">Playground — 7 weapons, 8 surfaces</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
-    <h1 class="hero-h"><span class="ln" data-ko="모든 발걸음을 느끼고.">Feel every step.</span> <span class="ln" data-ko="모든 &lt;span class=&quot;serif&quot;&gt;타격&lt;/span&gt;을 느끼세요.">Feel every <span class="serif">hit</span>.</span></h1>
-    <p class="hero-lede" data-ko="DualSense를 위한 무료 브라우저 놀이터. HD 햅틱, 적응형 트리거, 컨트롤러 스피커를 픽셀 이펙트 244개에 연결했습니다. USB로 꽂고 바로 플레이하세요. 설치할 것은 없습니다.">A free browser playground for the DualSense. HD haptics, adaptive triggers and the controller speaker, wired to 244 pixel-art effects. Plug in with USB and play — nothing to install.</p>
+    <a class="announce" href="#changelog"><span class="new">NEW</span><span data-ko="날씨 실험실, 보물 쟁반 추가">Weather lab and Treasure tray added</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+    <h1 class="hero-h"><span class="ln" data-ko="DualSense 진동을">DualSense haptics,</span> <span class="ln" data-ko="&lt;span class=&quot;serif&quot;&gt;브라우저에서&lt;/span&gt;."><span class="serif">in the browser</span>.</span></h1>
+    <p class="hero-lede" data-ko="무료이고 설치할 것이 없습니다. DualSense를 USB로 연결하면 HD 햅틱과 적응형 트리거를 쓸 수 있고, 다른 게임패드나 키보드로도 할 수 있습니다.">Free, nothing to install. Connect a DualSense over USB for HD haptics and adaptive triggers. Other gamepads and the keyboard work too.</p>
     <div class="ctas">
-      <a class="btn btn-primary" href="play/"><svg class="i"><use href="#i-play"/></svg><span data-ko="지금 플레이">Play now</span></a>
-      <a class="btn btn-ghost" href="#guide"><span data-ko="작동 방식">How it works</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+      <a class="btn btn-primary" href="play/"><svg class="i"><use href="#i-play"/></svg><span data-ko="플레이">Play</span></a>
+      <a class="btn btn-ghost" href="#guide"><span data-ko="설정 방법">Setup guide</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
     </div>
-    <div class="trust"><div class="chips"><span class="chip"><svg class="i"><use href="#i-usb"/></svg>USB-C</span><span class="chip"><svg class="i"><use href="#i-globe"/></svg>Chrome · Edge</span><span class="chip"><svg class="i"><use href="#i-lock"/></svg><span data-ko="계정 필요 없음">No account</span></span></div></div>
+    <div class="trust"><div class="chips"><span class="chip"><svg class="i"><use href="#i-usb"/></svg>USB</span><span class="chip"><svg class="i"><use href="#i-globe"/></svg>Chrome · Edge</span><span class="chip"><svg class="i"><use href="#i-lock"/></svg><span data-ko="가입 없음">No sign-up</span></span></div></div>
 
     <div class="shot">
       <div class="win" role="group" aria-label="Live preview">
@@ -970,25 +970,26 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
           <div class="s-label" data-ko="체험">EXPERIENCES</div>
           <div class="tasks" role="tablist" aria-label="Experiences">
           <button class="s-item task on" role="tab" aria-selected="true" data-x="playground"><svg class="i"><use href="#i-gamepad-2"/></svg><span data-ko="플레이그라운드">Playground</span></button>
-          <button class="s-item task" role="tab" aria-selected="false" data-x="rain"><svg class="i"><use href="#i-cloud-rain"/></svg><span data-ko="비">Rain</span></button>
+          <button class="s-item task" role="tab" aria-selected="false" data-x="weather"><svg class="i"><use href="#i-cloud-rain"/></svg><span data-ko="날씨 실험실">Weather lab</span></button>
+          <button class="s-item task" role="tab" aria-selected="false" data-x="tray"><svg class="i"><use href="#i-box"/></svg><span data-ko="보물 쟁반">Treasure tray</span></button>
           <button class="s-item task" role="tab" aria-selected="false" data-x="pistol"><svg class="i"><use href="#i-crosshair"/></svg><span data-ko="권총">Pistol</span></button>
           <button class="s-item task" role="tab" aria-selected="false" data-x="rifle"><svg class="i"><use href="#i-zap"/></svg><span data-ko="기관총">Machine gun</span></button>
           <button class="s-item task" role="tab" aria-selected="false" data-x="bow"><svg class="i"><use href="#i-crosshair"/></svg><span data-ko="활">Bow</span></button>
           <button class="s-item task" role="tab" aria-selected="false" data-x="melee"><svg class="i"><use href="#i-activity"/></svg><span data-ko="근접 무기">Melee</span></button>
           <button class="s-item task" role="tab" aria-selected="false" data-x="gallery"><svg class="i"><use href="#i-sparkles"/></svg><span data-ko="이펙트 갤러리">Effect gallery</span></button>
           </div>
-          <div class="side-user"><svg class="i"><use href="#i-gamepad-2"/></svg><span class="pad-state" data-ko="컨트롤러 미리보기">Controller preview</span></div>
+          <div class="side-user"><svg class="i"><use href="#i-gamepad-2"/></svg><span data-ko="미리보기">Preview</span></div>
         </aside>
         <div class="main">
           <div class="topbar"><span class="swap" data-k="title">Playground</span><span class="status-pill" data-k="status">LIVE · 320×180</span></div>
           <canvas class="pv pv-main" id="pvMain" width="320" height="180" aria-label="Live pixel preview"></canvas>
           <div class="kpis">
-            <div class="kpi"><span class="l" data-ko="햅틱 채널">Haptic channels</span><span class="v">4</span><span class="d" data-ko="양손 보이스코일">2 voice coils</span></div>
-            <div class="kpi"><span class="l" data-ko="트리거 모드">Trigger modes</span><span class="v">4</span><span class="d" data-ko="딸깍·경사·진동·벽">click · ramp · buzz · wall</span></div>
+            <div class="kpi"><span class="l" data-ko="체험">Experiences</span><span class="v">8</span><span class="d">play/</span></div>
+            <div class="kpi"><span class="l" data-ko="무기">Weapons</span><span class="v">7</span><span class="d" data-ko="플레이그라운드">playground</span></div>
+            <div class="kpi"><span class="l" data-ko="날씨">Weather</span><span class="v">12</span><span class="d" data-ko="날씨 실험실">weather lab</span></div>
             <div class="kpi"><span class="l" data-ko="픽셀 이펙트">Pixel effects</span><span class="v">244</span><span class="d">pixelfx</span></div>
-            <div class="kpi"><span class="l" data-ko="바닥 종류">Surfaces</span><span class="v">8</span><span class="d" data-ko="바닥마다 다른 발소리">each its own step</span></div>
           </div>
-          <div class="finding"><span class="k" data-ko="손에 느껴지는 것">WHAT YOU FEEL</span><p class="swap" data-k="finding"></p></div>
+          <div class="finding"><span class="k" data-ko="진동">HAPTICS</span><p class="swap" data-k="finding"></p></div>
         </div>
       </div>
       <div class="shot-fade" aria-hidden="true"></div>
@@ -996,7 +997,7 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
   </div>
 
   <div class="logos reveal">
-    <span class="logos-label" data-ko="필요한 것">WHAT YOU NEED</span>
+    <span class="logos-label" data-ko="필요한 것">REQUIREMENTS</span>
     <div class="logos-row">
       <span class="logo"><svg class="i"><use href="#i-gamepad-2"/></svg>DualSense</span>
       <span class="logo"><svg class="i"><use href="#i-usb"/></svg><span data-ko="USB 케이블">USB cable</span></span>
@@ -1011,15 +1012,15 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
     <div class="wrap">
       <div class="shead reveal">
         <div>
-          <p class="eyebrow" data-ko="01 — 컨트롤러">01 — THE CONTROLLER</p>
-          <h2 class="h2x" data-ko="손이 &lt;span class=&quot;serif&quot;&gt;읽는&lt;/span&gt; 컨트롤러.">A controller your hands <span class="serif">read</span>.</h2>
+          <p class="eyebrow" data-ko="01 — 하드웨어">01 — HARDWARE</p>
+          <h2 class="h2x" data-ko="DualSense의 &lt;span class=&quot;serif&quot;&gt;세 가지&lt;/span&gt; 기능.">Three DualSense <span class="serif">features</span>.</h2>
         </div>
-        <p data-ko="DualSense에는 진동 모터 대신 손잡이마다 보이스코일이 있고, 저항을 바꾸는 트리거와 작은 스피커가 있습니다. 대부분의 게임은 이걸 다 쓰지 않습니다. 여기서는 다 씁니다.">The DualSense has a voice coil in each grip instead of a spinning weight, triggers that push back and a small speaker. Most games barely use them. Here, everything does.</p>
+        <p data-ko="이 사이트에서 쓰는 컨트롤러 기능과 각각 어디에 쓰이는지입니다.">The controller features used here, and where each one is used.</p>
       </div>
       <div class="fgrid reveal">
-        <article class="bx feat"><div class="feat-top"><span class="ficon"><svg class="i"><use href="#i-vibrate"/></svg></span><span>01</span></div><h3 data-ko="HD 햅틱">HD haptics</h3><p data-ko="USB로 연결하면 컨트롤러가 4채널 오디오 장치가 됩니다. 3·4번 채널이 왼손과 오른손이고, 파형을 그대로 재생해서 탁, 자글자글, 쿵을 구분해 그립니다.">Over USB the controller is a 4-channel audio device. Channels 3 and 4 drive your left and right hand, so a tap, a crunch and a thud each feel distinct.</p></article>
-        <article class="bx feat"><div class="feat-top"><span class="ficon"><svg class="i"><use href="#i-crosshair"/></svg></span><span>02</span></div><h3 data-ko="적응형 트리거">Adaptive triggers</h3><p data-ko="R2가 중간에서 딸깍 끊기거나, 당길수록 무거워지거나, 손가락 밑에서 떨리거나, 벽처럼 막힙니다. 무기마다 하나씩.">R2 can break with a click halfway, get heavier as you pull, buzz under your finger or stop like a wall. Each weapon gets one.</p></article>
-        <article class="bx feat"><div class="feat-top"><span class="ficon"><svg class="i"><use href="#i-volume-2"/></svg></span><span>03</span></div><h3 data-ko="컨트롤러 스피커">Controller speaker</h3><p data-ko="큰 소리는 PC에서, 손 안의 소리는 손에서. 탄피, 재장전 딸깍, 활시위 삐걱임은 컨트롤러 스피커로 나옵니다.">Big sounds play on your PC, small ones in your hands: casings, reload clicks and a creaking bowstring come from the controller.</p></article>
+        <article class="bx feat"><div class="feat-top"><span class="ficon"><svg class="i"><use href="#i-vibrate"/></svg></span><span>01</span></div><h3 data-ko="HD 햅틱">HD haptics</h3><p data-ko="USB로 연결하면 컨트롤러가 4채널 오디오 장치로 잡힙니다. 3번과 4번 채널이 왼쪽과 오른쪽 손잡이의 진동 장치입니다.">Over USB the controller is a 4-channel audio device. Channels 3 and 4 drive the left and right grip.</p></article>
+        <article class="bx feat"><div class="feat-top"><span class="ficon"><svg class="i"><use href="#i-crosshair"/></svg></span><span>02</span></div><h3 data-ko="적응형 트리거">Adaptive triggers</h3><p data-ko="R2가 딸깍 끊기거나, 당길수록 무거워지거나, 떨리거나, 중간에 막힙니다. 무기마다 하나씩 씁니다.">R2 can click, get heavier, vibrate or stop partway. Each weapon uses one of these.</p></article>
+        <article class="bx feat"><div class="feat-top"><span class="ficon"><svg class="i"><use href="#i-volume-2"/></svg></span><span>03</span></div><h3 data-ko="컨트롤러 스피커">Controller speaker</h3><p data-ko="재장전, 탄피, 코인 같은 작은 소리는 컨트롤러에서 납니다. 나머지는 PC 스피커로 나옵니다.">Small sounds such as reloads, shell casings and coins play from the controller. Everything else plays on the PC.</p></article>
       </div>
     </div>
   </div>
@@ -1028,18 +1029,18 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
     <div class="wrap">
       <div class="shead reveal">
         <div>
-          <p class="eyebrow" data-ko="02 — 체험해 볼 것">02 — WHAT TO TRY</p>
-          <h2 class="h2x" data-ko="바닥이 다르면 &lt;span class=&quot;serif&quot;&gt;느낌&lt;/span&gt;도 다릅니다.">Every surface <span class="serif">feels</span> different.</h2>
+          <p class="eyebrow" data-ko="02 — 세부">02 — DETAILS</p>
+          <h2 class="h2x" data-ko="설정 &lt;span class=&quot;serif&quot;&gt;일부&lt;/span&gt;.">Some of the <span class="serif">settings</span>.</h2>
         </div>
-        <p data-ko="실제 발소리 녹음을 진동으로 바꿔서, 철판은 쨍하게, 눈은 사각사각, 물은 철벅하게 느껴집니다.">Real footstep recordings are turned into haptics, so steel rings, snow crunches and water splashes in your palms.</p>
+        <p data-ko="트리거 모드, 날씨 종류, 무기 목록입니다.">Trigger modes, weather types and weapons.</p>
       </div>
       <div class="bento reveal">
         <div class="brow">
           <div class="bx team">
             <div class="team-copy">
               <span class="kick" data-ko="트리거 저항">TRIGGER RESISTANCE</span>
-              <h3 data-ko="하나의 트리거, 네 가지 느낌.">One trigger, four feels.</h3>
-              <p data-ko="모드를 눌러 R2가 손가락을 어떻게 밀어내는지 보세요.">Pick a mode to see how R2 pushes back against your finger.</p>
+              <h3 data-ko="R2 저항 모드 4가지.">Four R2 resistance modes.</h3>
+              <p data-ko="모드를 누르면 저항 곡선이 바뀝니다.">Pick a mode to see its resistance curve.</p>
               <div class="roles" id="trigModes">
                 <button class="role on" data-mode="click" data-ko="딸깍">Click</button>
                 <button class="role" data-mode="ramp" data-ko="경사">Ramp</button>
@@ -1053,34 +1054,34 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
             </div>
           </div>
           <div class="bx tools">
-            <span class="kick" data-ko="바닥 8종">8 SURFACES</span>
-            <h3 data-ko="발밑을 골라 보세요.">Pick what is underfoot.</h3>
-            <div class="surf-tiles" id="surfTiles"></div>
+            <span class="kick" data-ko="날씨 12가지">12 WEATHER TYPES</span>
+            <h3 data-ko="날씨 실험실.">Weather lab.</h3>
+            <div class="surf-tiles"><div class="surf" style="background:linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),#2f4a7a"><span data-ko="비">Rain</span></div><div class="surf" style="background:linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),#1d2238"><span data-ko="폭풍">Storm</span></div><div class="surf" style="background:linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),#c9d6e6"><span data-ko="눈">Snow</span></div><div class="surf" style="background:linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),#9fb4cc"><span data-ko="눈보라">Blizzard</span></div><div class="surf" style="background:linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),#5c6670"><span data-ko="안개">Fog</span></div><div class="surf" style="background:linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),#b8692e"><span data-ko="낙엽">Leaves</span></div><div class="surf" style="background:linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),#e8a0b8"><span data-ko="벚꽃">Blossoms</span></div><div class="surf" style="background:linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),#7a8f2a"><span data-ko="반딧불이">Fireflies</span></div></div>
           </div>
         </div>
         <div class="brow brow-3">
           <div class="bx">
             <span class="kick" data-ko="무기 7종">7 WEAPONS</span>
-            <h3 data-ko="L1·R1로 바꾸기.">Switch with L1 and R1.</h3>
+            <h3 data-ko="L1·R1로 교체.">Switch with L1 and R1.</h3>
             <div class="models" role="group" aria-label="Weapons">
               <button class="model" aria-pressed="true">Sword</button><button class="model" aria-pressed="false">Hammer</button><button class="model" aria-pressed="false">Spear</button><button class="model" aria-pressed="false">Fists</button><button class="model" aria-pressed="false">Pistol</button><button class="model" aria-pressed="false">SMG</button><button class="model" aria-pressed="false">Bow</button>
             </div>
           </div>
           <div class="bx">
             <span class="kick" data-ko="연결">CONNECT</span>
-            <h3 data-ko="USB 한 줄이면 됩니다.">One USB cable.</h3>
+            <h3 data-ko="USB로 연결.">Connect over USB.</h3>
             <div class="approval">
               <svg class="i"><use href="#i-usb"/></svg>
-              <span class="approval-q" data-ko="브라우저에서 컨트롤러 열기">Open the controller in your browser</span>
+              <span class="approval-q" data-ko="플레이 화면에서 컨트롤러 연결">Connect the controller on the Play page</span>
               <a class="approve" href="play/"><svg class="i"><use href="#i-arrow-right"/></svg><span class="approve-t" data-ko="플레이">Play</span></a>
             </div>
           </div>
           <div class="bx sched">
-            <span class="kick" data-ko="비">RAIN</span>
-            <h3 data-ko="보슬비에서 폭풍까지.">From drizzle to storm.</h3>
-            <div class="run"><span class="tm">R2 20%</span><span class="dot"></span><span class="nm" data-ko="보슬비">Drizzle</span></div>
-            <div class="run"><span class="tm">R2 100%</span><span class="dot"></span><span class="nm" data-ko="폭우">Downpour</span></div>
-            <div class="run"><span class="tm">&#9651;</span><span class="dot"></span><span class="nm" data-ko="번개 세 번">Three strikes</span></div>
+            <span class="kick" data-ko="보물 쟁반">TREASURE TRAY</span>
+            <h3 data-ko="순서.">How it goes.</h3>
+            <div class="run"><span class="tm">01</span><span class="dot"></span><span class="nm" data-ko="기울여서 굴리기">Tilt to roll</span></div>
+            <div class="run"><span class="tm">02</span><span class="dot"></span><span class="nm" data-ko="상자 열기">Open the chest</span></div>
+            <div class="run"><span class="tm">03</span><span class="dot"></span><span class="nm" data-ko="코인 모으기">Collect coins</span></div>
           </div>
         </div>
       </div>
@@ -1089,14 +1090,11 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
 
   <div class="testi">
     <div class="wrap" style="display:flex;flex-direction:column;align-items:center;gap:36px">
-      <div class="qmark reveal" aria-hidden="true">&ldquo;</div>
-      <blockquote class="quote reveal" data-ko="철판 위의 발걸음이 눈 위의 발걸음처럼 느껴지면 안 됩니다. 그래서 바닥마다, 무기마다, &lt;span class=&quot;serif&quot;&gt;모든 타격&lt;/span&gt;마다 따로 만들었습니다.">A footstep on steel should never feel like a footstep on snow. So every surface, every weapon and <span class="serif">every hit</span> gets its own feel.</blockquote>
-      <div class="author reveal"><div><b data-ko="만든 원칙">Design note</b><small>Pixel Haptics</small></div></div>
       <div class="proof reveal">
-        <div><b data-count="244">244</b><span data-ko="픽셀 이펙트">pixel effects</span></div>
-        <div><b data-count="8">8</b><span data-ko="바닥 종류">surfaces</span></div>
+        <div><b data-count="8">8</b><span data-ko="체험">experiences</span></div>
         <div><b data-count="7">7</b><span data-ko="무기">weapons</span></div>
-        <div><b data-count="0">0</b><span data-ko="설치할 것">installs</span></div>
+        <div><b data-count="12">12</b><span data-ko="날씨">weather types</span></div>
+        <div><b data-count="244">244</b><span data-ko="픽셀 이펙트">pixel effects</span></div>
       </div>
     </div>
   </div>
@@ -1105,12 +1103,12 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
     <div class="wrap">
       <div class="cta-card reveal">
         <div class="cta-glow" aria-hidden="true"></div>
-        <p class="eyebrow" data-ko="무료 · 계정 없음">FREE · NO ACCOUNT</p>
-        <h2 class="cta-h" data-ko="꽂고. &lt;span class=&quot;serif&quot;&gt;느끼세요&lt;/span&gt;.">Plug in. <span class="serif">Feel it</span>.</h2>
-        <p data-ko="데스크톱 Chrome 또는 Edge, USB로 연결한 DualSense면 충분합니다.">Desktop Chrome or Edge and a DualSense on USB. That is all.</p>
+        <p class="eyebrow" data-ko="무료">FREE</p>
+        <h2 class="cta-h" data-ko="지금 &lt;span class=&quot;serif&quot;&gt;해 보기&lt;/span&gt;."><span class="serif">Try</span> it now.</h2>
+        <p data-ko="데스크톱 Chrome 또는 Edge가 필요합니다. HD 햅틱은 USB 연결에서만 됩니다.">Needs desktop Chrome or Edge. HD haptics need a USB connection.</p>
         <div class="ctas">
-          <a class="btn btn-primary" href="play/"><svg class="i"><use href="#i-play"/></svg><span data-ko="지금 플레이">Play now</span></a>
-          <a class="btn btn-ghost" href="#guide"><span data-ko="설정 가이드">Setup guide</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+          <a class="btn btn-primary" href="play/"><svg class="i"><use href="#i-play"/></svg><span data-ko="플레이">Play</span></a>
+          <a class="btn btn-ghost" href="#guide"><span data-ko="설정 방법">Setup guide</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
         </div>
       </div>
     </div>
@@ -1119,8 +1117,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
 <section class="page p-xp" data-page="experiences">
   <div class="page-hero pr-hero">
     <p class="eyebrow" data-ko="체험">Experiences</p>
-    <h1 class="h1" data-ko="하나의 놀이터, &lt;span class=&quot;serif&quot;&gt;여섯&lt;/span&gt; 개의 방.">One playground, <span class="serif">six</span> rooms.</h1>
-    <p class="lede" data-ko="모두 무료이고 브라우저에서 바로 실행됩니다. 아래 미리보기는 실제 게임과 같은 엔진으로 지금 그려지고 있습니다.">All free, all in the browser. The previews below run on the same engine as the game, right now.</p>
+    <h1 class="h1" data-ko="체험 &lt;span class=&quot;serif&quot;&gt;8가지&lt;/span&gt;."><span class="serif">Eight</span> experiences.</h1>
+    <p class="lede" data-ko="모두 무료이고 브라우저에서 실행됩니다. 미리보기는 게임과 같은 엔진으로 그립니다.">All free and run in the browser. The previews use the same engine as the game.</p>
   </div>
   <div class="pr-plans reveal">
     <div class="wrap">
@@ -1130,19 +1128,29 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
           <div style="display:flex;flex-direction:column;gap:12px">
             <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
             <h3 data-ko="플레이그라운드">Playground</h3>
-            <p data-ko="여덟 가지 바닥 위를 걷고, 달리고, 대시하고, 점프하세요. 허수아비를 검·망치·창·주먹으로 치거나 권총·SMG·활로 쏘면 타격이 손에 그대로 꽂힙니다.">Walk, run, dash and jump across eight surfaces, then beat straw dummies with sword, hammer, spear and fists, or shoot them with pistol, SMG and bow.</p>
-            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="왼발은 왼손, 오른발은 오른손으로">Left foot in the left hand, right foot in the right</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="제대로 맞으면 멈칫하는 히트스톱">Hit-stop on every solid hit</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="무기마다 다른 트리거 저항">A trigger effect for every weapon</span></li></ul>
+            <p data-ko="나무 데크와 벽돌 바닥을 걷고, 달리고, 점프합니다. 허수아비를 검, 망치, 창, 주먹으로 치거나 권총, SMG, 활로 쏩니다.">Walk, run and jump on a wooden deck and a brick floor. Hit straw dummies with a sword, hammer, spear or fists, or shoot them with a pistol, SMG or bow.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="발이 닿는 쪽 손에 발소리 진동">Footsteps on the side of the foot that lands</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="네모 버튼 연타 콤보, R2 강공격">Combos with Square, heavy attack with R2</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="L1·R1로 무기 7종 교체">Seven weapons on L1 and R1</span></li></ul>
             <a class="btn btn-primary" href="play/#playground"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
           </div>
         </article>
         <article class="xp-card">
-          <canvas class="pv" width="320" height="180" data-pv="rain" aria-label="Rain preview"></canvas>
+          <canvas class="pv" width="320" height="180" data-pv="weather" aria-label="Weather lab preview"></canvas>
           <div style="display:flex;flex-direction:column;gap:12px">
-            <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
-            <h3 data-ko="비">Rain</h3>
-            <p data-ko="R2를 당길수록 빗줄기가 굵어지고 손바닥에 톡톡 떨어집니다. 우산을 펴면 두드리는 감촉으로 바뀌고, 번개를 부르면 먼저 정전기가 손을 타고 올라옵니다.">Drops tap your palms as R2 turns a drizzle into a downpour. Open an umbrella and the patter turns into drumming; call lightning and feel the static build first.</p>
-            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="양손에 무작위로 떨어지는 빗방울">Random drops on both palms</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="우산을 펴면 질감이 바뀜">Umbrella changes the texture</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="먼저 느껴지는 번개 세 번">Three lightning strokes you feel coming</span></li></ul>
-            <a class="btn btn-ghost" href="play/#rain"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+            <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
+            <h3 data-ko="날씨 실험실">Weather lab</h3>
+            <p data-ko="날씨 12가지. 비, 눈, 바람마다 진동이 다릅니다. R2로 세기를 정합니다.">Twelve kinds of weather. Rain, snow and wind each vibrate differently. R2 sets the intensity.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="비, 폭풍, 눈, 눈보라, 안개 등">Rain, storm, snow, blizzard, fog and more</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="비·폭풍에서 세모 버튼으로 번개">Lightning on Triangle in rain and storm</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="바람이 한쪽 손에서 다른 손으로 이동">Gusts move from one hand to the other</span></li></ul>
+            <a class="btn btn-ghost" href="play/#weather"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="xp-card">
+          <canvas class="pv" width="320" height="180" data-pv="tray" aria-label="Treasure tray preview"></canvas>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
+            <h3 data-ko="보물 쟁반">Treasure tray</h3>
+            <p data-ko="컨트롤러를 기울여 쇠, 나무, 고무 공을 쟁반 위에서 굴립니다. 상자를 열면 코인이 쟁반에 떨어집니다.">Tilt the controller to roll a steel, a wooden and a rubber ball around a tray. Open the chest and coins drop onto it.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="공이 있는 쪽 손이 진동">Each ball vibrates on the side it is on</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="코인은 떨어진 자리에서 톡">Each coin taps where it lands</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="스틱이나 WASD로도 가능">Works with the stick or WASD too</span></li></ul>
+            <a class="btn btn-ghost" href="play/#tray"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
           </div>
         </article>
         <article class="xp-card">
@@ -1150,8 +1158,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
           <div style="display:flex;flex-direction:column;gap:12px">
             <div class="xp-tags"><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
             <h3 data-ko="권총">Pistol</h3>
-            <p data-ko="R2가 중간에서 딸깍 끊기는 순간 한 발씩 나갑니다. 총이 튀고, 탄이 바닥을 가로질러 허수아비가 흔들립니다.">Each shot waits for R2 to break at the click halfway down. The gun kicks, the round crosses the floor and the dummy rocks back.</p>
-            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="딸깍 끊기는 방아쇠">Break-point trigger click</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="반동, 그다음 오른쪽에서 오는 명중감">Recoil, then the impact on the right</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="탄피 소리는 컨트롤러 스피커에서">Casings tinkle from the controller speaker</span></li></ul>
+            <p data-ko="R2를 당기다 딸깍 하는 지점에서 발사됩니다. 세 발 쏘면 재장전합니다.">R2 fires at the click halfway down. Three rounds, then a reload.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="딸깍 트리거">Click trigger</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="반동 후 표적 명중">Recoil, then the hit on the target</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="재장전 소리는 컨트롤러 스피커">Reload clicks on the controller speaker</span></li></ul>
             <a class="btn btn-ghost" href="play/#pistol"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
           </div>
         </article>
@@ -1160,8 +1168,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
           <div style="display:flex;flex-direction:column;gap:12px">
             <div class="xp-tags"><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
             <h3 data-ko="기관총">Machine gun</h3>
-            <p data-ko="R2를 당기고 있으면 초당 12발마다 트리거 자체가 떨립니다. 계속 쏘면 과열돼서 총열이 식을 때까지 트리거가 딱딱하게 굳습니다.">Hold R2 and the trigger itself vibrates with every round, twelve a second. Keep firing and it overheats: the trigger locks stiff until the barrel cools.</p>
-            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="떨리는 트리거">Vibrating trigger</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="과열되면 트리거가 잠김">Overheat locks the trigger</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="오른쪽 벽에 꽂히는 탄환">Bullets chew the wall to the right</span></li></ul>
+            <p data-ko="R2를 누르고 있으면 트리거가 떨리며 초당 12발을 쏩니다. 과열되면 식을 때까지 트리거가 굳습니다.">Hold R2 and the trigger vibrates as it fires, twelve rounds a second. If it overheats, the trigger locks until it cools.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="진동 트리거">Vibrating trigger</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="과열 시 트리거 잠김">Overheat locks the trigger</span></li></ul>
             <a class="btn btn-ghost" href="play/#rifle"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
           </div>
         </article>
@@ -1170,8 +1178,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
           <div style="display:flex;flex-direction:column;gap:12px">
             <div class="xp-tags"><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag mint" data-ko="HD 햅틱">HD haptics</span></div>
             <h3 data-ko="활">Bow</h3>
-            <p data-ko="R2가 곧 활시위입니다. 당길수록 무거워지고, 끝까지 당기면 팔이 떨리고, 놓으면 시위가 좌우로 울립니다.">R2 is the bowstring. It gets heavier the further you pull, your arms tremble at full draw, and the string rings left and right when you let go.</p>
-            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="당길수록 커지는 저항">Resistance that ramps with the draw</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="끝까지 당기면 떨림">Full-draw tremble</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="화살이 박히는 둔탁한 손맛">A thud when the arrow lands</span></li></ul>
+            <p data-ko="R2를 당길수록 무거워집니다. 놓으면 발사됩니다.">R2 gets heavier the further you pull. Release to shoot.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="당길수록 커지는 저항">Resistance increases with the draw</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="끝까지 당기면 떨림">Vibration at full draw</span></li></ul>
             <a class="btn btn-ghost" href="play/#bow"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
           </div>
         </article>
@@ -1180,8 +1188,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
           <div style="display:flex;flex-direction:column;gap:12px">
             <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span></div>
             <h3 data-ko="근접 무기">Melee</h3>
-            <p data-ko="검 베기부터 지면 강타까지 14가지 동작. 휘두를 때 손을 가로지르고, 맞는 순간 손 안에서 멈칫합니다.">Fourteen moves, from a sword slash to a ground pound. The swing sweeps across your hands, then the hit freezes in them.</p>
-            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="양손을 가로지르는 칼바람">Wind-up swish across both hands</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="동작마다 다른 무게감">Weight follows each move</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="14가지 동작">Fourteen moves</span></li></ul>
+            <p data-ko="근접 동작 14가지를 허수아비에 써 봅니다. 방향키 좌우로 동작을 바꿉니다.">Fourteen melee moves against a straw dummy. Left and right on the D-pad change the move.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="동작마다 정해진 타격 타이밍">Hit timing comes from each move</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="무거운 동작은 더 길게 진동">Heavier moves vibrate longer</span></li></ul>
             <a class="btn btn-ghost" href="play/#melee"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
           </div>
         </article>
@@ -1190,8 +1198,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
           <div style="display:flex;flex-direction:column;gap:12px">
             <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
             <h3 data-ko="이펙트 갤러리">Effect gallery</h3>
-            <p data-ko="픽셀 이펙트 244개를 전부 손으로. 터지면 치고, 빛나면 웅웅거리며 좌우로 따라오고, 따뜻한 색은 낮게, 차가운 색은 높게 울립니다.">All 244 pixel effects, felt. Bursts become hits, glows become a hum that follows the effect across your hands, warm colours rumble low and cold ones buzz high.</p>
-            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="빛과 색을 진동으로 자동 변환">Auto-haptics from light and colour</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="21개 카테고리">21 categories</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="동작마다 정해진 타격 타이밍">Scripted hits for every move</span></li></ul>
+            <p data-ko="21개 카테고리, 픽셀 이펙트 244개. 화면 밝기가 바뀌는 대로 진동이 납니다.">244 pixel effects in 21 categories. Vibration follows the changes in brightness on screen.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="번쩍이면 탁">Flashes become hits</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="계속 빛나면 웅웅">Steady light becomes a hum</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="좌우는 이펙트 위치를 따라감">Left or right follows the effect</span></li></ul>
             <a class="btn btn-ghost" href="play/#gallery"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
           </div>
         </article>
@@ -1200,21 +1208,21 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
   </div>
   <div class="pr-compare">
     <div class="wrap reveal">
-      <h2 class="h2" data-ko="무엇을 &lt;span class=&quot;serif&quot;&gt;쓰는지&lt;/span&gt;">What each one <span class="serif">uses</span></h2>
+      <h2 class="h2" data-ko="체험별 &lt;span class=&quot;serif&quot;&gt;기능&lt;/span&gt;">Features per <span class="serif">experience</span></h2>
       <div class="tbl-scroll" tabindex="0" aria-label="Feature table, scroll horizontally on small screens">
-        <table class="tbl"><thead><tr><th scope="col"></th><th scope="col" class="pro" data-ko="플레이그라운드">Playground</th><th scope="col" data-ko="비">Rain</th><th scope="col" data-ko="권총">Pistol</th><th scope="col" data-ko="기관총">Machine gun</th><th scope="col" data-ko="활">Bow</th><th scope="col" data-ko="근접 무기">Melee</th><th scope="col" data-ko="이펙트 갤러리">Effect gallery</th></tr></thead><tbody>
-<tr><td data-ko="HD 햅틱">HD haptics</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
-<tr><td data-ko="적응형 트리거">Adaptive trigger</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><span class="dash" aria-label="No">—</span></td></tr>
-<tr><td data-ko="컨트롤러 스피커">Controller speaker</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
-<tr><td data-ko="왼손 / 오른손 구분">Left / right hand</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
-<tr><td data-ko="블루투스 (일반 진동)">Works on Bluetooth (rumble)</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
+        <table class="tbl"><thead><tr><th scope="col"></th><th scope="col" class="pro" data-ko="플레이그라운드">Playground</th><th scope="col" data-ko="날씨 실험실">Weather lab</th><th scope="col" data-ko="보물 쟁반">Treasure tray</th><th scope="col" data-ko="권총">Pistol</th><th scope="col" data-ko="기관총">Machine gun</th><th scope="col" data-ko="활">Bow</th><th scope="col" data-ko="근접 무기">Melee</th><th scope="col" data-ko="이펙트 갤러리">Effect gallery</th></tr></thead><tbody>
+<tr><td data-ko="HD 햅틱">HD haptics</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
+<tr><td data-ko="적응형 트리거">Adaptive trigger</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><span class="dash" aria-label="No">—</span></td></tr>
+<tr><td data-ko="컨트롤러 스피커">Controller speaker</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td></tr>
+<tr><td data-ko="모션 센서">Motion sensor</td><td class="pro"><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td></tr>
+<tr><td data-ko="키보드·마우스">Keyboard and mouse</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
         </tbody></table>
       </div>
     </div>
   </div>
   <div class="pr-faq">
     <div class="wrap reveal">
-      <h2 class="h2" data-ko="자주 묻는 &lt;span class=&quot;serif&quot;&gt;질문&lt;/span&gt;">Common <span class="serif">questions</span></h2>
+      <h2 class="h2" data-ko="자주 묻는 &lt;span class=&quot;serif&quot;&gt;질문&lt;/span&gt;">Frequently asked <span class="serif">questions</span></h2>
       <div class="faq">
         <div class="qa open">
           <button type="button" aria-expanded="true"><span data-ko="어떤 브라우저에서 되나요?">Which browsers work?</span><span class="ic"><svg class="i plus"><use href="#i-plus"/></svg><svg class="i minus"><use href="#i-minus"/></svg></span></button>
@@ -1230,7 +1238,7 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
         </div>
         <div class="qa">
           <button type="button" aria-expanded="false"><span data-ko="DualSense가 꼭 있어야 하나요?">Do I need a DualSense?</span><span class="ic"><svg class="i plus"><use href="#i-plus"/></svg><svg class="i minus"><use href="#i-minus"/></svg></span></button>
-          <div class="ans"><p data-ko="그게 핵심이지만 필수는 아닙니다. 일반 게임패드는 일반 진동으로, 키보드로도 플레이할 수 있습니다.">It is the point, but not required. Any standard gamepad gets rumble, and the keyboard works too.</p></div>
+          <div class="ans"><p data-ko="아니요. 다른 게임패드는 일반 진동으로, 키보드와 마우스는 진동 없이 할 수 있습니다.">No. Other gamepads get normal rumble, and you can use a keyboard and mouse without vibration.</p></div>
         </div>
       </div>
     </div>
@@ -1239,8 +1247,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
 <section class="page p-resources" data-page="guide">
   <div class="rs-hero">
     <p class="eyebrow" data-ko="가이드">Guide</p>
-    <h1 class="rs-title" data-ko="무엇을 &lt;span class=&quot;serif&quot;&gt;도와드릴까요?&lt;/span&gt;">How can we <span class="serif">help?</span></h1>
-    <p class="rs-lede" data-ko="설정, 문제 해결, 그리고 손이 느끼는 원리.">Setup, troubleshooting and how the feel is made.</p>
+    <h1 class="rs-title" data-ko="&lt;span class=&quot;serif&quot;&gt;가이드&lt;/span&gt;"><span class="serif">Guide</span></h1>
+    <p class="rs-lede" data-ko="설정, 문제 해결, 동작 원리.">Setup, troubleshooting and how it works.</p>
     <label class="rs-search" aria-label="Search the guide">
       <svg class="i"><use href="#i-search"/></svg>
       <input type="search" class="rs-input" placeholder="Search the guide, e.g. &ldquo;Steam&rdquo;" autocomplete="off" spellcheck="false">
@@ -1325,8 +1333,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
             </button>
             <button type="button" class="rs-tut" data-k="surfaces footsteps" data-art="surfaces">
               <span class="rs-lvl m">INTERMEDIATE</span>
-              <h4 data-ko="바닥 8종의 차이 느끼기">Feel the difference between eight surfaces</h4>
-              <span class="rs-meta"><svg class="i"><use href="#i-clock"/></svg>6 min</span>
+              <h4 data-ko="나무와 벽돌 위 발소리">Footsteps on wood and brick</h4>
+              <span class="rs-meta"><svg class="i"><use href="#i-clock"/></svg>3 min</span>
             </button>
             <button type="button" class="rs-tut" data-k="advanced report bit" data-art="bit">
               <span class="rs-lvl a">ADVANCED</span>
@@ -1343,8 +1351,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
       <div class="rs-card reveal">
         <div class="rs-team"><span class="rs-ico"><svg class="i"><use href="#i-github"/></svg></span></div>
         <div class="rs-copy">
-          <h3 data-ko="버그를 &lt;span class=&quot;serif&quot;&gt;찾으셨나요?&lt;/span&gt;">Found a <span class="serif">bug?</span></h3>
-          <p data-ko="컨트롤러 종류, 연결 방식, 브라우저를 적어 이슈로 남겨 주세요.">Open an issue with your controller, connection and browser.</p>
+          <h3 data-ko="버그 &lt;span class=&quot;serif&quot;&gt;제보&lt;/span&gt;">Report a <span class="serif">bug</span></h3>
+          <p data-ko="컨트롤러 종류, 연결 방식(USB/블루투스), 브라우저를 함께 적어 주세요.">Include your controller, connection (USB or Bluetooth) and browser.</p>
         </div>
         <a class="btn btn-primary" href="https://github.com/andonghun/fun-haptic/issues" target="_blank" rel="noopener"><span data-ko="이슈 남기기">Open an issue</span> <svg class="i"><use href="#i-arrow-right"/></svg></a>
       </div>
@@ -1354,8 +1362,8 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
 <section class="page p-changelog" data-page="changelog">
   <div class="cl-hero">
     <p class="eyebrow" data-ko="업데이트">Changelog</p>
-    <h1 class="cl-title" data-ko="Pixel Haptics의 &lt;span class=&quot;serif&quot;&gt;새 소식&lt;/span&gt;.">What&rsquo;s <span class="serif">new</span> in Pixel Haptics.</h1>
-    <p class="cl-lede" data-ko="새 체험, 개선, 수정.">New experiences, improvements and fixes.</p>
+    <h1 class="cl-title" data-ko="업데이트 &lt;span class=&quot;serif&quot;&gt;기록&lt;/span&gt;.">Release <span class="serif">notes</span>.</h1>
+    <p class="cl-lede" data-ko="추가, 개선, 수정 내역입니다.">Additions, improvements and fixes.</p>
     <div class="cl-actions">
       <a class="btn btn-ghost" href="https://github.com/andonghun/fun-haptic" target="_blank" rel="noopener"><svg class="i"><use href="#i-github"/></svg><span data-ko="GitHub에서 보기">Watch on GitHub</span></a>
     </div>
@@ -1363,13 +1371,23 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
   <div class="cl-timeline">
     <div class="cl-list">
       <article class="rel active reveal">
+        <div class="rel-meta"><span class="rel-ver">v0.6</span><span class="rel-date">Nov 2, 2026</span></div>
+        <div class="rel-rail"><span class="rel-dot"></span></div>
+        <div class="rel-entry"><div class="rel-card">
+          <div class="rel-tags"><span class="tag mint">New</span><span class="tag sky">Improved</span></div>
+          <h2 class="rel-title" data-ko="날씨 실험실, 보물 쟁반">Weather lab and Treasure tray</h2>
+          <p class="rel-desc" data-ko="비 체험을 날씨 12가지가 있는 날씨 실험실로 바꿨습니다. 보물 쟁반은 컨트롤러를 기울이면 공이 구르고 상자에서 코인이 떨어집니다. 플레이그라운드는 바닥 2종, 콤보, 더 강한 타격 진동으로 바뀌었습니다.">Rain was replaced by a weather lab with 12 types. The tray rolls balls when you tilt the controller, and drops coins from a chest. The playground now has two floors, combos and stronger hit vibration.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="장치와 진동 상태 항상 표시">Device and vibration status always on screen</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="메뉴에 진동 테스트">Vibration test in the menu</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="마우스 버튼으로 공격과 R2">Mouse buttons for attack and R2</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="수정: 망치 강공격 때 칼로 바뀌던 문제">Fix: the hammer no longer turns into a sword on a heavy attack</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="수정: 총 쏠 때 나던 끽끽 소리 제거">Fix: removed a squeaky sound when firing</span></li></ul>
+        </div></div>
+      </article>
+      <article class="rel reveal">
         <div class="rel-meta"><span class="rel-ver">v0.5</span><span class="rel-date">Nov 2, 2026</span></div>
         <div class="rel-rail"><span class="rel-dot"></span></div>
         <div class="rel-entry"><div class="rel-card">
           <div class="rel-tags"><span class="tag mint">New</span></div>
           <h2 class="rel-title" data-ko="플레이그라운드">Playground</h2>
-          <p class="rel-desc" data-ko="바닥 8종과 허수아비 6개가 있는 횡스크롤 들판. 걷고, 달리고, 대시하고, 점프하고, 무기 7종으로 싸웁니다.">A side-scrolling field with eight surfaces and six straw dummies. Walk, run, dash and jump, and fight with seven weapons.</p>
-          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="잔상과 함께 손을 가로지르는 대시">Dash with after-images and a sweep across your hands</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="달리다 멈추면 미끄러짐">Skid to a halt from a run</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="동작마다 정해진 히트스톱과 화면 흔들림">Hit-stop and screen shake taken from each move</span></li></ul>
+          <p class="rel-desc" data-ko="허수아비가 있는 횡스크롤 공간. 걷기, 달리기, 대시, 점프, 무기 7종.">A side-scrolling area with straw dummies. Walk, run, dash, jump and use seven weapons.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="잔상이 남는 대시">Dash with after-images</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="달리다 멈추면 미끄러짐">Skid when stopping from a run</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="동작별 히트스톱과 화면 흔들림">Hit-stop and screen shake per move</span></li></ul>
         </div></div>
       </article>
       <article class="rel reveal">
@@ -1377,9 +1395,9 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
         <div class="rel-rail"><span class="rel-dot"></span></div>
         <div class="rel-entry"><div class="rel-card">
           <div class="rel-tags"><span class="tag mint">New</span><span class="tag sky">Graphics</span></div>
-          <h2 class="rel-title" data-ko="pixelfx 픽셀아트">Pixel art with pixelfx</h2>
-          <p class="rel-desc" data-ko="오픈소스 pixelfx 라이브러리로 픽셀아트 전환. 어떤 이펙트든 촉감으로 바꾸는 자동 햅틱 추가.">Rebuilt in pixel art on the open-source pixelfx library, with auto-haptics that turn any effect into touch.</p>
-          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="갤러리에 이펙트 244개">244 effects in the gallery</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="캐릭터 동작의 타격 타이밍 그대로 반영">Character moves keep their scripted hits</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="메뉴에 실시간 미리보기">Live previews on the menu</span></li></ul>
+          <h2 class="rel-title" data-ko="픽셀아트">Pixel art</h2>
+          <p class="rel-desc" data-ko="오픈소스 pixelfx 라이브러리로 픽셀아트로 다시 만들었습니다. 화면의 빛으로 진동을 만드는 기능을 추가했습니다.">Rebuilt in pixel art with the open-source pixelfx library. Added vibration generated from on-screen light.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="갤러리에 이펙트 244개">244 effects in the gallery</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="메뉴에 실시간 미리보기">Live previews in the menu</span></li></ul>
         </div></div>
       </article>
       <article class="rel reveal">
@@ -1387,18 +1405,18 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
         <div class="rel-rail"><span class="rel-dot"></span></div>
         <div class="rel-entry"><div class="rel-card">
           <div class="rel-tags"><span class="tag sky">Improved</span></div>
-          <h2 class="rel-title" data-ko="1인칭 체험실">First-person rooms</h2>
-          <p class="rel-desc" data-ko="비, 권총, 소총, 활, 발소리, 굴리기를 1인칭으로. 자이로 조준 지원.">Rain, pistol, rifle, bow, footsteps and tilt in first person, with gyro aiming.</p>
-          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="손 안의 소리는 컨트롤러 스피커로">In-hand sounds moved to the controller speaker</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="비 체험에 우산과 천둥">Umbrella and thunder in the rain room</span></li></ul>
+          <h2 class="rel-title" data-ko="1인칭 버전">First-person version</h2>
+          <p class="rel-desc" data-ko="비, 권총, 소총, 활, 발소리, 굴리기를 3D 1인칭으로.">Rain, pistol, rifle, bow, footsteps and tilt in 3D first person.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="작은 소리를 컨트롤러 스피커로">Small sounds moved to the controller speaker</span></li></ul>
         </div></div>
       </article>
-      <article class="rel reveal">
+      <article class="rel older" hidden>
         <div class="rel-meta"><span class="rel-ver">v0.2</span><span class="rel-date">Oct 17, 2026</span></div>
         <div class="rel-rail"><span class="rel-dot"></span></div>
         <div class="rel-entry"><div class="rel-card">
           <div class="rel-tags"><span class="tag amber">Experiment</span></div>
-          <h2 class="rel-title" data-ko="작은 모험">A small adventure</h2>
-          <p class="rel-desc" data-ko="기능별 스테이지 7개가 있는 허브 섬. 사람들은 스테이지를 깨는 것보다 직접 느끼고 싶어한다는 걸 배웠습니다.">A hub island with seven stages built around each feature. It taught us that people want to feel things, not clear stages.</p>
+          <h2 class="rel-title" data-ko="3D 모험">3D adventure</h2>
+          <p class="rel-desc" data-ko="스테이지 7개가 있는 허브 섬. 이후 개별 체험으로 바꿨습니다.">A hub island with seven stages. Replaced later by separate experiences.</p>
           <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="검 막기와 패리">Sword guard and parry</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="도끼 던지기와 회수">Axe throw and recall</span></li></ul>
         </div></div>
       </article>
@@ -1407,9 +1425,9 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
         <div class="rel-rail"><span class="rel-dot"></span></div>
         <div class="rel-entry"><div class="rel-card">
           <div class="rel-tags"><span class="tag red">Fix</span></div>
-          <h2 class="rel-title" data-ko="드디어 보이스코일까지 닿은 진동">Haptics finally reach the coils</h2>
-          <p class="rel-desc" data-ko="구형 진동 호환 비트가 켜져 있으면 컨트롤러가 오디오 햅틱을 무시했습니다. 이제 HD 햅틱이 꺼져 있을 때만 구형 진동을 보냅니다.">The controller ignored audio haptics while a classic-rumble compatibility bit was set. We now send rumble only when HD haptics are off.</p>
-          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="3·4번 채널이 왼손·오른손 코일">Channels 3 and 4 drive the left and right coil</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="WebHID로 적응형 트리거">Adaptive triggers over WebHID</span></li></ul>
+          <h2 class="rel-title" data-ko="HD 햅틱 동작">HD haptics working</h2>
+          <p class="rel-desc" data-ko="출력 리포트에 구형 진동 플래그가 켜져 있으면 컨트롤러가 오디오 진동을 무시했습니다. 이제 HD 햅틱이 꺼져 있을 때만 구형 진동을 보냅니다.">The controller ignored audio haptics while a legacy rumble flag was set in its output report. Rumble is now only sent when HD haptics are off.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="3·4번 채널이 왼쪽·오른쪽 손잡이">Channels 3 and 4 drive the left and right grip</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="WebHID로 적응형 트리거">Adaptive triggers over WebHID</span></li></ul>
         </div></div>
       </article>
     </div>
@@ -1423,7 +1441,7 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
     <div class="footer-top">
       <div class="footer-brand">
         <a class="brand" href="#home"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" fill="#6ee7c8"/><rect x="13" y="3" width="8" height="8" fill="#edf1f0" opacity=".9"/><rect x="3" y="13" width="8" height="8" fill="#edf1f0" opacity=".5"/><rect x="13" y="13" width="8" height="8" fill="#6ee7c8" opacity=".55"/></svg>Pixel Haptics</a>
-        <p data-ko="DualSense를 손끝으로 느끼는 무료 브라우저 놀이터.">A free browser playground for feeling your DualSense.</p>
+        <p data-ko="DualSense 진동과 트리거를 브라우저에서 써 보는 무료 사이트.">Free browser demos for DualSense haptics and triggers.</p>
         <div class="socials">
           <a href="https://github.com/andonghun/fun-haptic" target="_blank" rel="noopener" aria-label="GitHub"><svg class="i"><use href="#i-github"/></svg></a>
         </div>
@@ -1565,7 +1583,7 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
     $$('[data-ko]').forEach(function(el){el.innerHTML=l==='ko'?el.dataset.ko:EN[el.dataset.i]});
     $('#langBtn').textContent=l==='ko'?'English':'한국어';
     var inp=$('.rs-input'); if(inp) inp.placeholder=l==='ko'?'가이드 검색, 예: “Steam”':'Search the guide, e.g. “Steam”';
-    document.title=l==='ko'?'Pixel Haptics — 브라우저에서 DualSense를 느껴보세요':'Pixel Haptics — feel your DualSense in the browser';
+    document.title=l==='ko'?'Pixel Haptics — 브라우저에서 DualSense 진동':'Pixel Haptics — DualSense haptics in the browser';
     finding(cur); trigMode(curMode);
   }
   $('#langBtn').addEventListener('click',function(){setLang(document.documentElement.lang==='ko'?'en':'ko')});
@@ -1573,15 +1591,16 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
 
   /* ---- home: experience tabs drive the live preview ---- */
   var FIND={
-    playground:['Footsteps that change with the floor, a sweep across your palms on a dash, and a hit-stop thud when a weapon lands.','바닥에 따라 바뀌는 발소리, 대시할 때 손바닥을 쓸고 가는 느낌, 무기가 맞는 순간 멈칫하는 쿵.'],
-    rain:['Hundreds of tiny taps spread over both palms; an umbrella turns them into a low drumming.','양손에 흩어지는 수백 개의 작은 톡톡. 우산을 펴면 낮게 두드리는 소리로 바뀝니다.'],
-    pistol:['A clean click in R2, then a hard kick, then the impact arriving in your right hand.','R2의 깔끔한 딸깍, 강한 반동, 그리고 오른손에 도착하는 명중감.'],
-    rifle:['The trigger buzzes under your finger twelve times a second until it overheats and locks.','과열돼서 잠길 때까지 손가락 밑에서 초당 12번 떨리는 트리거.'],
-    bow:['Resistance that builds with the draw, a tremble at full pull, then the string ringing left and right.','당길수록 쌓이는 저항, 끝까지 당기면 떨림, 그리고 좌우로 울리는 시위.'],
-    melee:['A swish that crosses your hands before contact, then a hit whose weight matches the swing.','맞기 전에 손을 가로지르는 바람 소리, 그리고 휘두른 무게만큼의 타격.'],
-    gallery:['Whatever lights up the screen lights up your hands: bursts hit, glows hum, colour sets the pitch.','화면에서 빛나는 것이 손에서도 빛납니다. 터지면 치고, 빛나면 웅웅거리고, 색이 음높이를 정합니다.']
+    playground:['Footsteps vibrate on the side of the foot that lands. Dashes move across both hands. Hits vibrate harder for heavier weapons.','발이 닿는 쪽 손에 발소리 진동이 옵니다. 대시는 양손을 가로지르고, 무거운 무기일수록 타격 진동이 셉니다.'],
+    weather:['Rain taps both hands, snow ticks lightly, wind moves from one hand to the other.','비는 양손을 톡톡 치고, 눈은 가볍게 닿고, 바람은 한쪽 손에서 다른 쪽으로 이동합니다.'],
+    tray:['Each ball vibrates on the side it is on. Each coin taps where it lands.','공이 있는 쪽 손이 진동하고, 코인은 떨어진 자리에서 톡 칩니다.'],
+    pistol:['A click in R2, a recoil kick, then the hit on the right.','R2 딸깍, 반동, 그리고 오른쪽에서 명중.'],
+    rifle:['The trigger vibrates with each round until it overheats and locks.','과열돼 잠길 때까지 한 발마다 트리거가 떨립니다.'],
+    bow:['Resistance increases as you pull, vibrates at full draw, and the string vibrates on release.','당길수록 저항이 커지고, 끝까지 당기면 떨리고, 놓으면 시위가 진동합니다.'],
+    melee:['A short sweep before the hit, then a hit timed to the move.','타격 직전 짧은 휘두름, 그리고 동작에 맞춘 타격.'],
+    gallery:['Flashes become hits, steady light becomes a hum, and the side follows the effect.','번쩍이면 탁, 계속 빛나면 웅웅, 좌우는 이펙트 위치를 따라갑니다.']
   };
-  var NAMES={playground:['Playground','플레이그라운드'],rain:['Rain','비'],pistol:['Pistol','권총'],rifle:['Machine gun','기관총'],bow:['Bow','활'],melee:['Melee','근접 무기'],gallery:['Effect gallery','이펙트 갤러리']};
+  var NAMES={playground:['Playground','플레이그라운드'],weather:['Weather lab','날씨 실험실'],tray:['Treasure tray','보물 쟁반'],pistol:['Pistol','권총'],rifle:['Machine gun','기관총'],bow:['Bow','활'],melee:['Melee','근접 무기'],gallery:['Effect gallery','이펙트 갤러리']};
   var cur='playground';
   function finding(id){var f=FIND[id];$('[data-k=finding]').textContent=L(f[0],f[1]);$('[data-k=title]').textContent=L(NAMES[id][0],NAMES[id][1])}
   $$('.p-home .task').forEach(function(b){b.addEventListener('click',function(){
@@ -1592,7 +1611,7 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
   })});
 
   /* ---- trigger modes: draw the resistance curve ---- */
-  var MODES={click:['Resistance rises, then breaks at the click — the pistol.','저항이 올라가다 딸깍 끊깁니다 — 권총.'],ramp:['Heavier the further you pull — the bow.','당길수록 무거워집니다 — 활.'],buzz:['The trigger vibrates under your finger — the machine gun.','손가락 밑에서 트리거가 떨립니다 — 기관총.'],wall:['A hard stop partway down — an overheated barrel.','중간에서 딱 막힙니다 — 과열된 총열.']};
+  var MODES={click:['Resistance builds, then drops at the click. Used by the pistol.','저항이 올라가다 딸깍 하고 풀립니다. 권총에 씁니다.'],ramp:['Resistance increases with the pull. Used by the bow.','당길수록 저항이 커집니다. 활에 씁니다.'],buzz:['The trigger vibrates. Used by the machine gun.','트리거가 떨립니다. 기관총에 씁니다.'],wall:['A hard stop partway down. Used when the gun overheats.','중간에서 막힙니다. 총이 과열됐을 때 씁니다.']};
   var curMode='click';
   function trigMode(m){
     curMode=m; var d='';
@@ -1606,13 +1625,6 @@ svg.b{width:18px;height:18px;flex:none;display:inline-block}
     $$('#trigModes .role').forEach(function(b){b.classList.toggle('on',b.dataset.mode===m)});
   }
   $$('#trigModes .role').forEach(function(b){b.addEventListener('click',function(){trigMode(b.dataset.mode)})});
-
-  /* ---- surfaces ---- */
-  var SURF=[['Grass','풀','#4f9a3c'],['Wood','나무','#9a6232'],['Steel','철판','#7d889a'],['Stone','돌','#76737f'],['Gravel','자갈','#8c7d6a'],['Snow','눈','#c9d6e6'],['Water','물','#3a78b0'],['Sand','모래','#d4b070']];
-  var st=$('#surfTiles');
-  SURF.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.className='surf'+(i?'':' on');b.style.background='linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),'+s[2];b.innerHTML='<span data-ko="'+s[1]+'">'+s[0]+'</span>';
-    b.addEventListener('click',function(){$$('.surf').forEach(function(x){x.classList.toggle('on',x===b)});toast(L('Try it in the Playground: walk onto '+s[0].toLowerCase(),'플레이그라운드에서 '+s[1]+' 위를 걸어 보세요'))});st.appendChild(b)});
-  $$('.surf [data-ko]').forEach(function(el){el.dataset.i='s'+el.textContent;EN['s'+el.textContent]=el.innerHTML});
 
   /* ---- weapon chips, rain timeline, proof numbers ---- */
   $$('.p-home .model').forEach(function(b){b.addEventListener('click',function(){$$('.p-home .model').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')})})});
@@ -1686,8 +1698,9 @@ import { createFrame, clearFrame, composite, backdrop, createFx, createAct } fro
 import { effects } from './vendor/pixelfx/src/fx/index.js';
 
 const P = {
-  playground:{act:'moves/sword-combo', x:40}, rain:{fx:'weather/rain', y:170, bg:'sky'}, pistol:{act:'moves/pistol-shots', x:50},
-  rifle:{fx:'projectiles/muzzle-smg', x:140}, bow:{act:'moves/arrow-shot', x:16}, melee:{act:'melee/hammer-smash', x:110},
+  playground:{act:'moves/sword-combo', x:40}, weather:{cycle:['weather/rain', 'weather/storm', 'weather/snow', 'weather/blizzard', 'weather/aurora', 'weather/cherry-blossoms'], y:170, bg:'sky', dur:4},
+  tray:{cycle:['pickups/chest-open', 'pickups/coin-spin', 'pickups/collect-burst'], dur:2.4}, pistol:{act:'moves/pistol-shots', x:50},
+  rifle:{act:'moves/pistol-shots', x:50}, bow:{act:'moves/arrow-shot', x:16}, melee:{act:'melee/hammer-smash', x:110},
   gallery:{cycle:['fire/campfire', 'explosions/big-explosion', 'lightning/plasma-ball', 'ice/frost-nova', 'water/fountain', 'holy/heal', 'pickups/chest-open', 'weather/aurora']}
 };
 class View {
@@ -1698,7 +1711,7 @@ class View {
     const y = p.y ?? (p.cycle ? 140 : 150); this.bg = backdrop(p.bg || (p.cycle ? (m.bg || 'dark') : 'ground'), 320, 180, y);
     const x = p.x ?? (p.cycle ? 160 : m.origin[0] + (320 - m.size[0])/2);
     if(p.act){ this.cur = createAct(mod, {x, y}); const k = mod.act.poses; this.end = Math.max(m.duration, k[k.length - 1][0]) - Math.min(0, k[0][0]) + 0.6; this.act = true; }
-    else { this.cur = createFx(mod, {x, y}); this.end = p.cycle ? 3.2 : (m.loop ? Infinity : m.duration + 0.6); this.act = false; }
+    else { this.cur = createFx(mod, {x, y}); this.end = p.cycle ? (p.dur || 3.2) : (m.loop ? Infinity : m.duration + 0.6); this.act = false; }
     this.age = 0;
   }
   tick(dt){
