@@ -3,7 +3,7 @@
 // Machine gun: hold R2 — the trigger itself vibrates, a burst pours out at 12 rounds a second and chews the wall;
 // keep firing and it overheats: the trigger goes stiff and the barrel hisses until it cools.
 import { effects, rnd, clamp, FLOOR, hud, Sfx, later } from './common.js';
-import { PX, ActHaptic } from '../px.js';
+import { PX, ActHaptic, drawFigure } from '../px.js';
 import { IN } from '../input.js';
 import { DS, TRG } from '../ds.js';
 import { H } from '../haptics.js';
@@ -46,17 +46,19 @@ export function makeSmg(stage){
     id:'rifle',
     enter(){
       stage.setBg('ground', FLOOR); stage.clear(); stage.auto.enabled = false; trig(); Light.base = [255, 120, 40];
-      stage.paint = p => { p.place(MX - 20, FLOOR); PX.drawActor(p, PX.stockActor(1)); p.place(0, 0);
+      const AIM = {...PX.READY, weapon:'pistol', crouch:3, lean:2, fx:18, fy:-28, sa:0, bx:12, by:-25, ffx:11, fbx:-9}, KICK = {...AIM, lean:0, fx:16, fy:-33, sa:-0.45, by:-28};
+      stage.paintBack = p => drawFigure(stage.frame, MX - 28, FLOOR, gun && rate > 1/24 ? KICK : AIM);
+      stage.paint = p => {
         p.rect(WALL, FLOOR - 70, 40, 70, PX.hex('#3b3550')); p.rect(WALL, FLOOR - 70, 2, 70, PX.hex('#5b5079'));
         const hb = Math.round(heat*38); p.rect(MX - 40, FLOOR - 60, 40, 4, PX.hex('#1a1724')); if(hb) p.rect(MX - 39, FLOOR - 59, hb, 2, over > 0 ? PX.hex('#ff4d5e') : PX.hex('#ffc23d')); };
       UI.toast(t('x_rifle_tip'), 4200);
     },
-    exit(){ stage.paint = null; stage.clear(); DS.out.trigR = TRG.off(); },
+    exit(){ stage.paint = stage.paintBack = null; stage.clear(); DS.out.trigR = TRG.off(); },
     update(dt, live){
       over = Math.max(0, over - dt); if(over <= 0 && heat >= 1) heat = 0.7;
       const firing = live && IN.r2 > 0.35 && over <= 0;
       heat = Math.max(0, heat - dt*(firing ? 0 : 0.45));
-      if(firing && !gun) gun = stage.fx(SMG, {x:MX, y:FLOOR, keep:true});
+      if(firing && !gun) gun = stage.fx(SMG, {x:MX, y:FLOOR, height:32, keep:true});
       if(!firing && gun){ gun.stop(); const g = gun; setTimeout(() => stage.remove(g), 400); gun = null; burst = 0; }
       if(firing){ rate -= dt; if(rate <= 0){ rate = 1/12; shots++; burst++; heat += 0.028;
         Sfx.gunshot(false, -0.6); H.pulse(220, 0.85, 0.022, burst % 2 ? -0.5 : -0.2); H.pulse(70, 1.2, 0.06, -0.3); H.noise({f:160, dur:0.03, gain:0.4, pan:-0.4});

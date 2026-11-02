@@ -13,12 +13,14 @@ import { makePistol, makeSmg } from './pxp/guns.js';
 import { makeBow } from './pxp/bow.js';
 import { makeMelee } from './pxp/melee.js';
 import { makeGallery } from './pxp/gallery.js';
+import { makePlayground } from './pxp/playground.js';
 
 const stage = new Stage($('px'), 320, 180);
 const XPS = [
+  {id:'playground', icon:'🕹️', big:true, make:() => makePlayground(stage), tags:['hd', 'trg', 'spk'], prev:{act:'moves/sword-combo', x:40}},
   {id:'rain',    icon:'🌧️', make:() => makeRain(stage),    tags:['hd', 'trg', 'spk'], prev:{fx:'weather/rain', bg:'sky'}},
   {id:'pistol',  icon:'🔫', make:() => makePistol(stage),  tags:['trg', 'hd', 'spk'], prev:{act:'moves/pistol-shots', x:50}},
-  {id:'rifle',   icon:'💥', make:() => makeSmg(stage),     tags:['trg', 'hd', 'spk'], prev:{fx:'projectiles/muzzle-smg', x:120}},
+  {id:'rifle',   icon:'💥', make:() => makeSmg(stage),     tags:['trg', 'hd', 'spk'], prev:{act:'moves/pistol-shots', x:50}},
   {id:'bow',     icon:'🏹', make:() => makeBow(stage),     tags:['trg', 'hd'],        prev:{act:'moves/arrow-shot', x:16}},
   {id:'melee',   icon:'⚔️', make:() => makeMelee(stage),   tags:['hd', 'trg'],        prev:{act:'moves/sword-combo', x:40}},
   {id:'gallery', icon:'✨', make:() => makeGallery(stage), tags:['hd', 'spk'],        prev:{cycle:['fire/campfire', 'explosions/big-explosion', 'lightning/plasma-ball', 'ice/frost-nova', 'water/fountain', 'arcane/magic-circle-cast', 'holy/heal', 'critters/slime']}}
@@ -30,7 +32,7 @@ const G = {xp:null, playing:false};
 const previews = [];
 function buildMenu(){
   previews.length = 0;
-  $('xpGrid').innerHTML = XPS.map(x => `<button class="btn xp" data-xp="${x.id}"><canvas class="pv" width="320" height="180"></canvas><div class="xp-body"><h3>${x.icon} ${t('x_' + x.id)}</h3><p>${t('x_' + x.id + '_d')}</p><div class="tags">${x.tags.map(g => `<span class="tag ${TAGC[g]}">${t('tag_' + g)}</span>`).join('')}</div></div></button>`).join('');
+  $('xpGrid').innerHTML = XPS.map(x => `<button class="btn xp${x.big ? ' big' : ''}" data-xp="${x.id}"><canvas class="pv" width="320" height="180"></canvas><div class="xp-body"><h3>${x.icon} ${t('x_' + x.id)}</h3><p>${t('x_' + x.id + '_d')}</p><div class="tags">${x.tags.map(g => `<span class="tag ${TAGC[g]}">${t('tag_' + g)}</span>`).join('')}</div></div></button>`).join('');
   document.querySelectorAll('[data-xp]').forEach((b, i) => {
     b.onclick = () => start(b.dataset.xp);
     const st = new Stage(b.querySelector('canvas'), 320, 180, {auto:false, bg:XPS[i].prev.bg || 'ground', groundY:150});

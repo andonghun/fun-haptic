@@ -105,3 +105,6 @@ small{font-size:13px}
 @media (max-width:640px){.card{padding:20px}.hud-ctl{display:none}}
 
 .logo{font-family:'Courier New',monospace;letter-spacing:.02em;text-shadow:4px 4px 0 rgba(0,0,0,.4)}
+.btn.xp.big{grid-column:1/-1;display:grid;grid-template-columns:2fr 1fr;align-items:center}
+.btn.xp.big h3{font-size:28px}
+@media (max-width:760px){.btn.xp.big{grid-template-columns:1fr}}

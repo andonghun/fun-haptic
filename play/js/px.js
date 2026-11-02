@@ -1,12 +1,14 @@
 // Pixel stage: a low-res pixelfx frame drawn to a canvas, plus "auto-haptics" — every frame we measure how much
 // light the effects put out, where (left↔right) and how warm it is, and turn sudden jumps into hits and steady glow
 // into a hum. That gives every one of the library's effects a feel without hand-authoring each one.
-import { createFrame, clearFrame, composite, backdrop, createFx, createAct, painterFor, actBounds, hex, drawActor, stockActor } from '../../vendor/pixelfx/src/core/index.js';
+import { createFrame, clearFrame, composite, backdrop, createFx, createAct, painterFor, actBounds, hex, drawActor, stockActor, posed, READY } from '../../vendor/pixelfx/src/core/index.js';
 import { H } from './haptics.js';
 import { SND } from './sound.js';
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-export const PX = { createFx, createAct, backdrop, painterFor, actBounds, hex, drawActor, stockActor };
+// paint the rigged hero in a pose with his feet at (x, y) in frame pixels
+export function drawFigure(F, x, y, pose, flip = false){ const r = posed(pose); for(let i = 0; i < r.n; i++){ const px = flip ? x - r.xs[i] - 1 : x + r.xs[i], py = y + r.ys[i]; if(px >= 0 && py >= 0 && px < F.w && py < F.h) F.color[py*F.w + px] = r.color[i]; } }
+export const PX = { READY, createFx, createAct, backdrop, painterFor, actBounds, hex, drawActor, stockActor };
 
 export class Stage {
   constructor(canvas, w = 320, h = 180, o = {}){

@@ -2,7 +2,7 @@
 // L2 opens an umbrella over the little hero — the drops turn into deeper drumming on the canopy.
 // △ calls lightning: a sigil charges (static crackles up through your hands), then three strokes slam down.
 import { effects, rnd, clamp, FLOOR, hud } from './common.js';
-import { PX } from '../px.js';
+import { PX, drawFigure } from '../px.js';
 import { IN } from '../input.js';
 import { DS, TRG } from '../ds.js';
 import { H } from '../haptics.js';
@@ -24,11 +24,11 @@ export function makeRain(stage){
       stage.setBg('sky', FLOOR); stage.clear(); stage.auto.enabled = false;
       rain = stage.fx(RAIN, {x:160, y:FLOOR + 20, keep:true, density:0.3});
       stage.paint = p => {                                     // hero + umbrella
-        const ac = PX.stockActor(1); p.place(160, FLOOR); PX.drawActor(p, ac); p.place(0, 0);
+        drawFigure(stage.frame, 160, FLOOR, st.open > 0.3 ? {...PX.READY, fx:6, fy:-30, bx:4, by:-28} : {...PX.READY});
         const o = st.open; if(o < 0.05) return;
-        const top = FLOOR - 30 - Math.round(o*8), r = Math.round(4 + o*16);
-        p.line(164, FLOOR - 14, 164, top, C.pole);
-        for(let dx = -r; dx <= r; dx++){ const yy = top - Math.round(Math.sqrt(Math.max(0, r*r - dx*dx))*0.45); p.line(164 + dx, yy, 164 + dx, top, (dx/2 | 0) % 2 ? C.cloth : C.cloth2); p.dot(164 + dx, yy, C.rim); }
+        const top = FLOOR - 50 - Math.round(o*8), r = Math.round(4 + o*18);
+        p.line(166, FLOOR - 28, 166, top, C.pole);
+        for(let dx = -r; dx <= r; dx++){ const yy = top - Math.round(Math.sqrt(Math.max(0, r*r - dx*dx))*0.45); p.line(166 + dx, yy, 166 + dx, top, (dx/2 | 0) % 2 ? C.cloth : C.cloth2); p.dot(166 + dx, yy, C.rim); }
       };
       DS.out.trigR = TRG.ramp(0, 1, 5); DS.out.trigL = TRG.feedback(3, 4); Light.base = [30, 50, 110];
       beds = [SND.bed({type:'highpass', f:2400, q:0.3}), SND.bed({type:'lowpass', f:500, lfo:0.07}), SND.bed({type:'bandpass', f:1100, q:0.8})];
