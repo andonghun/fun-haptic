@@ -1,70 +1,1728 @@
 <!doctype html>
-<html lang="ko">
+<html lang="en">
 <head>
+<meta name="description" content="A free browser playground for the DualSense controller: HD haptics, adaptive triggers and the controller speaker, wired to 244 pixel-art effects. Plug in with USB and play — nothing to install.">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Haptic Quest — 브라우저에서 즐기는 DualSense HD 햅틱 체험</title>
-<meta name="description" content="설치 없이 브라우저에서 DualSense 컨트롤러의 HD 햅틱, 적응형 트리거, 라이트바를 체험하는 3D 모험 게임. Play a haptic 3D adventure for the DualSense controller right in your browser.">
-<!-- AdSense site-wide script goes here once approved -->
+<title>Pixel Haptics — feel your DualSense in the browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b1020;--fg:#eef2fb;--dim:#9aa8c3;--acc:#5fb4ff;--acc2:#b48cff;--line:rgba(140,170,230,.2)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 "Pretendard","Segoe UI","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
-a{color:var(--acc)}
-.wrap{max-width:980px;margin:0 auto;padding:0 20px}
-header{padding:18px 0;display:flex;justify-content:space-between;align-items:center}
-header b{font-size:18px;letter-spacing:-.02em}
-.hero{padding:70px 0 50px;text-align:center;background:radial-gradient(900px 400px at 50% 0%,rgba(95,140,255,.25),transparent)}
-.hero h1{font-size:clamp(38px,7vw,72px);line-height:1.05;margin:0 0 16px;letter-spacing:-.03em;background:linear-gradient(120deg,#9fe0ff,#5fb4ff 40%,#b48cff 75%,#ffd25e);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p{color:#cfdcf5;font-size:19px;max-width:640px;margin:0 auto 28px}
-.cta{display:inline-block;padding:15px 34px;border-radius:14px;background:linear-gradient(135deg,#4aa8ff,#8a6bff);color:#fff;text-decoration:none;font-weight:700;font-size:18px;box-shadow:0 12px 40px rgba(110,120,255,.35)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:30px 0}
-.card{border:1px solid var(--line);border-radius:16px;padding:20px;background:rgba(255,255,255,.03)}
-.card h3{margin:0 0 6px}
-h2{margin:48px 0 12px;font-size:26px}
-.dim{color:var(--dim)}
-.ad-slot{margin:30px auto;min-height:0}
-footer{margin-top:60px;padding:30px 0;border-top:1px solid var(--line);color:var(--dim);font-size:14px}
-.lang{background:none;border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:6px 12px;cursor:pointer}
-[data-l]{display:none} html[lang=ko] [data-l=ko], html[lang=en] [data-l=en]{display:revert}
+/* Portrait slots: replace data-face / data-img placeholders with real image files (see SKILL.md step 6). */
+:root{
+  --bg:#07090a; --bg-2:#0a0e0f; --surface:#0e1213; --surface-2:#111617;
+  --ink:#edf1f0; --ink-85:rgba(237,241,240,.85); --ink-80:rgba(237,241,240,.8); --ink-72:rgba(237,241,240,.72);
+  --ink-68:rgba(237,241,240,.68); --ink-65:rgba(237,241,240,.65); --ink-62:rgba(237,241,240,.62); --ink-58:rgba(237,241,240,.58);
+  --ink-50:rgba(237,241,240,.5); --ink-45:rgba(237,241,240,.45); --ink-40:rgba(237,241,240,.4); --ink-38:rgba(237,241,240,.38); --ink-06:rgba(237,241,240,.06);
+  --mint:#6ee7c8; --mint-10:rgba(110,231,200,.1); --mint-06:rgba(110,231,200,.06); --mint-22:rgba(110,231,200,.22);
+  --red:#ff7a7a; --amber:#f5b867; --sky:#7cc4f5; --lilac:#b8c1ff;
+  --line:rgba(255,255,255,.06); --line-2:rgba(255,255,255,.08); --line-3:rgba(255,255,255,.1); --line-4:rgba(255,255,255,.14);
+  --fill:rgba(255,255,255,.03); --fill-2:rgba(255,255,255,.04); --fill-3:rgba(255,255,255,.07);
+  --sans:'Geist',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Geist Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  --serif:'Instrument Serif',Georgia,serif;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px; --r-2xl:24px;
+  --wrap:1200px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit;color:inherit;background:none;border:0;outline:none}
+button{cursor:pointer}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--mint);outline-offset:2px;border-radius:6px}
+svg.i{width:16px;height:16px;flex:none;display:inline-block;vertical-align:middle}
+svg.b{width:18px;height:18px;flex:none;display:inline-block}
+
+/* ---------- layout primitives ---------- */
+.wrap{width:100%;max-width:calc(var(--wrap) + 48px);margin:0 auto;padding:0 24px}
+.wrap-1000{max-width:1048px}
+.wrap-760{max-width:808px}
+.sec{padding:120px 0}
+.sec-line{border-top:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mint)}
+.eyebrow.muted{color:var(--ink-45)}
+.serif{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--mint);letter-spacing:-.01em}
+.h1{font-weight:600;font-size:64px;line-height:1.02;letter-spacing:-.04em;background:linear-gradient(#fff,#a3b2b0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.h1 .serif{font-size:1.16em;-webkit-text-fill-color:var(--mint);line-height:.9}
+.h2{font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-.03em;color:var(--ink)}
+.h2 .serif{font-size:1.14em;line-height:.9}
+.h3{font-weight:600;font-size:20px;letter-spacing:-.01em}
+.lede{font-size:18px;line-height:1.5;color:var(--ink-58)}
+.muted{color:var(--ink-50)}
+.mono{font-family:var(--mono)}
+.center{text-align:center}
+
+/* page hero (interior pages) */
+.page-hero{position:relative;text-align:center;padding:134px 24px 0;overflow:hidden}
+.page-hero::before{content:"";position:absolute;left:50%;top:-260px;width:1000px;height:560px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(110,231,200,.16),rgba(110,231,200,0));pointer-events:none}
+.page-hero > *{position:relative}
+.page-hero .h1{margin-top:20px}
+.page-hero .lede{margin:18px auto 0;font-size:16px;max-width:560px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 22px;border-radius:999px;font-weight:500;font-size:15px;white-space:nowrap;transition:transform .2s,background .2s,border-color .2s,box-shadow .2s}
+.btn .i{width:16px;height:16px}
+.btn-primary{background:#fff;color:#07090a}
+.btn-primary:hover{background:#dff8f0;box-shadow:0 0 0 4px rgba(110,231,200,.14)}
+.btn-ghost{background:var(--fill-2);border:1px solid var(--line-4);color:var(--ink)}
+.btn-ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.24)}
+.btn-sm{height:36px;padding:0 16px;font-size:14px}
+.btn-xs{height:32px;padding:0 14px;font-size:13px}
+.btn:active{transform:translateY(1px)}
+.link-arrow{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--ink-50)}
+
+/* cards & chips */
+.card{background:var(--fill);border:1px solid var(--line-2);border-radius:var(--r-lg);transition:border-color .25s,background .25s,transform .25s}
+.card.hover:hover{border-color:rgba(110,231,200,.28);background:rgba(110,231,200,.03);transform:translateY(-2px)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:999px;border:1px solid var(--line-3);background:var(--fill-2);font-size:12px;color:var(--ink-72);white-space:nowrap}
+.tag{display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:5px;font-family:var(--mono);font-weight:500;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase}
+.tag.mint{background:rgba(110,231,200,.12);color:var(--mint)}
+.tag.amber{background:rgba(245,184,103,.12);color:var(--amber)}
+.tag.sky{background:rgba(124,196,245,.12);color:var(--sky)}
+.tag.lilac{background:rgba(184,193,255,.12);color:var(--lilac)}
+.tag.red{background:rgba(255,122,122,.12);color:var(--red)}
+.icon-tile{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--mint-06);border:1px solid var(--mint-22);color:var(--mint)}
+.icon-tile .i{width:17px;height:17px}
+
+/* avatars */
+.avatar{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#1b2223;flex:none;box-shadow:0 0 0 2px var(--bg)}
+.avstack{display:flex}
+.avstack .avatar + .avatar{margin-left:-8px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;height:69px;border-bottom:1px solid var(--line);background:rgba(7,9,10,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.nav .wrap{height:100%;display:flex;align-items:center;justify-content:space-between}
+.nav-left{display:flex;align-items:center;gap:44px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:600;font-size:17px;letter-spacing:-.01em}
+.brand svg{width:22px;height:22px}
+.nav-links{display:flex;gap:28px;font-size:14px;color:var(--ink-62)}
+.nav-links a{position:relative;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--ink)}
+.nav-links a.active::after{content:"";position:absolute;left:0;right:0;bottom:-25px;height:1px;background:var(--mint)}
+.nav-right{display:flex;align-items:center;gap:20px;font-size:14px;color:var(--ink-72)}
+.nav-right .btn{height:36px;padding:0 16px}
+.nav-burger{display:none;width:36px;height:36px;border-radius:10px;border:1px solid var(--line-2);place-items:center}
+.mobile-menu{display:none}
+
+/* footer */
+.footer{border-top:1px solid var(--line);padding:72px 0 40px;overflow:hidden}
+.footer-top{display:flex;justify-content:space-between;gap:48px}
+.footer-brand{display:flex;flex-direction:column;gap:16px}
+.footer-brand .brand{font-size:18px}
+.footer-brand .brand svg{width:24px;height:24px}
+.footer-brand p{width:260px;color:var(--ink-50)}
+.socials{display:flex;gap:8px}
+.socials a{width:36px;height:36px;border-radius:10px;background:var(--fill-2);border:1px solid var(--line-2);display:grid;place-items:center;color:var(--ink-72);transition:color .2s,border-color .2s}
+.socials a:hover{color:var(--mint);border-color:var(--mint-22)}
+.socials .i{width:17px;height:17px}
+.footer-cols{display:flex;gap:72px}
+.footer-col{display:flex;flex-direction:column;gap:12px}
+.footer-col h4{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.08em;color:var(--ink-45);margin-bottom:4px}
+.footer-col a{font-size:14px;color:var(--ink-65);transition:color .2s}
+.footer-col a:hover{color:var(--ink)}
+.footer-bottom{margin-top:56px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:13px;color:var(--ink-40)}
+.status{display:flex;align-items:center;gap:8px;color:var(--ink-50)}
+.status::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--mint)}
+.wordmark{margin-top:56px;text-align:center;font-weight:600;font-size:300px;line-height:.8;letter-spacing:-.045em;color:var(--ink-06);user-select:none;white-space:nowrap}
+
+/* pages / router */
+.page{display:none}
+.page.on{display:block;animation:pagein .45s cubic-bezier(.2,.7,.2,1)}
+@keyframes pagein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;z-index:90;display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;background:#121a1a;border:1px solid var(--mint-22);color:var(--ink);font-size:14px;box-shadow:0 20px 50px rgba(0,0,0,.5);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast .i{color:var(--mint)}
+
+@media (max-width:1100px){
+  .footer-cols{gap:40px}
+  .wordmark{font-size:220px}
+}
+@media (max-width:900px){
+  .nav-links,.nav-right .login{display:none}
+  .nav-burger{display:grid}
+  .mobile-menu.open{display:flex;flex-direction:column;gap:4px;position:fixed;top:69px;left:0;right:0;z-index:49;padding:12px 16px 20px;background:rgba(7,9,10,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+  .mobile-menu a{padding:12px 8px;font-size:16px;color:var(--ink-72);border-bottom:1px solid var(--line)}
+  .mobile-menu a.active{color:var(--mint)}
+  .footer-top{flex-direction:column}
+  .footer-cols{flex-wrap:wrap;gap:32px 48px}
+  .h1{font-size:44px}
+  .h2{font-size:32px}
+  .sec{padding:80px 0}
+  .page-hero{padding-top:88px}
+  .wordmark{font-size:120px}
+}
+@media (max-width:560px){
+  .wrap{padding:0 16px}
+  .h1{font-size:36px}
+  .footer-bottom{flex-direction:column;gap:12px}
+  .wordmark{font-size:88px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+
+/* ---------- hero ---------- */
+.p-home .hero{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:112px 0 0;overflow:hidden}
+.p-home .hero-glow{position:absolute;left:50%;top:560px;width:960px;height:520px;transform:translateX(-50%);border-radius:50%;background:rgba(110,231,200,.14);filter:blur(100px);pointer-events:none}
+.p-home .hero > :not(.hero-glow){position:relative}
+.p-home .announce{display:inline-flex;align-items:center;gap:10px;padding:4px 14px 4px 4px;border-radius:999px;background:var(--fill-2);border:1px solid var(--line-3);font-size:13px;color:var(--ink-80);transition:border-color .2s,background .2s}
+.p-home .announce:hover{border-color:var(--mint-22);background:rgba(110,231,200,.05)}
+.p-home .announce .new{padding:4px 10px;border-radius:999px;background:var(--mint);color:#07090a;font-family:var(--mono);font-weight:500;font-size:11px;line-height:1;letter-spacing:.06em}
+.p-home .announce .i{width:14px;height:14px;color:var(--ink-80);transition:transform .2s}
+.p-home .announce:hover .i{transform:translateX(2px)}
+.p-home .hero-h{margin-top:32px;font-weight:600;font-size:80px;line-height:1;letter-spacing:-3.2px;background:linear-gradient(#fff,#a3b2b0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.p-home .hero-h .serif{font-size:94px;line-height:1;letter-spacing:-.94px;-webkit-text-fill-color:var(--mint)}
+.p-home .hero-h .ln{display:block}
+.p-home .hero-lede{margin-top:24px;max-width:560px;font-size:18px;line-height:1.5;color:var(--ink-58)}
+.p-home .ctas{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap;justify-content:center}
+.p-home .trust{display:flex;align-items:center;gap:12px;margin-top:28px;font-size:13px;color:var(--ink-50)}
+.p-home .trust .avatar{width:28px;height:28px;box-shadow:0 0 0 2px var(--bg)}
+
+/* product shot */
+.p-home .shot{position:relative;width:1200px;max-width:100%;height:560px;margin-top:72px;overflow:hidden}
+.p-home .win{position:absolute;left:40px;top:0;width:1120px;height:680px;display:flex;border-radius:20px;background:#0e1213;border:1px solid var(--line-3);overflow:hidden;box-shadow:0 0 120px rgba(110,231,200,.18),0 40px 100px -20px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);text-align:left}
+.p-home .side{width:232px;flex:none;display:flex;flex-direction:column;gap:2px;padding:16px 12px 0;background:#0a0e0f;border-right:1px solid var(--line)}
+.p-home .lights{display:flex;gap:8px;height:31px;padding:2px 0 0 8px}
+.p-home .lights i{width:12px;height:12px;border-radius:50%;background:#ff5f57}
+.p-home .lights i:nth-child(2){background:#febc2e}
+.p-home .lights i:nth-child(3){background:#28c840}
+.p-home .s-item{display:flex;align-items:center;gap:10px;width:100%;padding:7px 10px;border-radius:8px;font-size:13px;color:var(--ink-68);text-align:left;transition:background .2s,color .2s}
+.p-home .s-item:hover{background:var(--fill-2);color:var(--ink)}
+.p-home .s-item .i{width:15px;height:15px}
+.p-home .s-label{padding:14px 0 6px 10px;font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.08em;color:var(--ink-38)}
+.p-home .tasks{display:flex;flex-direction:column;gap:2px}
+.p-home .task .dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--ink-45);flex:none;transition:border-color .2s}
+.p-home .task.on{background:var(--fill-3);color:var(--ink)}
+.p-home .task.on .dot{border-color:var(--mint)}
+.p-home .task .live{width:6px;height:6px;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
+.p-home .side-user{margin-top:auto;display:flex;align-items:center;gap:10px;padding:0 0 16px 8px;font-size:13px;color:var(--ink-80)}
+.p-home .side-user .avatar{width:26px;height:26px;box-shadow:none}
+.p-home .main{flex:1;min-width:0;display:flex;flex-direction:column;gap:18px;padding:20px 36px 0}
+.p-home .topbar{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--line);font-weight:500;font-size:14px}
+.p-home .status-pill{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border-radius:999px;background:var(--mint-10);color:var(--mint);font-family:var(--mono);font-weight:500;font-size:11px;white-space:nowrap}
+.p-home .status-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--mint);animation:hpulse 1.6s ease-in-out infinite}
+.p-home .status-pill.done{background:rgba(255,255,255,.05);color:var(--ink-65)}
+.p-home .status-pill.done::before{background:var(--ink-50);animation:none}
+@keyframes hpulse{50%{opacity:.35}}
+.p-home .perf-h{font-weight:600;font-size:20px;letter-spacing:-.2px}
+.p-home .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.p-home .kpi{display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-radius:12px;background:var(--fill);border:1px solid var(--fill-3)}
+.p-home .kpi .l{font-size:12px;color:var(--ink-50)}
+.p-home .kpi .v{font-weight:600;font-size:24px;letter-spacing:-.48px;font-variant-numeric:tabular-nums}
+.p-home .kpi .d{font-family:var(--mono);font-weight:500;font-size:11px;color:var(--mint)}
+.p-home .kpi .d.bad{color:var(--red)}
+.p-home .chart{display:flex;flex-direction:column;gap:10px;padding:14px 18px 8px;border-radius:12px;border:1px solid var(--fill-3);background:linear-gradient(rgba(110,231,200,.05),rgba(110,231,200,0))}
+.p-home .chart-head{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-50)}
+.p-home .chart-head b{font-family:var(--mono);font-weight:500;color:var(--ink-80)}
+.p-home .spark{display:block;width:100%;height:130px;clip-path:inset(0 100% 0 0)}
+.p-home .spark.draw{clip-path:inset(0 0 0 0);transition:clip-path 1.6s cubic-bezier(.4,.1,.2,1)}
+.p-home .spark path{transition:d .6s}
+.p-home .finding{display:flex;flex-direction:column;gap:4px;padding:12px 16px;border-radius:12px;background:var(--mint-06);border:1px solid var(--mint-22)}
+.p-home .finding .k{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.08em;color:var(--mint)}
+.p-home .finding p{font-size:13px;line-height:1.5;color:var(--ink-85)}
+.p-home .swap{transition:opacity .25s}
+.p-home .swap.fade{opacity:0}
+.p-home .shot-fade{position:absolute;left:0;right:0;top:320px;height:240px;background:linear-gradient(rgba(7,9,10,0),#07090a);pointer-events:none}
+
+/* logo strip */
+.p-home .logos{display:flex;flex-direction:column;align-items:center;gap:28px;padding:24px 0 96px}
+.p-home .logos-label{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.08em;color:var(--ink-40)}
+.p-home .logos-row{display:flex;align-items:center;justify-content:center;gap:56px;flex-wrap:wrap}
+.p-home .logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;letter-spacing:-.18px;color:var(--ink-50);transition:color .2s}
+.p-home .logo svg.b{width:22px;height:22px}
+.p-home .logo:hover{color:var(--ink-85)}
+
+/* sections */
+.p-home .hsec{border-top:1px solid var(--line);padding:120px 0}
+.p-home .shead{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:56px}
+.p-home .shead .eyebrow{color:rgba(110,231,200,.9)}
+.p-home .h2x{margin-top:18px;max-width:660px;font-weight:600;font-size:52px;line-height:1.04;letter-spacing:-1.82px;color:var(--ink)}
+.p-home .h2x .serif{font-size:59.28px;line-height:1.04}
+.p-home .shead > p{width:380px;flex:none;font-size:16px;line-height:1.55;color:rgba(237,241,240,.55)}
+.p-home .bx{position:relative;border-radius:20px;background:#0c1011;border:1px solid var(--fill-3);box-shadow:inset 0 1px 0 rgba(255,255,255,.04);transition:border-color .25s,transform .25s,background .25s}
+.p-home .bx:hover{border-color:rgba(110,231,200,.24);transform:translateY(-2px)}
+.p-home .kick{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.08em;color:var(--ink-45)}
+
+/* features */
+.p-home .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.p-home .feat{padding:28px}
+.p-home .feat-top{display:flex;align-items:center;justify-content:space-between}
+.p-home .ficon{padding:10px;border-radius:12px;background:rgba(110,231,200,.08);border:1px solid rgba(110,231,200,.2);color:var(--mint);display:grid;transition:background .25s}
+.p-home .ficon .i{width:20px;height:20px}
+.p-home .feat:hover .ficon{background:rgba(110,231,200,.16)}
+.p-home .feat-top span{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.08em;color:rgba(237,241,240,.35)}
+.p-home .feat h3{margin-top:72px;font-weight:600;font-size:20px;letter-spacing:-.3px}
+.p-home .feat p{margin-top:10px;font-size:14px;line-height:1.6;color:rgba(237,241,240,.55)}
+
+/* bento */
+.p-home .bento{display:flex;flex-direction:column;gap:16px}
+.p-home .brow{display:flex;gap:16px}
+.p-home .team{flex:1;min-width:0;display:flex;align-items:center;gap:32px;padding:28px 48px 28px 28px;background:linear-gradient(90deg,#0c1011,#0f1a18)}
+.p-home .team-copy{flex:1;display:flex;flex-direction:column;gap:14px}
+.p-home .team-copy h3{max-width:330px;font-weight:600;font-size:26px;line-height:1.2;letter-spacing:-.52px}
+.p-home .team-copy p{max-width:330px;font-size:14px;line-height:1.6;color:rgba(237,241,240,.55)}
+.p-home .roles{display:flex;gap:8px;flex-wrap:wrap}
+.p-home .role{padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);font-size:12px;color:rgba(237,241,240,.75);transition:border-color .2s,color .2s,background .2s}
+.p-home .role:hover,.p-home .role.on{border-color:rgba(110,231,200,.4);color:var(--mint);background:rgba(110,231,200,.08)}
+.p-home .badge-wrap{width:240px;height:308px;flex:none;display:grid;place-items:center}
+.p-home .badge{width:220px;padding:12px 12px 14px;border-radius:18px;background:#f4f7f6;box-shadow:0 30px 50px -10px rgba(0,0,0,.5);transform:rotate(4deg);transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.p-home .team:hover .badge{transform:rotate(1deg) translateY(-4px)}
+.p-home .badge img{width:196px;height:196px;border-radius:12px;object-fit:cover;object-position:50% 18%;background:#dfe4e2}
+.p-home .badge-info{display:flex;flex-direction:column;gap:2px;padding-top:12px;white-space:nowrap}
+.p-home .badge-info .n{font-size:12px;color:#5d6b68}
+.p-home .badge-info .t{font-weight:600;font-size:20px;letter-spacing:-.3px;color:#07090a}
+.p-home .badge-info .t em{font-style:normal;color:#0fa79a}
+.p-home .badge-info .id{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.06em;color:#5d6b68}
+.p-home .tools{width:420px;flex:none;display:flex;flex-direction:column;gap:12px;padding:28px}
+.p-home .bx h3{font-weight:600;font-size:22px;letter-spacing:-.33px;max-width:320px}
+.p-home .tiles{display:grid;grid-template-columns:repeat(4,78px);gap:10px}
+.p-home .tile{width:78px;height:78px;border-radius:14px;display:grid;place-items:center;background:var(--fill);border:1px solid var(--fill-3);color:rgba(237,241,240,.72);transition:color .2s,border-color .2s,background .2s,transform .2s}
+.p-home .tile svg.b{width:24px;height:24px}
+.p-home .tile:hover{color:var(--mint);border-color:var(--mint-22);background:var(--mint-06);transform:translateY(-2px)}
+.p-home .brow-3 > .bx{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px;padding:28px}
+.p-home .models{display:flex;flex-wrap:wrap;gap:8px}
+.p-home .model{padding:7px 12px;border-radius:999px;background:var(--fill-2);border:1px solid var(--line-3);font-family:var(--mono);font-weight:500;font-size:12px;color:rgba(237,241,240,.7);transition:all .2s}
+.p-home .model:hover{border-color:rgba(255,255,255,.22);color:var(--ink)}
+.p-home .model[aria-pressed="true"]{background:rgba(110,231,200,.12);border-color:rgba(110,231,200,.4);color:var(--mint)}
+.p-home .model-note{font-size:12px;color:var(--ink-45);font-family:var(--mono)}
+.p-home .approval{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--fill-2);border:1px solid var(--line-2);transition:border-color .3s,background .3s}
+.p-home .approval > .i{width:20px;height:20px;color:var(--mint)}
+.p-home .approval span{flex:1;font-size:13px;color:var(--ink-85)}
+.p-home .approve{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:var(--mint);color:#07090a;font-weight:500;font-size:12px;white-space:nowrap;transition:all .25s}
+.p-home .approve:hover{box-shadow:0 0 0 4px rgba(110,231,200,.18)}
+.p-home .approve .i{width:13px;height:13px;display:none}
+.p-home .approval.ok{border-color:var(--mint-22);background:var(--mint-06)}
+.p-home .approval.ok .approve{background:transparent;color:var(--mint);box-shadow:inset 0 0 0 1px rgba(110,231,200,.4);cursor:default}
+.p-home .approval.ok .approve .i{display:inline-block}
+.p-home .approval-log{font-size:12px;color:var(--ink-45);font-family:var(--mono)}
+.p-home .run{display:flex;align-items:center;gap:12px}
+.p-home .run .tm{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--ink-45)}
+.p-home .run .dot{width:7px;height:7px;border-radius:50%;background:rgba(237,241,240,.25);transition:background .4s,box-shadow .4s}
+.p-home .run .nm{font-size:14px;color:var(--ink-50);transition:color .4s}
+.p-home .run.lit .dot{background:var(--mint);box-shadow:0 0 8px rgba(110,231,200,.6)}
+.p-home .run.lit .nm{color:rgba(237,241,240,.9)}
+.p-home .run.now .dot{animation:hring 1.2s ease-out infinite}
+@keyframes hring{0%{box-shadow:0 0 0 0 rgba(110,231,200,.6)}100%{box-shadow:0 0 0 7px rgba(110,231,200,0)}}
+
+/* testimonial */
+.p-home .testi{border-top:1px solid var(--line);padding:140px 0;display:flex;flex-direction:column;align-items:center;gap:36px;text-align:center}
+.p-home .qmark{font-family:var(--serif);font-size:120px;line-height:.6;color:var(--mint);height:48px;overflow:visible}
+.p-home .quote{max-width:960px;font-family:var(--serif);font-size:44px;line-height:1.25;letter-spacing:-.44px;color:var(--ink)}
+.p-home .quote .serif{letter-spacing:-.44px}
+.p-home .author{display:flex;align-items:center;gap:14px;text-align:left}
+.p-home .author .avatar{width:44px;height:44px;box-shadow:none}
+.p-home .author b{display:block;font-weight:500;font-size:15px}
+.p-home .author small{display:block;font-size:13px;color:var(--ink-50);margin-top:2px}
+.p-home .proof{display:flex;padding-top:40px}
+.p-home .proof > div{display:flex;flex-direction:column;align-items:center;gap:6px;padding:0 48px}
+.p-home .proof > div + div{border-left:1px solid var(--line-2)}
+.p-home .proof b{font-weight:600;font-size:40px;letter-spacing:-1.2px;line-height:1.2;font-variant-numeric:tabular-nums}
+.p-home .proof span{font-size:13px;color:var(--ink-50)}
+
+/* CTA */
+.p-home .cta-sec{padding:0 0 120px}
+.p-home .cta-card{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:24px;padding:96px 24px;border-radius:32px;background:#0b1110;border:1px solid var(--line-2);text-align:center}
+.p-home .cta-glow{position:absolute;left:50%;top:259px;width:760px;height:360px;transform:translateX(-50%);border-radius:50%;background:rgba(110,231,200,.22);filter:blur(80px);pointer-events:none;transition:opacity .4s,transform .6s}
+.p-home .cta-card:hover .cta-glow{transform:translateX(-50%) scale(1.08)}
+.p-home .cta-card > :not(.cta-glow){position:relative}
+.p-home .cta-card .eyebrow{color:rgba(110,231,200,.9)}
+.p-home .cta-h{font-weight:600;font-size:72px;line-height:1.2;letter-spacing:-2.88px}
+.p-home .cta-h .serif{font-size:84px;letter-spacing:-.84px}
+.p-home .cta-card > p{font-size:16px;color:rgba(237,241,240,.55)}
+.p-home .cta-card .ctas{margin-top:0}
+
+/* responsive */
+@media (max-width:1100px){
+  .p-home .tools{width:380px}
+  .p-home .tiles{grid-template-columns:repeat(4,1fr)}
+  .p-home .tile{width:auto;aspect-ratio:1;height:auto}
+  .p-home .proof > div{padding:0 32px}
+}
+@media (max-width:900px){
+  .p-home .hero{padding-top:72px}
+  .p-home .hero-h{font-size:52px;letter-spacing:-2px}
+  .p-home .hero-h .serif{font-size:61px}
+  .p-home .hero-lede{font-size:16px;padding:0 8px}
+  .p-home .shot{height:520px;margin-top:56px}
+  .p-home .win{left:24px;width:calc(100% - 48px)}
+  .p-home .side{width:200px}
+  .p-home .kpis{grid-template-columns:repeat(2,1fr)}
+  .p-home .shot-fade{top:300px;height:220px}
+  .p-home .logos-row{gap:24px 36px}
+  .p-home .hsec{padding:88px 0}
+  .p-home .shead{flex-direction:column;align-items:flex-start;gap:16px;margin-bottom:40px}
+  .p-home .shead > p{width:auto;max-width:520px}
+  .p-home .h2x{font-size:40px;letter-spacing:-1.3px}
+  .p-home .h2x .serif{font-size:46px}
+  .p-home .fgrid{grid-template-columns:1fr}
+  .p-home .feat h3{margin-top:40px}
+  .p-home .brow{flex-direction:column}
+  .p-home .tools{width:auto}
+  .p-home .tiles{grid-template-columns:repeat(8,1fr)}
+  .p-home .testi{padding:96px 0}
+  .p-home .quote{font-size:34px}
+  .p-home .proof{flex-wrap:wrap;justify-content:center;row-gap:28px}
+  .p-home .cta-h{font-size:52px;letter-spacing:-2px}
+  .p-home .cta-h .serif{font-size:61px}
+  .p-home .cta-sec{padding-bottom:88px}
+}
+@media (max-width:560px){
+  .p-home .hero{padding-top:56px}
+  .p-home .hero-h{font-size:38px;letter-spacing:-1.4px;line-height:1.05}
+  .p-home .hero-h .serif{font-size:45px}
+  .p-home .hero-h .ln{display:inline}
+  .p-home .hero-lede{margin-top:18px}
+  .p-home .ctas{flex-direction:column;align-items:stretch;width:100%;max-width:320px}
+  .p-home .ctas .btn{justify-content:center}
+  .p-home .trust{flex-direction:column;gap:10px;padding:0 16px}
+  .p-home .shot{height:640px;margin-top:44px}
+  .p-home .win{flex-direction:column;height:760px;left:16px;width:calc(100% - 32px)}
+  .p-home .side{width:100%;padding:12px 12px 10px;border-right:0;border-bottom:1px solid var(--line)}
+  .p-home .side > .s-item,.p-home .side-user{display:none}
+  .p-home .lights{height:22px}
+  .p-home .s-label{padding:4px 0 6px 4px}
+  .p-home .tasks{flex-direction:row;overflow-x:auto;gap:6px;scrollbar-width:none}
+  .p-home .tasks::-webkit-scrollbar{display:none}
+  .p-home .task{width:auto;flex:none;border:1px solid var(--line-2)}
+  .p-home .main{padding:16px 16px 0;gap:14px}
+  .p-home .topbar{flex-wrap:wrap;gap:8px}
+  .p-home .kpis{gap:8px}
+  .p-home .kpi{padding:12px}
+  .p-home .kpi .v{font-size:20px}
+  .p-home .shot-fade{top:460px;height:180px}
+  .p-home .logos{padding:16px 0 72px}
+  .p-home .logos-row{gap:18px 28px}
+  .p-home .logo{font-size:16px}
+  .p-home .h2x{font-size:34px}
+  .p-home .h2x .serif{font-size:39px}
+  .p-home .team{flex-direction:column;align-items:flex-start;padding:24px}
+  .p-home .badge-wrap{width:100%;height:300px}
+  .p-home .tools,.p-home .brow-3 > .bx,.p-home .feat{padding:24px}
+  .p-home .tiles{grid-template-columns:repeat(4,1fr);gap:8px}
+  .p-home .quote{font-size:28px}
+  .p-home .qmark{font-size:96px;height:36px}
+  .p-home .proof{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:28px 0}
+  .p-home .proof > div{padding:0 12px}
+  .p-home .proof > div:nth-child(3){border-left:0}
+  .p-home .proof b{font-size:34px}
+  .p-home .cta-card{padding:64px 20px;border-radius:24px}
+  .p-home .cta-h{font-size:38px;letter-spacing:-1.4px;line-height:1.15}
+  .p-home .cta-h .serif{font-size:45px;display:inline-block}
+  .p-home .cta-glow{width:420px;top:280px}
+}
+
+
+.p-pricing .pr-hero{padding:120px 24px 72px}
+.p-pricing .pr-hero::before{top:-180px;width:900px;height:420px;background:radial-gradient(closest-side,rgba(110,231,200,.2),rgba(110,231,200,0))}
+.p-pricing .pr-hero .eyebrow{color:rgba(110,231,200,.9)}
+.p-pricing .pr-hero .h1{line-height:1.04;letter-spacing:-.035em}
+.p-pricing .pr-hero .h1 .serif{font-size:1.14em}
+.p-pricing .pr-hero .lede{margin-top:20px;font-size:18px;max-width:none;color:rgba(237,241,240,.55)}
+
+/* billing toggle */
+.p-pricing .pr-toggle{position:relative;display:inline-flex;gap:4px;align-items:center;margin-top:36px;padding:4px;border-radius:999px;background:var(--fill-2);border:1px solid var(--line-3)}
+.p-pricing .pr-toggle button{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;height:35px;padding:0 18px;border-radius:999px;font-weight:500;font-size:14px;color:rgba(237,241,240,.6);transition:color .3s}
+.p-pricing .pr-toggle button:hover{color:var(--ink)}
+.p-pricing .pr-toggle button[aria-pressed="true"]{color:#07090a}
+.p-pricing .pr-toggle .save{display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:999px;background:rgba(15,167,154,.14);color:#0b8f7f;font-family:var(--mono);font-weight:500;font-size:11px;transition:background .3s,color .3s}
+.p-pricing .pr-toggle button[aria-pressed="false"] .save{background:rgba(110,231,200,.12);color:var(--mint)}
+.p-pricing .pr-pill{position:absolute;top:4px;bottom:4px;left:4px;border-radius:999px;background:#fff;transition:transform .35s cubic-bezier(.2,.7,.2,1),width .35s cubic-bezier(.2,.7,.2,1)}
+
+/* plans */
+.p-pricing .pr-plans{padding-bottom:40px}
+.p-pricing .pr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:stretch}
+.p-pricing .plan{position:relative;line-height:normal;display:flex;flex-direction:column;padding:32px;border-radius:20px;background:#0c1011;border:1px solid rgba(255,255,255,.07);transition:border-color .25s,transform .25s}
+.p-pricing .plan:hover{border-color:rgba(255,255,255,.14);transform:translateY(-2px)}
+.p-pricing .plan.pro{border-color:rgba(110,231,200,.45);background:linear-gradient(180deg,rgba(110,231,200,.1),#0c1011 45%);box-shadow:0 30px 80px -20px rgba(110,231,200,.16)}
+.p-pricing .plan.pro:hover{border-color:rgba(110,231,200,.7)}
+.p-pricing .plan-head{display:flex;align-items:center;justify-content:space-between;min-height:26px}
+.p-pricing .plan-name{font-weight:600;font-size:22px;letter-spacing:-.015em;color:var(--ink)}
+.p-pricing .popular{display:inline-flex;align-items:center;height:20px;padding:0 10px;border-radius:999px;background:var(--mint);color:#07090a;font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.06em}
+.p-pricing .plan-desc{margin-top:8px;font-size:14px;color:rgba(237,241,240,.55)}
+.p-pricing .price{display:flex;align-items:flex-end;gap:4px;margin-top:32px;white-space:nowrap}
+.p-pricing .price .cur{font-size:24px;line-height:1.2;color:rgba(237,241,240,.5)}
+.p-pricing .price .amt{display:inline-block;font-weight:600;font-size:64px;line-height:.9;letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums;transition:opacity .18s,transform .18s}
+.p-pricing .price .amt.swap{opacity:0;transform:translateY(-8px)}
+.p-pricing .price .per{font-size:14px;line-height:1.2;color:rgba(237,241,240,.45)}
+.p-pricing .bill{margin-top:6px;min-height:14px;font-family:var(--mono);font-weight:500;font-size:11px;color:rgba(237,241,240,.4);transition:opacity .18s}
+.p-pricing .bill.swap{opacity:0}
+.p-pricing .plan .btn{width:100%;justify-content:center;margin-top:28px}
+.p-pricing .plan .btn .i{transition:transform .2s}
+.p-pricing .plan .btn:hover .i{transform:translateX(3px)}
+.p-pricing .plan hr{border:0;height:1px;background:var(--line-2);margin:28px 0 24px}
+.p-pricing .inc{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.08em;color:var(--ink-45);text-transform:uppercase}
+.p-pricing .feats{list-style:none;display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.p-pricing .feats li{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(237,241,240,.82)}
+.p-pricing .feats .i{width:15px;height:15px;color:var(--ink);stroke-width:2.2}
+.p-pricing .plan.pro .feats .i{color:var(--mint)}
+.p-pricing .trust{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:36px;font-size:13px;color:var(--ink-50);text-align:center}
+
+/* compare */
+.p-pricing .pr-compare{border-top:1px solid var(--line);padding:120px 0 40px}
+.p-pricing .pr-compare .h2,.p-pricing .pr-faq .h2{text-align:center;letter-spacing:-.03em}
+.p-pricing .pr-compare .h2 .serif,.p-pricing .pr-faq .h2 .serif{font-size:1.14em}
+.p-pricing .tbl-scroll{margin:40px auto 0;max-width:1000px;border:1px solid var(--line-2);border-radius:20px;overflow:hidden}
+.p-pricing .tbl{width:100%;border-collapse:collapse;font-size:14px;line-height:normal;table-layout:fixed}
+.p-pricing .tbl th,.p-pricing .tbl td{padding:18px 0;height:51px;text-align:center;white-space:nowrap;font-weight:400;color:rgba(237,241,240,.9)}
+.p-pricing .tbl th:first-child,.p-pricing .tbl td:first-child{width:368px;padding-left:28px;text-align:left;color:rgba(237,241,240,.6)}
+.p-pricing .tbl .i{display:block;margin:0 auto}
+.p-pricing .tbl thead th{background:var(--fill);font-weight:500}
+.p-pricing .tbl thead th.pro{color:rgba(110,231,200,.9)}
+.p-pricing .tbl tbody tr{border-top:1px solid var(--line);transition:background .2s}
+.p-pricing .tbl tbody tr:hover{background:rgba(110,231,200,.04)}
+.p-pricing .tbl tbody tr:hover td:first-child{color:var(--ink)}
+.p-pricing .tbl td.pro{font-weight:500}
+.p-pricing .tbl .dash{color:rgba(237,241,240,.25)}
+.p-pricing .tbl .i{width:18px;height:18px;color:var(--mint);stroke-width:2.2}
+
+/* faq */
+.p-pricing .pr-faq{padding:120px 0 140px}
+.p-pricing .faq{display:flex;flex-direction:column;gap:8px;max-width:760px;margin:40px auto 0}
+.p-pricing .qa{border-radius:16px;border:1px solid transparent;border-bottom-color:var(--line);transition:background .3s,border-color .3s}
+.p-pricing .qa.open{background:#0c1011;border-color:rgba(255,255,255,.07)}
+.p-pricing .qa button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px;text-align:left;font-weight:500;font-size:16px;line-height:normal;color:rgba(237,241,240,.75);transition:color .2s,padding .35s cubic-bezier(.2,.7,.2,1)}
+.p-pricing .qa.open button{padding-bottom:12px}
+.p-pricing .qa button:hover,.p-pricing .qa.open button{color:var(--ink)}
+.p-pricing .qa .ic{position:relative;width:18px;height:18px;flex:none}
+.p-pricing .qa .ic .i{position:absolute;inset:0;width:18px;height:18px;transition:opacity .25s,transform .3s}
+.p-pricing .qa .ic .minus{color:var(--mint);opacity:0;transform:rotate(-90deg)}
+.p-pricing .qa.open .ic .plus{opacity:0;transform:rotate(90deg)}
+.p-pricing .qa.open .ic .minus{opacity:1;transform:none}
+.p-pricing .qa .ans{height:0;overflow:hidden;transition:height .35s cubic-bezier(.2,.7,.2,1)}
+.p-pricing .qa .ans p{padding:0 24px 20px;font-size:14px;line-height:1.65;color:rgba(237,241,240,.6)}
+
+@media (max-width:900px){
+  .p-pricing .pr-hero{padding:88px 24px 56px}
+  .p-pricing .pr-hero .lede{font-size:16px}
+  .p-pricing .pr-grid{grid-template-columns:1fr;max-width:520px;margin:0 auto}
+  .p-pricing .plan.pro{order:-1}
+  .p-pricing .pr-compare{padding-top:80px}
+  .p-pricing .pr-faq{padding:80px 0 96px}
+  .p-pricing .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+  .p-pricing .tbl{min-width:600px}
+  .p-pricing .tbl th:first-child,.p-pricing .tbl td:first-child{width:190px;position:sticky;left:0;background:var(--bg);z-index:1;box-shadow:1px 0 0 var(--line)}
+  .p-pricing .tbl thead th:first-child{background:#0e1011}
+  .p-pricing .tbl tbody tr:hover td:first-child{background:#0a0f0f}
+}
+@media (max-width:560px){
+  .p-pricing .pr-hero .h1 br{display:none}
+  .p-pricing .plan{padding:24px}
+  .p-pricing .trust{flex-direction:column;gap:10px}
+  .p-pricing .trust span{text-wrap:balance;max-width:300px}
+  .p-pricing .tbl th:first-child,.p-pricing .tbl td:first-child{width:150px;padding-left:16px;white-space:normal}
+  .p-pricing .tbl{min-width:520px}
+  .p-pricing .qa button{padding:18px;font-size:15px}
+  .p-pricing .qa .ans p{padding:0 18px 18px}
+}
+
+
+.p-resources .rs-hero{position:relative;text-align:center;padding:120px 24px 88px;overflow-x:clip}
+.p-resources .rs-hero::before{content:"";position:absolute;left:50%;top:-180px;width:1260px;height:780px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(110,231,200,.15),rgba(110,231,200,0));pointer-events:none}
+.p-resources .rs-hero > *{position:relative}
+.p-resources .rs-hero .eyebrow{color:rgba(110,231,200,.9)}
+.p-resources .rs-title{margin-top:20px;font-weight:600;font-size:72px;line-height:1.15;letter-spacing:-.04em;color:var(--ink)}
+.p-resources .rs-title .serif{font-size:82px;line-height:1}
+.p-resources .rs-lede{margin-top:22px;font-size:18px;color:rgba(237,241,240,.55)}
+.p-resources .rs-search{margin:40px auto 0;width:640px;max-width:100%;display:flex;align-items:center;gap:12px;padding:8px 8px 8px 22px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(110,231,200,.35);box-shadow:0 0 0 4px rgba(110,231,200,.12),0 0 60px rgba(110,231,200,.08);transition:box-shadow .25s,border-color .25s}
+.p-resources .rs-search:focus-within{border-color:rgba(110,231,200,.6);box-shadow:0 0 0 4px rgba(110,231,200,.2),0 0 70px rgba(110,231,200,.14)}
+.p-resources .rs-search > .i{width:18px;height:18px;color:var(--ink)}
+.p-resources .rs-search input{flex:1;min-width:0;height:26px;font-size:16px;color:var(--ink)}
+.p-resources .rs-search input:focus-visible{outline:none}
+.p-resources .rs-search input::placeholder{color:rgba(237,241,240,.4)}
+.p-resources .rs-search input::-webkit-search-cancel-button{display:none}
+.p-resources .rs-clear{display:none;width:28px;height:28px;border-radius:50%;place-items:center;color:var(--ink-50)}
+.p-resources .rs-clear:hover{color:var(--ink);background:var(--fill-3)}
+.p-resources .rs-clear .i{width:14px;height:14px}
+.p-resources .rs-search.has .rs-clear{display:grid}
+.p-resources .rs-kbd{display:inline-flex;align-items:center;gap:3px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.07);font-family:var(--mono);font-weight:500;font-size:12px;line-height:1;color:rgba(237,241,240,.6);white-space:nowrap}
+.p-resources .rs-pop{margin-top:18px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px}
+.p-resources .rs-pop span{font-size:13px;color:rgba(237,241,240,.4)}
+.p-resources .rs-chip{padding:4px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.1);font-size:12px;line-height:normal;color:rgba(237,241,240,.7);transition:border-color .2s,color .2s,background .2s}
+.p-resources .rs-chip:hover{border-color:var(--mint-22);color:var(--ink)}
+.p-resources .rs-chip.on{border-color:rgba(110,231,200,.45);color:var(--mint);background:var(--mint-06)}
+
+.p-resources .rs-cats{padding-bottom:120px}
+.p-resources .rs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.p-resources .rs-cat{display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:28px;border-radius:20px;background:#0c1011;border:1px solid rgba(255,255,255,.07);transition:transform .25s,border-color .25s,background .25s,box-shadow .25s}
+.p-resources .rs-cat:hover{transform:translateY(-4px);border-color:rgba(110,231,200,.28);background:#0d1313;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.p-resources .rs-ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:rgba(110,231,200,.08);border:1px solid rgba(110,231,200,.2);color:var(--mint)}
+.p-resources .rs-ico .i{width:20px;height:20px}
+.p-resources .rs-cat h3{margin-top:40px;font-weight:600;font-size:19px;letter-spacing:-.012em;color:var(--ink)}
+.p-resources .rs-cat p{margin-top:8px;font-size:14px;line-height:1.55;color:rgba(237,241,240,.55)}
+.p-resources .rs-count{margin-top:24px;display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-weight:500;font-size:12px;color:rgba(237,241,240,.45)}
+.p-resources .rs-count .i{width:13px;height:13px;color:var(--ink);transition:transform .25s}
+.p-resources .rs-cat:hover .rs-count{color:var(--mint)}
+.p-resources .rs-cat:hover .rs-count .i{transform:translateX(3px);color:var(--mint)}
+
+.p-resources .rs-at{border-top:1px solid var(--line);padding:120px 0}
+.p-resources .rs-cols{display:flex;gap:64px;align-items:flex-start}
+.p-resources .rs-arts{flex:1;min-width:0}
+.p-resources .rs-tuts{width:460px;flex:none}
+.p-resources .rs-k{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.08em;color:rgba(237,241,240,.45)}
+.p-resources .rs-h2{margin-top:14px;font-weight:600;font-size:36px;line-height:1.2;letter-spacing:-.025em;color:var(--ink)}
+.p-resources .rs-h2 .serif{font-size:41px;line-height:1}
+.p-resources .rs-list{margin-top:28px;list-style:none}
+.p-resources .rs-art{display:flex;align-items:center;gap:16px;width:100%;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.07);text-align:left;transition:transform .25s,padding .25s}
+.p-resources .rs-art .n{font-family:var(--mono);font-weight:500;font-size:12px;color:rgba(237,241,240,.3);transition:color .2s}
+.p-resources .rs-art .t{flex:1;min-width:0;font-size:16px;color:rgba(237,241,240,.88);transition:color .2s}
+.p-resources .rs-art .i{width:16px;height:16px;color:var(--ink);transition:transform .25s,color .2s}
+.p-resources .rs-art:hover{transform:translateY(-2px)}
+.p-resources .rs-art:hover .t{color:#fff}
+.p-resources .rs-art:hover .n,.p-resources .rs-art:hover .i{color:var(--mint)}
+.p-resources .rs-art:hover .i{transform:translate(2px,-2px)}
+.p-resources .rs-tuts .rs-h2{margin-top:20px}
+.p-resources .rs-tuts .rs-tlist{margin-top:30px}
+.p-resources .rs-tlist{margin-top:28px;display:flex;flex-direction:column;gap:12px}
+.p-resources .rs-tut{display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:22px;border-radius:20px;background:#0c1011;border:1px solid rgba(255,255,255,.07);text-align:left;transition:transform .25s,border-color .25s,box-shadow .25s}
+.p-resources .rs-tut:hover{transform:translateY(-3px);border-color:rgba(110,231,200,.28);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.p-resources .rs-lvl{padding:3px 9px;border-radius:999px;font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.06em;line-height:normal}
+.p-resources .rs-lvl.b{background:rgba(110,231,200,.1);color:var(--mint)}
+.p-resources .rs-lvl.m{background:rgba(122,215,255,.1);color:#7ad7ff}
+.p-resources .rs-lvl.a{background:rgba(255,184,107,.1);color:#ffb86b}
+.p-resources .rs-tut h4{font-weight:500;font-size:17px;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+.p-resources .rs-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(237,241,240,.45)}
+.p-resources .rs-meta .avatar{width:24px;height:24px;box-shadow:0 0 0 2px #0c1011}
+.p-resources .rs-empty{display:none;margin-top:24px;padding:28px;border-radius:16px;border:1px dashed var(--line-3);text-align:center;color:var(--ink-50);font-size:14px}
+.p-resources .rs-empty .i{width:20px;height:20px;color:var(--ink-40);margin-bottom:8px}
+.p-resources .rs-empty b{color:var(--ink);font-weight:500}
+.p-resources .rs-empty.show{display:block}
+.p-resources .rs-hide{display:none!important}
+
+.p-resources .rs-sup{padding-bottom:140px}
+.p-resources .rs-card{display:flex;align-items:center;gap:28px;padding:36px 40px;border-radius:20px;border:1px solid rgba(255,255,255,.07);background:linear-gradient(90deg,#0c1011,#0f1a18)}
+.p-resources .rs-team{display:flex;flex:none}
+.p-resources .rs-team .avatar{width:48px;height:48px;box-shadow:0 0 0 2px #0c1011}
+.p-resources .rs-team .avatar + .avatar{margin-left:-10px}
+.p-resources .rs-copy{flex:1;min-width:0}
+.p-resources .rs-copy h3{font-weight:600;font-size:24px;line-height:1.25;letter-spacing:-.015em;color:var(--ink)}
+.p-resources .rs-copy h3 .serif{font-size:27px;line-height:1}
+.p-resources .rs-copy p{margin-top:6px;font-size:14px;color:rgba(237,241,240,.55)}
+
+@media (max-width:900px){
+  .p-resources .rs-hero{padding:88px 24px 64px}
+  .p-resources .rs-title{font-size:52px}
+  .p-resources .rs-title .serif{font-size:60px}
+  .p-resources .rs-lede{font-size:16px}
+  .p-resources .rs-grid{grid-template-columns:repeat(2,1fr)}
+  .p-resources .rs-cats{padding-bottom:80px}
+  .p-resources .rs-at{padding:80px 0}
+  .p-resources .rs-cols{flex-direction:column;gap:56px}
+  .p-resources .rs-tuts{width:100%}
+  .p-resources .rs-sup{padding-bottom:96px}
+  .p-resources .rs-card{flex-wrap:wrap}
+}
+@media (max-width:560px){
+  .p-resources .rs-hero{padding:72px 16px 56px}
+  .p-resources .rs-title{font-size:40px}
+  .p-resources .rs-title .serif{font-size:46px}
+  .p-resources .rs-search{padding-left:16px}
+  .p-resources .rs-search input{font-size:15px}
+  .p-resources .rs-kbd{display:none}
+  .p-resources .rs-grid{grid-template-columns:1fr}
+  .p-resources .rs-cat{padding:24px}
+  .p-resources .rs-cat h3{margin-top:28px}
+  .p-resources .rs-h2{font-size:30px}
+  .p-resources .rs-h2 .serif{font-size:34px}
+  .p-resources .rs-art .t{font-size:15px}
+  .p-resources .rs-card{flex-direction:column;align-items:flex-start;padding:28px 24px;gap:20px}
+  .p-resources .rs-copy h3{font-size:21px}
+  .p-resources .rs-copy h3 .serif{font-size:24px}
+}
+
+
+.p-events .ev-hero{padding:120px 24px 72px}
+.p-events .ev-hero::before{top:-180px;width:900px;height:420px;background:radial-gradient(closest-side,rgba(110,231,200,.17),rgba(110,231,200,0))}
+.p-events .ev-hero .eyebrow{color:rgba(110,231,200,.9)}
+.p-events .ev-hero .h1{font-size:72px;letter-spacing:-.04em;line-height:1.22;margin-top:20px}
+.p-events .ev-hero .h1 .serif{font-size:1.14em}
+.p-events .ev-hero .lede{font-size:18px;color:rgba(237,241,240,.55);max-width:560px}
+
+/* featured */
+.p-events .ev-feat-sec{padding:0 0 120px}
+.p-events .ev-feat{position:relative;display:flex;gap:56px;align-items:flex-start;padding:48px;border-radius:28px;border:1px solid rgba(255,255,255,.07);background:linear-gradient(90deg,#0c1011,#0f1a18);overflow:hidden}
+.p-events .ev-feat::before{content:"";position:absolute;left:62%;top:-260px;width:800px;height:560px;background:radial-gradient(closest-side,rgba(110,231,200,.13),rgba(110,231,200,0));pointer-events:none}
+.p-events .ev-feat::after{content:"";position:absolute;left:-120px;bottom:-260px;width:700px;height:460px;background:radial-gradient(closest-side,rgba(110,231,200,.06),rgba(110,231,200,0));pointer-events:none}
+.p-events .ev-feat > *{position:relative;z-index:1}
+.p-events .ev-details{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+.p-events .ev-live{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.08em;color:#ff6b6b}
+.p-events .ev-dot{position:relative;width:8px;height:8px;border-radius:50%;background:#ff6b6b;box-shadow:0 0 8px rgba(255,107,107,.8)}
+.p-events .ev-dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:#ff6b6b;animation:evping 1.6s cubic-bezier(0,0,.2,1) infinite}
+@keyframes evping{0%{transform:scale(1);opacity:.75}80%,100%{transform:scale(2.8);opacity:0}}
+.p-events .ev-ftitle{margin-top:20px;font-weight:600;font-size:40px;line-height:1.1;letter-spacing:-.03em;color:var(--ink)}
+.p-events .ev-ftitle .serif{font-size:44px;line-height:1}
+.p-events .ev-when{margin-top:16px;font-family:var(--mono);font-weight:500;font-size:13px;color:var(--mint)}
+.p-events .ev-desc{margin-top:16px;font-size:15px;line-height:1.65;color:rgba(237,241,240,.6)}
+.p-events .ev-host{margin-top:28px;display:flex;align-items:center;gap:12px}
+.p-events .ev-host .avatar{width:44px;height:44px}
+.p-events .ev-host b{display:block;font-weight:500;font-size:15px;color:var(--ink)}
+.p-events .ev-host small{display:block;margin-top:2px;font-size:13px;color:var(--ink-50)}
+.p-events .ev-actions{margin-top:32px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.p-events .ev-actions .btn .i{transition:transform .2s}
+.p-events .ev-actions .btn:hover .i{transform:translateX(3px)}
+.p-events .ev-actions .btn.done{background:var(--mint)}
+.p-events .ev-reg{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-50)}
+.p-events .ev-reg .avatar{width:24px;height:24px;box-shadow:0 0 0 2px #0d1312}
+.p-events .ev-reg b{font-weight:400;color:var(--ink-72);font-variant-numeric:tabular-nums}
+.p-events .ev-side{width:440px;flex:none;display:flex;flex-direction:column;gap:16px}
+.p-events .ev-count{display:flex;gap:8px}
+.p-events .ev-unit{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px 0 14px;border-radius:16px;background:var(--fill-2);border:1px solid var(--line-2)}
+.p-events .ev-unit b{font-weight:600;font-size:40px;line-height:1.2;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+.p-events .ev-unit b.tick{animation:evtick .35s ease}
+@keyframes evtick{from{opacity:.35;transform:translateY(-3px)}to{opacity:1;transform:none}}
+.p-events .ev-unit span{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.1em;color:var(--ink-40)}
+.p-events .ev-agenda{border:1px solid var(--line-2);border-radius:16px;overflow:hidden;list-style:none}
+.p-events .ev-agenda li{display:flex;align-items:center;gap:16px;padding:15px 20px;background:rgba(255,255,255,.02);font-size:14px;color:var(--ink-85)}
+.p-events .ev-agenda li + li{border-top:1px solid rgba(255,255,255,.07)}
+.p-events .ev-agenda em{font-style:normal;font-family:var(--mono);font-weight:500;font-size:12px;color:var(--mint)}
+
+/* upcoming */
+.p-events .ev-up{padding:120px 0}
+.p-events .ev-up-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px}
+.p-events .ev-up-head .eyebrow{margin-bottom:14px}
+.p-events .ev-up-head .h2,.p-events .ev-rep .h2{font-size:40px;letter-spacing:-.03em;line-height:1.2}
+.p-events .ev-filters{display:flex;gap:6px;flex-wrap:wrap}
+.p-events .ev-pill{height:33px;padding:0 14px;border-radius:999px;font-weight:500;font-size:13px;color:rgba(237,241,240,.7);background:var(--fill-2);border:1px solid var(--line-3);transition:background .2s,color .2s,border-color .2s}
+.p-events .ev-pill:hover{border-color:rgba(255,255,255,.22);color:var(--ink)}
+.p-events .ev-pill.on{background:#fff;color:#07090a;border-color:#fff}
+.p-events .ev-list{margin-top:40px;border-top:1px solid var(--line-2);transition:opacity .18s}
+.p-events .ev-list.fading{opacity:0}
+.p-events .ev-row{display:flex;align-items:center;gap:32px;padding:26px 0;border-bottom:1px solid var(--line-2);transition:background .2s}
+.p-events .ev-row:hover{background:linear-gradient(90deg,rgba(110,231,200,0),rgba(110,231,200,.025),rgba(110,231,200,0))}
+.p-events .ev-row[hidden]{display:none}
+.p-events .ev-date{width:72px;flex:none;display:flex;flex-direction:column;gap:2px}
+.p-events .ev-date b{font-weight:600;font-size:36px;line-height:1.2;letter-spacing:-.03em;color:var(--ink)}
+.p-events .ev-date span{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.1em;color:var(--ink-45)}
+.p-events .ev-info{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.p-events .ev-tag{display:inline-flex;padding:3px 9px;border-radius:999px;font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.06em;line-height:1.2}
+.p-events .ev-tag.webinar{background:rgba(122,215,255,.1);color:#7ad7ff}
+.p-events .ev-tag.challenge{background:rgba(255,184,107,.1);color:#ffb86b}
+.p-events .ev-tag.workshop{background:rgba(110,231,200,.1);color:var(--mint)}
+.p-events .ev-tag.meetup{background:rgba(255,138,110,.1);color:#ff9a7e}
+.p-events .ev-info h3{font-weight:500;font-size:19px;letter-spacing:-.01em;color:var(--ink)}
+.p-events .ev-info p{font-size:13px;color:var(--ink-45)}
+.p-events .ev-row .avatar{width:36px;height:36px}
+.p-events .ev-regbtn{min-width:124px;justify-content:center}
+.p-events .ev-regbtn .ok{display:none}
+.p-events .ev-regbtn.done{background:var(--mint-10);border-color:rgba(110,231,200,.4);color:var(--mint)}
+.p-events .ev-regbtn.done .ok{display:block}
+.p-events .ev-regbtn.done .go{display:none}
+
+/* replays */
+.p-events .ev-rep{padding:0 0 120px}
+.p-events .ev-grid{margin-top:36px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.p-events .ev-card{display:flex;flex-direction:column;gap:14px;cursor:pointer;text-align:left}
+.p-events .ev-thumb{position:relative;height:214px;border-radius:18px;border:1px solid var(--line-2);overflow:hidden;display:grid;place-items:center}
+.p-events .ev-thumb::before{content:"";position:absolute;inset:0;background:var(--g);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.p-events .ev-card:hover .ev-thumb::before{transform:scale(1.08)}
+.p-events .ev-play{position:relative;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:transform .3s cubic-bezier(.2,.7,.2,1),background .3s}
+.p-events .ev-play .i{width:18px;height:18px;fill:#fff;margin-left:2px}
+.p-events .ev-card:hover .ev-play{transform:scale(1.15);background:rgba(255,255,255,.26)}
+.p-events .ev-len{position:absolute;right:12px;bottom:12px;padding:3px 8px;border-radius:6px;background:rgba(0,0,0,.55);font-family:var(--mono);font-weight:500;font-size:11px;color:var(--ink)}
+.p-events .ev-card h3{font-weight:500;font-size:17px;letter-spacing:-.01em;color:var(--ink)}
+.p-events .ev-card p{margin-top:-6px;font-size:13px;color:var(--ink-45)}
+
+/* newsletter */
+.p-events .ev-news-sec{padding:0 0 140px}
+.p-events .ev-news{position:relative;display:flex;align-items:center;justify-content:space-between;gap:32px;padding:44px 48px;border-radius:28px;background:#0c1011;border:1px solid rgba(255,255,255,.07);overflow:hidden}
+.p-events .ev-news::before{content:"";position:absolute;left:-220px;top:-60px;width:800px;height:580px;background:radial-gradient(closest-side,rgba(110,231,200,.12),rgba(110,231,200,0));pointer-events:none}
+.p-events .ev-news > *{position:relative}
+.p-events .ev-news h2{font-weight:600;font-size:30px;letter-spacing:-.02em;line-height:1.25}
+.p-events .ev-news h2 .serif{font-size:34px}
+.p-events .ev-news p{margin-top:8px;font-size:14px;color:var(--ink-55,rgba(237,241,240,.55))}
+.p-events .ev-form{display:flex;gap:8px;align-items:flex-start;flex:none}
+.p-events .ev-field{position:relative}
+.p-events .ev-form input{width:300px;height:49px;padding:0 20px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);font-size:15px;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.p-events .ev-form input::placeholder{color:var(--ink-40)}
+.p-events .ev-form input:focus{border-color:rgba(110,231,200,.5);box-shadow:0 0 0 4px rgba(110,231,200,.1)}
+.p-events .ev-form.err input{border-color:rgba(255,122,122,.6);box-shadow:0 0 0 4px rgba(255,122,122,.1)}
+.p-events .ev-err{position:absolute;left:20px;top:56px;font-size:12px;color:var(--red);opacity:0;transform:translateY(-4px);transition:all .2s;white-space:nowrap}
+.p-events .ev-form.err .ev-err{opacity:1;transform:none}
+.p-events .ev-form .btn{height:49px}
+
+@media (max-width:1100px){
+  .p-events .ev-side{width:380px}
+  .p-events .ev-feat{gap:40px}
+}
+@media (max-width:900px){
+  .p-events .ev-hero{padding:88px 24px 56px}
+  .p-events .ev-hero .h1{font-size:48px}
+  .p-events .ev-feat{flex-direction:column;padding:32px}
+  .p-events .ev-side{width:100%}
+  .p-events .ev-up{padding:80px 0}
+  .p-events .ev-up-head{flex-direction:column;align-items:flex-start}
+  .p-events .ev-row{gap:20px;flex-wrap:wrap}
+  .p-events .ev-info{flex-basis:calc(100% - 92px)}
+  .p-events .ev-row .avatar{margin-left:92px}
+  .p-events .ev-regbtn{margin-left:auto}
+  .p-events .ev-grid{grid-template-columns:1fr 1fr}
+  .p-events .ev-news{flex-direction:column;align-items:flex-start}
+  .p-events .ev-rep,.p-events .ev-feat-sec{padding-bottom:80px}
+  .p-events .ev-news-sec{padding-bottom:100px}
+}
+@media (max-width:560px){
+  .p-events .ev-hero .h1{font-size:38px}
+  .p-events .ev-hero .lede{font-size:16px}
+  .p-events .ev-hero .lede br{display:none}
+  .p-events .ev-feat{padding:24px 20px;border-radius:22px}
+  .p-events .ev-ftitle{font-size:30px}
+  .p-events .ev-ftitle .serif{font-size:34px}
+  .p-events .ev-unit b{font-size:30px}
+  .p-events .ev-unit{padding:14px 0 12px}
+  .p-events .ev-agenda li{padding:13px 16px}
+  .p-events .ev-up-head .h2,.p-events .ev-rep .h2{font-size:32px}
+  .p-events .ev-row{gap:16px;padding:22px 0}
+  .p-events .ev-date{width:56px}
+  .p-events .ev-date b{font-size:30px}
+  .p-events .ev-info{flex-basis:calc(100% - 72px)}
+  .p-events .ev-info h3{font-size:17px}
+  .p-events .ev-row .avatar{margin-left:72px}
+  .p-events .ev-grid{grid-template-columns:1fr}
+  .p-events .ev-news{padding:28px 20px;border-radius:22px}
+  .p-events .ev-news h2{font-size:26px}
+  .p-events .ev-form{width:100%;flex-direction:column;align-items:stretch;gap:28px}
+  .p-events .ev-form input{width:100%}
+  .p-events .ev-form .btn{justify-content:center}
+}
+
+
+.p-changelog .cl-hero{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;padding:120px 24px 88px;overflow:hidden}
+.p-changelog .cl-hero::before{content:"";position:absolute;left:50%;top:-360px;width:1260px;height:780px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(110,231,200,.17),rgba(110,231,200,.05) 60%,rgba(110,231,200,0));pointer-events:none}
+.p-changelog .cl-hero > *{position:relative}
+.p-changelog .cl-hero .eyebrow{color:rgba(110,231,200,.9)}
+.p-changelog .cl-title{margin-top:20px;font-weight:600;font-size:72px;line-height:1.2;letter-spacing:-.04em;color:var(--ink)}
+.p-changelog .cl-title .serif{font-size:1.14em;line-height:.9}
+.p-changelog .cl-lede{margin-top:18px;font-size:18px;color:rgba(237,241,240,.55)}
+.p-changelog .cl-actions{margin-top:32px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center}
+.p-changelog .cl-rss{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 16px;font-weight:500;font-size:14px;color:rgba(237,241,240,.7);border-radius:999px;transition:color .2s,background .2s}
+.p-changelog .cl-rss:hover{color:var(--mint);background:var(--fill-2)}
+.p-changelog .cl-rss .i{width:16px;height:16px}
+
+.p-changelog .cl-timeline{padding:24px 24px 140px;display:flex;flex-direction:column;align-items:center}
+.p-changelog .cl-list{width:100%;max-width:1000px}
+.p-changelog .rel{display:flex;align-items:stretch}
+.p-changelog .rel[hidden]{display:none}
+.p-changelog .rel.older{opacity:0;transform:translateY(14px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+.p-changelog .rel.older.shown{opacity:1;transform:none}
+.p-changelog .rel-meta{width:180px;flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:6px;padding:30px 28px 0 0;white-space:nowrap}
+.p-changelog .rel-ver{font-weight:600;font-size:22px;letter-spacing:-.015em;color:var(--ink);line-height:normal}
+.p-changelog .rel-date{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--ink-40)}
+.p-changelog .rel-rail{position:relative;width:24px;flex:none;display:flex;justify-content:center}
+.p-changelog .rel-rail::before{content:"";width:1px;height:100%;background:rgba(255,255,255,.08);transition:background .4s}
+.p-changelog .rel-dot{position:absolute;left:6.5px;top:38px;width:11px;height:11px;border-radius:50%;background:#2c3334;box-shadow:0 0 0 4px var(--bg);transition:background .35s,box-shadow .35s}
+.p-changelog .rel.active .rel-rail::before{background:rgba(255,255,255,.18)}
+.p-changelog .rel.active .rel-dot{background:var(--mint);box-shadow:0 0 0 4px rgba(110,231,200,.16),0 0 18px rgba(110,231,200,.55)}
+.p-changelog .rel-entry{flex:1;min-width:0;padding:24px 0 32px 28px}
+.p-changelog .rel-card{background:#0c1011;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:30px 32px;transition:border-color .4s,box-shadow .4s}
+.p-changelog .rel.active .rel-card{border-color:rgba(110,231,200,.3)}
+.p-changelog .rel-tags{display:flex;gap:6px;flex-wrap:wrap}
+.p-changelog .rel-tags .tag{height:auto;padding:3px 9px;border-radius:999px;font-size:10px;line-height:normal;letter-spacing:.06em}
+.p-changelog .rel-tags .tag.mint,.p-changelog .rel-tags .tag.sky,.p-changelog .rel-tags .tag.amber,.p-changelog .rel-tags .tag.red{background-color:var(--tagbg)}
+.p-changelog .tag.mint{--tagbg:rgba(110,231,200,.1)}
+.p-changelog .tag.sky{--tagbg:rgba(124,196,245,.1)}
+.p-changelog .tag.amber{--tagbg:rgba(245,184,103,.1)}
+.p-changelog .tag.red{--tagbg:rgba(255,122,122,.1)}
+.p-changelog .rel-title{margin-top:16px;font-weight:600;font-size:28px;letter-spacing:-.02em;line-height:normal;color:var(--ink)}
+.p-changelog .rel-desc{margin-top:10px;font-size:15px;line-height:1.65;color:rgba(237,241,240,.6)}
+.p-changelog .rel-panel{margin-top:24px;display:flex;flex-direction:column;gap:10px;padding:20px;border-radius:14px;border:1px solid rgba(255,255,255,.07);background:linear-gradient(180deg,rgba(110,231,200,.09) 0%,rgba(110,231,200,.25) 48%,rgba(110,231,200,.04) 92%,#0c1011 100%),#0c1011}
+.p-changelog .panel-label{font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.08em;color:var(--ink-45);text-transform:uppercase}
+.p-changelog .member{display:flex;align-items:center;gap:12px}
+.p-changelog .member .avatar{box-shadow:none}
+.p-changelog .member-name{flex:1;min-width:0;font-weight:500;font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-changelog .role{font-family:var(--mono);font-weight:500;font-size:11px;color:rgba(110,231,200,.9);white-space:nowrap;padding:3px 6px;margin:-3px -6px;border-radius:6px;transition:background .2s,color .2s}
+.p-changelog .role:hover{background:rgba(255,255,255,.06)}
+.p-changelog .role.viewer{color:var(--ink-40)}
+.p-changelog .role.flash{animation:clrole .45s ease}
+@keyframes clrole{0%{background:rgba(110,231,200,.22)}100%{background:transparent}}
+.p-changelog .run{display:flex;align-items:center;gap:12px;white-space:nowrap}
+.p-changelog .run-dot{width:7px;height:7px;border-radius:50%;background:var(--mint);flex:none}
+.p-changelog .run-dot.off{background:rgba(237,241,240,.3)}
+.p-changelog .run-time{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--ink-50)}
+.p-changelog .run-text{font-size:14px;color:var(--ink);overflow:hidden;text-overflow:ellipsis}
+.p-changelog .run-text.dim{color:var(--ink-40)}
+.p-changelog .bullets{margin-top:20px;list-style:none;display:flex;flex-direction:column;gap:10px}
+.p-changelog .bullets li{display:flex;align-items:center;gap:12px;font-size:14px;line-height:17px;color:rgba(237,241,240,.82)}
+.p-changelog .bullets .i{width:14px;height:14px;color:var(--mint);stroke-width:2.4}
+.p-changelog .cl-more{margin-top:24px}
+.p-changelog .cl-more:disabled{cursor:default;opacity:.55;transform:none}
+.p-changelog .cl-more:disabled:hover{background:var(--fill-2);border-color:var(--line-4)}
+.p-changelog .cl-more .i{width:16px;height:16px;color:var(--mint)}
+
+@media (max-width:900px){
+  .p-changelog .cl-title{font-size:52px}
+  .p-changelog .cl-hero{padding:88px 24px 64px}
+  .p-changelog .rel-meta{width:120px;padding-right:20px}
+  .p-changelog .rel-entry{padding-left:20px}
+}
+@media (max-width:560px){
+  .p-changelog .cl-hero{padding:72px 16px 48px}
+  .p-changelog .cl-title{font-size:40px}
+  .p-changelog .cl-lede{font-size:16px}
+  .p-changelog .cl-timeline{padding:8px 16px 96px}
+  .p-changelog .rel{display:grid;grid-template-columns:20px minmax(0,1fr);grid-template-rows:auto 1fr}
+  .p-changelog .rel-rail{grid-column:1;grid-row:1 / span 2;width:20px}
+  .p-changelog .rel-dot{left:4.5px;top:24px}
+  .p-changelog .rel-meta{grid-column:2;grid-row:1;width:auto;flex-direction:row;align-items:baseline;gap:10px;padding:18px 0 0 16px}
+  .p-changelog .rel-ver{font-size:20px}
+  .p-changelog .rel-entry{grid-column:2;grid-row:2;padding:12px 0 28px 16px}
+  .p-changelog .rel-card{padding:22px 18px;border-radius:16px}
+  .p-changelog .rel-title{font-size:22px;margin-top:14px}
+  .p-changelog .rel-desc{font-size:14px}
+  .p-changelog .rel-panel{padding:16px 14px}
+  .p-changelog .member{display:grid;grid-template-columns:28px minmax(0,1fr);grid-template-rows:auto auto;column-gap:12px;row-gap:2px}
+  .p-changelog .member .avatar{grid-row:1 / span 2;align-self:center}
+  .p-changelog .member .role{grid-column:2;justify-self:start;margin:0 -6px;padding:1px 6px}
+  .p-changelog .run{gap:10px;white-space:normal;align-items:baseline}
+  .p-changelog .run-dot{align-self:center}
+  .p-changelog .run-time{white-space:nowrap}
+  .p-changelog .run-time{font-size:11px}
+  .p-changelog .run-text{font-size:13px}
+  .p-changelog .bullets li{align-items:flex-start}
+  .p-changelog .bullets .i{margin-top:3px}
+}
+
+
+/* ---- Pixel Haptics additions (same tokens) ---- */
+.pv{display:block;width:100%;aspect-ratio:16/9;image-rendering:pixelated;image-rendering:crisp-edges;background:#07090a;border-radius:12px;border:1px solid var(--line-2)}
+.pv-main{border-radius:14px}
+.trust .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.trust .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--fill-2);border:1px solid var(--line-3);font:500 12px/1 'Geist Mono',monospace;color:var(--ink-72)}
+.trust .chip .i{width:14px;height:14px;color:var(--mint)}
+.xp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.xp-card{display:flex;flex-direction:column;gap:14px;padding:16px;border-radius:20px;background:var(--fill);border:1px solid var(--line-2);transition:transform .25s,border-color .25s}
+.xp-card:hover{transform:translateY(-2px);border-color:var(--mint-22)}
+.xp-card.lead{grid-column:1/-1;display:grid;grid-template-columns:1.6fr 1fr;align-items:center;box-shadow:0 0 120px rgba(110,231,200,.12)}
+.xp-card h3{margin:0;font:600 20px/1.2 Geist,sans-serif;letter-spacing:-.02em}
+.xp-card p{margin:0;color:var(--ink-58);font-size:14px;line-height:1.55}
+.xp-card .feats{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--ink-72)}
+.xp-card .feats li{display:flex;gap:8px;align-items:center}.xp-card .feats .i{width:15px;height:15px;color:var(--mint);flex:none}
+.xp-tags{display:flex;gap:6px;flex-wrap:wrap}
+.xp-card .btn{align-self:flex-start}
+@media (max-width:980px){.xp-grid{grid-template-columns:1fr 1fr}.xp-card.lead{grid-template-columns:1fr}}
+@media (max-width:640px){.xp-grid{grid-template-columns:1fr}}
+.drawer{position:fixed;inset:0;z-index:80;display:none}
+.drawer.open{display:block}
+.drawer .scrim{position:absolute;inset:0;background:rgba(7,9,10,.6);backdrop-filter:blur(4px)}
+.drawer .panel{position:absolute;right:0;top:0;bottom:0;width:min(560px,100%);background:var(--bg-2);border-left:1px solid var(--line-3);padding:32px 32px 60px;overflow-y:auto;animation:drawIn .35s ease}
+@keyframes drawIn{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
+.drawer h2{font:600 28px/1.15 Geist,sans-serif;letter-spacing:-.03em;margin:10px 0 18px}
+.drawer p,.drawer li{color:var(--ink-72);font-size:15px;line-height:1.65}
+.drawer ol,.drawer ul{padding-left:20px}
+.drawer code{font-family:'Geist Mono',monospace;font-size:13px;background:var(--fill-2);border:1px solid var(--line-2);border-radius:6px;padding:1px 6px}
+.drawer .close{position:absolute;top:18px;right:18px;width:36px;height:36px;border-radius:999px;border:1px solid var(--line-3);background:var(--fill);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.lang-btn{font:500 12px/1 'Geist Mono',monospace;color:var(--ink-72);background:var(--fill);border:1px solid var(--line-3);border-radius:999px;padding:7px 11px;cursor:pointer}
+.lang-btn:hover{color:var(--ink);border-color:var(--mint-22)}
+.trig-viz{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.trig-viz svg{width:100%;height:84px}
+.surf-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.surf{height:44px;border-radius:10px;border:1px solid var(--line-2);display:flex;align-items:flex-end;padding:6px 8px;font:500 10.5px/1 'Geist Mono',monospace;color:var(--ink-85);cursor:pointer;transition:border-color .2s,transform .2s}
+.surf:hover,.surf.on{border-color:var(--mint);transform:translateY(-1px)}
+.qmark-note{font:500 11px/1 'Geist Mono',monospace;letter-spacing:.08em;color:var(--ink-50);text-transform:uppercase}
 </style>
 </head>
 <body>
-<div class="wrap"><header><b>Haptic Quest</b><button class="lang" id="lang">English</button></header></div>
-<section class="hero"><div class="wrap">
-  <h1>Haptic Quest</h1>
-  <p data-l="ko">손끝으로 느끼는 작은 3D 모험. 설치 없이 브라우저에서 DualSense의 HD 햅틱·적응형 트리거·라이트바를 체험하세요.</p>
-  <p data-l="en">A tiny 3D adventure you feel in your fingertips. Experience DualSense HD haptics, adaptive triggers and the lightbar right in your browser — nothing to install.</p>
-  <a class="cta" href="play/"><span data-l="ko">지금 플레이</span><span data-l="en">Play now</span></a>
-</div></section>
-<div class="wrap">
-  <div class="grid">
-    <div class="card"><h3 data-l="ko">👣 손으로 찾는 보물</h3><h3 data-l="en">👣 Treasure you can feel</h3>
-      <p class="dim" data-l="ko">보물에 가까워질수록 손이 두근거리고, 진동이 오는 쪽으로 걸어가면 됩니다. 철교, 나무 다리, 눈밭, 자갈, 얕은 물 — 바닥마다 발밑 감촉이 다릅니다.</p>
-      <p class="dim" data-l="en">Your hands beat faster as treasure gets closer — walk toward the side that buzzes. Iron bridges, boardwalks, snow, gravel and shallow water all feel different underfoot.</p></div>
-    <div class="card"><h3 data-l="ko">🎮 표준 패드·키보드도 OK</h3><h3 data-l="en">🎮 Any pad or keyboard</h3>
-      <p class="dim" data-l="ko">DualSense를 USB로 연결하면 HD 햅틱으로, 블루투스나 다른 패드는 일반 진동으로, 키보드만으로도 플레이할 수 있습니다.</p>
-      <p class="dim" data-l="en">USB DualSense gets full HD haptics; Bluetooth or other pads get standard rumble; keyboard works too.</p></div>
-    <div class="card"><h3 data-l="ko">🔒 설치·회원가입 없음</h3><h3 data-l="en">🔒 No install, no account</h3>
-      <p class="dim" data-l="ko">모든 것이 브라우저 안에서 동작합니다. 진행 상황은 이 기기의 브라우저에만 저장됩니다.</p>
-      <p class="dim" data-l="en">Everything runs inside your browser. Progress is saved only in this browser on this device.</p></div>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><symbol id="i-activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /></symbol><symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></symbol><symbol id="i-arrow-up-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10" /> <path d="M7 17 17 7" /></symbol><symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /> <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></symbol><symbol id="i-bot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8" /> <rect width="16" height="12" x="4" y="8" rx="2" /> <path d="M2 14h2" /> <path d="M20 14h2" /> <path d="M15 13v2" /> <path d="M9 13v2" /></symbol><symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" /> <path d="m3.3 7 8.7 5 8.7-5" /> <path d="M12 22V12" /></symbol><symbol id="i-calendar-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5" /> <path d="M16 2v4" /> <path d="M8 2v4" /> <path d="M3 10h5" /> <path d="M17.5 17.5 16 16.3V14" /> <circle cx="16" cy="16" r="6" /></symbol><symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4" /> <path d="M16 2v4" /> <rect width="18" height="18" x="3" y="4" rx="2" /> <path d="M3 10h18" /></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></symbol><symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></symbol><symbol id="i-circle-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="m9 12 2 2 4-4" /></symbol><symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <polyline points="12 6 12 12 16 14" /></symbol><symbol id="i-credit-card" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2" /> <line x1="2" x2="22" y1="10" y2="10" /></symbol><symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" x2="12" y1="15" y2="3" /></symbol><symbol id="i-file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /> <path d="M14 2v4a2 2 0 0 0 2 2h4" /> <path d="M10 9H8" /> <path d="M16 13H8" /> <path d="M16 17H8" /></symbol><symbol id="i-github" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" /> <path d="M9 18c-4.51 2-5-2-7-2" /></symbol><symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /></symbol><symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5" /> <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /> <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" /></symbol><symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4" /> <path d="m21 2-9.6 9.6" /> <circle cx="7.5" cy="15.5" r="5.5" /></symbol><symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" /> <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" /> <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" /></symbol><symbol id="i-linkedin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /> <rect width="4" height="12" x="2" y="9" /> <circle cx="4" cy="4" r="2" /></symbol><symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /></symbol><symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /> <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></symbol><symbol id="i-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /></symbol><symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12" /> <line x1="4" x2="20" y1="6" y2="6" /> <line x1="4" x2="20" y1="18" y2="18" /></symbol><symbol id="i-message-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></symbol><symbol id="i-minus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /></symbol><symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol><symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3" /></symbol><symbol id="i-plug" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /> <path d="M9 8V2" /> <path d="M15 8V2" /> <path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z" /></symbol><symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14" /> <path d="M12 5v14" /></symbol><symbol id="i-puzzle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z" /></symbol><symbol id="i-quote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /> <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /></symbol><symbol id="i-radio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9" /> <path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5" /> <circle cx="12" cy="12" r="2" /> <path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5" /> <path d="M19.1 4.9C23 8.8 23 15.1 19.1 19" /></symbol><symbol id="i-rss" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11a9 9 0 0 1 9 9" /> <path d="M4 4a16 16 0 0 1 16 16" /> <circle cx="5" cy="19" r="1" /></symbol><symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /></symbol><symbol id="i-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /></symbol><symbol id="i-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" /> <path d="M20 3v4" /> <path d="M22 5h-4" /> <path d="M4 17v2" /> <path d="M5 18H3" /></symbol><symbol id="i-square-pen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /> <path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" /></symbol><symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /></symbol><symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="m4.93 4.93 1.41 1.41" /> <path d="m17.66 17.66 1.41 1.41" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="m6.34 17.66-1.41 1.41" /> <path d="m19.07 4.93-1.41 1.41" /></symbol><symbol id="i-trending-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /> <polyline points="16 7 22 7 22 13" /></symbol><symbol id="i-twitter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" /></symbol><symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /></symbol><symbol id="i-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5" /> <rect x="2" y="6" width="14" height="12" rx="2" /></symbol><symbol id="i-workflow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol><symbol id="i-youtube" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17" /> <path d="m10 15 5-3-5-3z" /></symbol><symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></symbol><symbol id="i-gamepad-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></symbol><symbol id="i-vibrate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 8 2 2-2 2 2 2-2 2"/><path d="m22 8-2 2 2 2-2 2 2 2"/><rect width="8" height="14" x="8" y="5" rx="1"/></symbol><symbol id="i-crosshair" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></symbol><symbol id="i-volume-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol><symbol id="i-usb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="1"/><circle cx="4" cy="20" r="1"/><path d="M4.7 19.3 19 5"/><path d="m21 3-3 1 2 2Z"/><path d="M9.26 7.68 5 12l2 5"/><path d="m10 14 5 2 3.5-3.5"/><path d="m18 12 1-1 1 1-1 1Z"/></symbol><symbol id="i-cloud-rain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></symbol><symbol id="i-footprints" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"/><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"/><path d="M16 17h4"/><path d="M4 13h4"/></symbol></svg>
+<header class="nav">
+  <div class="wrap">
+    <div class="nav-left">
+      <a class="brand" href="#home" aria-label="Pixel Haptics home"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" fill="#6ee7c8"/><rect x="13" y="3" width="8" height="8" fill="#edf1f0" opacity=".9"/><rect x="3" y="13" width="8" height="8" fill="#edf1f0" opacity=".5"/><rect x="13" y="13" width="8" height="8" fill="#6ee7c8" opacity=".55"/></svg>Pixel Haptics</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#home" data-nav="home" data-ko="홈">Home</a>
+        <a href="#experiences" data-nav="experiences" data-ko="체험">Experiences</a>
+        <a href="#guide" data-nav="guide" data-ko="가이드">Guide</a>
+        <a href="#changelog" data-nav="changelog" data-ko="업데이트">Changelog</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <button class="lang-btn" type="button" id="langBtn">한국어</button>
+      <a class="btn btn-primary btn-sm" href="play/" data-ko="지금 플레이">Play now</a>
+      <button class="nav-burger" aria-label="Open menu" aria-expanded="false"><svg class="i"><use href="#i-menu"/></svg></button>
+    </div>
   </div>
-  <div class="ad-slot" id="adHome"></div>
-  <h2 data-l="ko">준비물</h2><h2 data-l="en">What you need</h2>
-  <ul data-l="ko"><li>데스크톱 Chrome 또는 Edge (WebHID 지원 브라우저)</li><li>DualSense 컨트롤러 + USB 케이블 (HD 햅틱은 USB에서만 동작)</li><li>Steam이 켜져 있다면 Steam Input을 끄거나 Steam을 종료하세요 — 컨트롤러를 가로채 HD 햅틱을 막습니다.</li></ul>
-  <ul data-l="en"><li>Desktop Chrome or Edge (browsers with WebHID)</li><li>A DualSense controller and a USB cable (HD haptics only work over USB)</li><li>If Steam is running, disable Steam Input or quit Steam — it grabs the controller and blocks HD haptics.</li></ul>
-  <h2 data-l="ko">HD 햅틱이 뭔가요?</h2><h2 data-l="en">What are HD haptics?</h2>
-  <p data-l="ko">DualSense에는 예전 패드처럼 추를 돌리는 모터 대신 양손에 하나씩 보이스코일 액추에이터가 들어 있습니다. 스피커처럼 파형을 그대로 재생하기 때문에 "툭", "자글자글", "쿵" 같은 질감을 손바닥에 정확히 그릴 수 있습니다. USB로 연결하면 컨트롤러가 4채널 오디오 장치로 잡히는데, 3·4번 채널이 바로 왼손·오른손 액추에이터입니다. Haptic Quest는 이 채널로 직접 파형을 보내 게임 속 발소리와 충격을 손으로 느끼게 해 줍니다.</p>
-  <p data-l="en">Instead of the spinning weights in older pads, the DualSense has a voice-coil actuator in each grip. Like tiny speakers, they play waveforms directly, so a game can draw precise textures — a tap, a crunch, a thud — on your palms. Over USB the controller shows up as a 4-channel audio device whose channels 3 and 4 drive the left and right actuators. Haptic Quest sends waveforms straight to those channels so you feel every footstep and impact.</p>
-  <footer>
-    <span data-l="ko">3D 모델: Quaternius, Kenney (CC0) · 효과음: Kenney (CC0) · three.js (MIT). DualSense는 Sony Interactive Entertainment의 상표이며 이 사이트는 Sony와 관련이 없습니다.</span>
-    <span data-l="en">3D models: Quaternius, Kenney (CC0) · Sound: Kenney (CC0) · three.js (MIT). DualSense is a trademark of Sony Interactive Entertainment; this site is not affiliated with Sony.</span>
-  </footer>
+</header>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#home" data-nav="home" data-ko="홈">Home</a>
+  <a href="#experiences" data-nav="experiences" data-ko="체험">Experiences</a>
+  <a href="#guide" data-nav="guide" data-ko="가이드">Guide</a>
+  <a href="#changelog" data-nav="changelog" data-ko="업데이트">Changelog</a>
+  <a href="play/" data-ko="지금 플레이">Play now</a>
 </div>
+
+<main>
+<section class="page p-home" data-page="home">
+  <div class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <a class="announce" href="#changelog"><span class="new">NEW</span><span data-ko="플레이그라운드 — 무기 7종, 바닥 8종">Playground — 7 weapons, 8 surfaces</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+    <h1 class="hero-h"><span class="ln" data-ko="모든 발걸음을 느끼고.">Feel every step.</span> <span class="ln" data-ko="모든 &lt;span class=&quot;serif&quot;&gt;타격&lt;/span&gt;을 느끼세요.">Feel every <span class="serif">hit</span>.</span></h1>
+    <p class="hero-lede" data-ko="DualSense를 위한 무료 브라우저 놀이터. HD 햅틱, 적응형 트리거, 컨트롤러 스피커를 픽셀 이펙트 244개에 연결했습니다. USB로 꽂고 바로 플레이하세요. 설치할 것은 없습니다.">A free browser playground for the DualSense. HD haptics, adaptive triggers and the controller speaker, wired to 244 pixel-art effects. Plug in with USB and play — nothing to install.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="play/"><svg class="i"><use href="#i-play"/></svg><span data-ko="지금 플레이">Play now</span></a>
+      <a class="btn btn-ghost" href="#guide"><span data-ko="작동 방식">How it works</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+    </div>
+    <div class="trust"><div class="chips"><span class="chip"><svg class="i"><use href="#i-usb"/></svg>USB-C</span><span class="chip"><svg class="i"><use href="#i-globe"/></svg>Chrome · Edge</span><span class="chip"><svg class="i"><use href="#i-lock"/></svg><span data-ko="계정 필요 없음">No account</span></span></div></div>
+
+    <div class="shot">
+      <div class="win" role="group" aria-label="Live preview">
+        <aside class="side">
+          <div class="lights" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="s-label" data-ko="체험">EXPERIENCES</div>
+          <div class="tasks" role="tablist" aria-label="Experiences">
+          <button class="s-item task on" role="tab" aria-selected="true" data-x="playground"><svg class="i"><use href="#i-gamepad-2"/></svg><span data-ko="플레이그라운드">Playground</span></button>
+          <button class="s-item task" role="tab" aria-selected="false" data-x="rain"><svg class="i"><use href="#i-cloud-rain"/></svg><span data-ko="비">Rain</span></button>
+          <button class="s-item task" role="tab" aria-selected="false" data-x="pistol"><svg class="i"><use href="#i-crosshair"/></svg><span data-ko="권총">Pistol</span></button>
+          <button class="s-item task" role="tab" aria-selected="false" data-x="rifle"><svg class="i"><use href="#i-zap"/></svg><span data-ko="기관총">Machine gun</span></button>
+          <button class="s-item task" role="tab" aria-selected="false" data-x="bow"><svg class="i"><use href="#i-crosshair"/></svg><span data-ko="활">Bow</span></button>
+          <button class="s-item task" role="tab" aria-selected="false" data-x="melee"><svg class="i"><use href="#i-activity"/></svg><span data-ko="근접 무기">Melee</span></button>
+          <button class="s-item task" role="tab" aria-selected="false" data-x="gallery"><svg class="i"><use href="#i-sparkles"/></svg><span data-ko="이펙트 갤러리">Effect gallery</span></button>
+          </div>
+          <div class="side-user"><svg class="i"><use href="#i-gamepad-2"/></svg><span class="pad-state" data-ko="컨트롤러 미리보기">Controller preview</span></div>
+        </aside>
+        <div class="main">
+          <div class="topbar"><span class="swap" data-k="title">Playground</span><span class="status-pill" data-k="status">LIVE · 320×180</span></div>
+          <canvas class="pv pv-main" id="pvMain" width="320" height="180" aria-label="Live pixel preview"></canvas>
+          <div class="kpis">
+            <div class="kpi"><span class="l" data-ko="햅틱 채널">Haptic channels</span><span class="v">4</span><span class="d" data-ko="양손 보이스코일">2 voice coils</span></div>
+            <div class="kpi"><span class="l" data-ko="트리거 모드">Trigger modes</span><span class="v">4</span><span class="d" data-ko="딸깍·경사·진동·벽">click · ramp · buzz · wall</span></div>
+            <div class="kpi"><span class="l" data-ko="픽셀 이펙트">Pixel effects</span><span class="v">244</span><span class="d">pixelfx</span></div>
+            <div class="kpi"><span class="l" data-ko="바닥 종류">Surfaces</span><span class="v">8</span><span class="d" data-ko="바닥마다 다른 발소리">each its own step</span></div>
+          </div>
+          <div class="finding"><span class="k" data-ko="손에 느껴지는 것">WHAT YOU FEEL</span><p class="swap" data-k="finding"></p></div>
+        </div>
+      </div>
+      <div class="shot-fade" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="logos reveal">
+    <span class="logos-label" data-ko="필요한 것">WHAT YOU NEED</span>
+    <div class="logos-row">
+      <span class="logo"><svg class="i"><use href="#i-gamepad-2"/></svg>DualSense</span>
+      <span class="logo"><svg class="i"><use href="#i-usb"/></svg><span data-ko="USB 케이블">USB cable</span></span>
+      <span class="logo"><svg class="i"><use href="#i-globe"/></svg>Chrome</span>
+      <span class="logo"><svg class="i"><use href="#i-globe"/></svg>Edge</span>
+      <span class="logo"><svg class="i"><use href="#i-box"/></svg>Windows</span>
+      <span class="logo"><svg class="i"><use href="#i-box"/></svg>macOS</span>
+    </div>
+  </div>
+
+  <div class="hsec">
+    <div class="wrap">
+      <div class="shead reveal">
+        <div>
+          <p class="eyebrow" data-ko="01 — 컨트롤러">01 — THE CONTROLLER</p>
+          <h2 class="h2x" data-ko="손이 &lt;span class=&quot;serif&quot;&gt;읽는&lt;/span&gt; 컨트롤러.">A controller your hands <span class="serif">read</span>.</h2>
+        </div>
+        <p data-ko="DualSense에는 진동 모터 대신 손잡이마다 보이스코일이 있고, 저항을 바꾸는 트리거와 작은 스피커가 있습니다. 대부분의 게임은 이걸 다 쓰지 않습니다. 여기서는 다 씁니다.">The DualSense has a voice coil in each grip instead of a spinning weight, triggers that push back and a small speaker. Most games barely use them. Here, everything does.</p>
+      </div>
+      <div class="fgrid reveal">
+        <article class="bx feat"><div class="feat-top"><span class="ficon"><svg class="i"><use href="#i-vibrate"/></svg></span><span>01</span></div><h3 data-ko="HD 햅틱">HD haptics</h3><p data-ko="USB로 연결하면 컨트롤러가 4채널 오디오 장치가 됩니다. 3·4번 채널이 왼손과 오른손이고, 파형을 그대로 재생해서 탁, 자글자글, 쿵을 구분해 그립니다.">Over USB the controller is a 4-channel audio device. Channels 3 and 4 drive your left and right hand, so a tap, a crunch and a thud each feel distinct.</p></article>
+        <article class="bx feat"><div class="feat-top"><span class="ficon"><svg class="i"><use href="#i-crosshair"/></svg></span><span>02</span></div><h3 data-ko="적응형 트리거">Adaptive triggers</h3><p data-ko="R2가 중간에서 딸깍 끊기거나, 당길수록 무거워지거나, 손가락 밑에서 떨리거나, 벽처럼 막힙니다. 무기마다 하나씩.">R2 can break with a click halfway, get heavier as you pull, buzz under your finger or stop like a wall. Each weapon gets one.</p></article>
+        <article class="bx feat"><div class="feat-top"><span class="ficon"><svg class="i"><use href="#i-volume-2"/></svg></span><span>03</span></div><h3 data-ko="컨트롤러 스피커">Controller speaker</h3><p data-ko="큰 소리는 PC에서, 손 안의 소리는 손에서. 탄피, 재장전 딸깍, 활시위 삐걱임은 컨트롤러 스피커로 나옵니다.">Big sounds play on your PC, small ones in your hands: casings, reload clicks and a creaking bowstring come from the controller.</p></article>
+      </div>
+    </div>
+  </div>
+
+  <div class="hsec">
+    <div class="wrap">
+      <div class="shead reveal">
+        <div>
+          <p class="eyebrow" data-ko="02 — 체험해 볼 것">02 — WHAT TO TRY</p>
+          <h2 class="h2x" data-ko="바닥이 다르면 &lt;span class=&quot;serif&quot;&gt;느낌&lt;/span&gt;도 다릅니다.">Every surface <span class="serif">feels</span> different.</h2>
+        </div>
+        <p data-ko="실제 발소리 녹음을 진동으로 바꿔서, 철판은 쨍하게, 눈은 사각사각, 물은 철벅하게 느껴집니다.">Real footstep recordings are turned into haptics, so steel rings, snow crunches and water splashes in your palms.</p>
+      </div>
+      <div class="bento reveal">
+        <div class="brow">
+          <div class="bx team">
+            <div class="team-copy">
+              <span class="kick" data-ko="트리거 저항">TRIGGER RESISTANCE</span>
+              <h3 data-ko="하나의 트리거, 네 가지 느낌.">One trigger, four feels.</h3>
+              <p data-ko="모드를 눌러 R2가 손가락을 어떻게 밀어내는지 보세요.">Pick a mode to see how R2 pushes back against your finger.</p>
+              <div class="roles" id="trigModes">
+                <button class="role on" data-mode="click" data-ko="딸깍">Click</button>
+                <button class="role" data-mode="ramp" data-ko="경사">Ramp</button>
+                <button class="role" data-mode="buzz" data-ko="진동">Buzz</button>
+                <button class="role" data-mode="wall" data-ko="벽">Wall</button>
+              </div>
+            </div>
+            <div class="trig-viz" aria-hidden="true">
+              <svg viewBox="0 0 300 84" preserveAspectRatio="none"><path id="trigPath" fill="none" stroke="#6ee7c8" stroke-width="2" vector-effect="non-scaling-stroke" d=""/><line x1="0" y1="83" x2="300" y2="83" stroke="rgba(255,255,255,.1)"/></svg>
+              <span class="qmark-note" id="trigNote"></span>
+            </div>
+          </div>
+          <div class="bx tools">
+            <span class="kick" data-ko="바닥 8종">8 SURFACES</span>
+            <h3 data-ko="발밑을 골라 보세요.">Pick what is underfoot.</h3>
+            <div class="surf-tiles" id="surfTiles"></div>
+          </div>
+        </div>
+        <div class="brow brow-3">
+          <div class="bx">
+            <span class="kick" data-ko="무기 7종">7 WEAPONS</span>
+            <h3 data-ko="L1·R1로 바꾸기.">Switch with L1 and R1.</h3>
+            <div class="models" role="group" aria-label="Weapons">
+              <button class="model" aria-pressed="true">Sword</button><button class="model" aria-pressed="false">Hammer</button><button class="model" aria-pressed="false">Spear</button><button class="model" aria-pressed="false">Fists</button><button class="model" aria-pressed="false">Pistol</button><button class="model" aria-pressed="false">SMG</button><button class="model" aria-pressed="false">Bow</button>
+            </div>
+          </div>
+          <div class="bx">
+            <span class="kick" data-ko="연결">CONNECT</span>
+            <h3 data-ko="USB 한 줄이면 됩니다.">One USB cable.</h3>
+            <div class="approval">
+              <svg class="i"><use href="#i-usb"/></svg>
+              <span class="approval-q" data-ko="브라우저에서 컨트롤러 열기">Open the controller in your browser</span>
+              <a class="approve" href="play/"><svg class="i"><use href="#i-arrow-right"/></svg><span class="approve-t" data-ko="플레이">Play</span></a>
+            </div>
+          </div>
+          <div class="bx sched">
+            <span class="kick" data-ko="비">RAIN</span>
+            <h3 data-ko="보슬비에서 폭풍까지.">From drizzle to storm.</h3>
+            <div class="run"><span class="tm">R2 20%</span><span class="dot"></span><span class="nm" data-ko="보슬비">Drizzle</span></div>
+            <div class="run"><span class="tm">R2 100%</span><span class="dot"></span><span class="nm" data-ko="폭우">Downpour</span></div>
+            <div class="run"><span class="tm">&#9651;</span><span class="dot"></span><span class="nm" data-ko="번개 세 번">Three strikes</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="testi">
+    <div class="wrap" style="display:flex;flex-direction:column;align-items:center;gap:36px">
+      <div class="qmark reveal" aria-hidden="true">&ldquo;</div>
+      <blockquote class="quote reveal" data-ko="철판 위의 발걸음이 눈 위의 발걸음처럼 느껴지면 안 됩니다. 그래서 바닥마다, 무기마다, &lt;span class=&quot;serif&quot;&gt;모든 타격&lt;/span&gt;마다 따로 만들었습니다.">A footstep on steel should never feel like a footstep on snow. So every surface, every weapon and <span class="serif">every hit</span> gets its own feel.</blockquote>
+      <div class="author reveal"><div><b data-ko="만든 원칙">Design note</b><small>Pixel Haptics</small></div></div>
+      <div class="proof reveal">
+        <div><b data-count="244">244</b><span data-ko="픽셀 이펙트">pixel effects</span></div>
+        <div><b data-count="8">8</b><span data-ko="바닥 종류">surfaces</span></div>
+        <div><b data-count="7">7</b><span data-ko="무기">weapons</span></div>
+        <div><b data-count="0">0</b><span data-ko="설치할 것">installs</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-sec">
+    <div class="wrap">
+      <div class="cta-card reveal">
+        <div class="cta-glow" aria-hidden="true"></div>
+        <p class="eyebrow" data-ko="무료 · 계정 없음">FREE · NO ACCOUNT</p>
+        <h2 class="cta-h" data-ko="꽂고. &lt;span class=&quot;serif&quot;&gt;느끼세요&lt;/span&gt;.">Plug in. <span class="serif">Feel it</span>.</h2>
+        <p data-ko="데스크톱 Chrome 또는 Edge, USB로 연결한 DualSense면 충분합니다.">Desktop Chrome or Edge and a DualSense on USB. That is all.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="play/"><svg class="i"><use href="#i-play"/></svg><span data-ko="지금 플레이">Play now</span></a>
+          <a class="btn btn-ghost" href="#guide"><span data-ko="설정 가이드">Setup guide</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="page p-xp" data-page="experiences">
+  <div class="page-hero pr-hero">
+    <p class="eyebrow" data-ko="체험">Experiences</p>
+    <h1 class="h1" data-ko="하나의 놀이터, &lt;span class=&quot;serif&quot;&gt;여섯&lt;/span&gt; 개의 방.">One playground, <span class="serif">six</span> rooms.</h1>
+    <p class="lede" data-ko="모두 무료이고 브라우저에서 바로 실행됩니다. 아래 미리보기는 실제 게임과 같은 엔진으로 지금 그려지고 있습니다.">All free, all in the browser. The previews below run on the same engine as the game, right now.</p>
+  </div>
+  <div class="pr-plans reveal">
+    <div class="wrap">
+      <div class="xp-grid">
+        <article class="xp-card lead">
+          <canvas class="pv" width="320" height="180" data-pv="playground" aria-label="Playground preview"></canvas>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
+            <h3 data-ko="플레이그라운드">Playground</h3>
+            <p data-ko="여덟 가지 바닥 위를 걷고, 달리고, 대시하고, 점프하세요. 허수아비를 검·망치·창·주먹으로 치거나 권총·SMG·활로 쏘면 타격이 손에 그대로 꽂힙니다.">Walk, run, dash and jump across eight surfaces, then beat straw dummies with sword, hammer, spear and fists, or shoot them with pistol, SMG and bow.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="왼발은 왼손, 오른발은 오른손으로">Left foot in the left hand, right foot in the right</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="제대로 맞으면 멈칫하는 히트스톱">Hit-stop on every solid hit</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="무기마다 다른 트리거 저항">A trigger effect for every weapon</span></li></ul>
+            <a class="btn btn-primary" href="play/#playground"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="xp-card">
+          <canvas class="pv" width="320" height="180" data-pv="rain" aria-label="Rain preview"></canvas>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
+            <h3 data-ko="비">Rain</h3>
+            <p data-ko="R2를 당길수록 빗줄기가 굵어지고 손바닥에 톡톡 떨어집니다. 우산을 펴면 두드리는 감촉으로 바뀌고, 번개를 부르면 먼저 정전기가 손을 타고 올라옵니다.">Drops tap your palms as R2 turns a drizzle into a downpour. Open an umbrella and the patter turns into drumming; call lightning and feel the static build first.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="양손에 무작위로 떨어지는 빗방울">Random drops on both palms</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="우산을 펴면 질감이 바뀜">Umbrella changes the texture</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="먼저 느껴지는 번개 세 번">Three lightning strokes you feel coming</span></li></ul>
+            <a class="btn btn-ghost" href="play/#rain"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="xp-card">
+          <canvas class="pv" width="320" height="180" data-pv="pistol" aria-label="Pistol preview"></canvas>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="xp-tags"><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
+            <h3 data-ko="권총">Pistol</h3>
+            <p data-ko="R2가 중간에서 딸깍 끊기는 순간 한 발씩 나갑니다. 총이 튀고, 탄이 바닥을 가로질러 허수아비가 흔들립니다.">Each shot waits for R2 to break at the click halfway down. The gun kicks, the round crosses the floor and the dummy rocks back.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="딸깍 끊기는 방아쇠">Break-point trigger click</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="반동, 그다음 오른쪽에서 오는 명중감">Recoil, then the impact on the right</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="탄피 소리는 컨트롤러 스피커에서">Casings tinkle from the controller speaker</span></li></ul>
+            <a class="btn btn-ghost" href="play/#pistol"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="xp-card">
+          <canvas class="pv" width="320" height="180" data-pv="rifle" aria-label="Machine gun preview"></canvas>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="xp-tags"><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
+            <h3 data-ko="기관총">Machine gun</h3>
+            <p data-ko="R2를 당기고 있으면 초당 12발마다 트리거 자체가 떨립니다. 계속 쏘면 과열돼서 총열이 식을 때까지 트리거가 딱딱하게 굳습니다.">Hold R2 and the trigger itself vibrates with every round, twelve a second. Keep firing and it overheats: the trigger locks stiff until the barrel cools.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="떨리는 트리거">Vibrating trigger</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="과열되면 트리거가 잠김">Overheat locks the trigger</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="오른쪽 벽에 꽂히는 탄환">Bullets chew the wall to the right</span></li></ul>
+            <a class="btn btn-ghost" href="play/#rifle"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="xp-card">
+          <canvas class="pv" width="320" height="180" data-pv="bow" aria-label="Bow preview"></canvas>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="xp-tags"><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span><span class="tag mint" data-ko="HD 햅틱">HD haptics</span></div>
+            <h3 data-ko="활">Bow</h3>
+            <p data-ko="R2가 곧 활시위입니다. 당길수록 무거워지고, 끝까지 당기면 팔이 떨리고, 놓으면 시위가 좌우로 울립니다.">R2 is the bowstring. It gets heavier the further you pull, your arms tremble at full draw, and the string rings left and right when you let go.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="당길수록 커지는 저항">Resistance that ramps with the draw</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="끝까지 당기면 떨림">Full-draw tremble</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="화살이 박히는 둔탁한 손맛">A thud when the arrow lands</span></li></ul>
+            <a class="btn btn-ghost" href="play/#bow"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="xp-card">
+          <canvas class="pv" width="320" height="180" data-pv="melee" aria-label="Melee preview"></canvas>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag amber" data-ko="적응형 트리거">Adaptive triggers</span></div>
+            <h3 data-ko="근접 무기">Melee</h3>
+            <p data-ko="검 베기부터 지면 강타까지 14가지 동작. 휘두를 때 손을 가로지르고, 맞는 순간 손 안에서 멈칫합니다.">Fourteen moves, from a sword slash to a ground pound. The swing sweeps across your hands, then the hit freezes in them.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="양손을 가로지르는 칼바람">Wind-up swish across both hands</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="동작마다 다른 무게감">Weight follows each move</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="14가지 동작">Fourteen moves</span></li></ul>
+            <a class="btn btn-ghost" href="play/#melee"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </article>
+        <article class="xp-card">
+          <canvas class="pv" width="320" height="180" data-pv="gallery" aria-label="Effect gallery preview"></canvas>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="xp-tags"><span class="tag mint" data-ko="HD 햅틱">HD haptics</span><span class="tag sky" data-ko="컨트롤러 스피커">Speaker</span></div>
+            <h3 data-ko="이펙트 갤러리">Effect gallery</h3>
+            <p data-ko="픽셀 이펙트 244개를 전부 손으로. 터지면 치고, 빛나면 웅웅거리며 좌우로 따라오고, 따뜻한 색은 낮게, 차가운 색은 높게 울립니다.">All 244 pixel effects, felt. Bursts become hits, glows become a hum that follows the effect across your hands, warm colours rumble low and cold ones buzz high.</p>
+            <ul class="feats"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="빛과 색을 진동으로 자동 변환">Auto-haptics from light and colour</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="21개 카테고리">21 categories</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="동작마다 정해진 타격 타이밍">Scripted hits for every move</span></li></ul>
+            <a class="btn btn-ghost" href="play/#gallery"><span data-ko="플레이">Play</span><svg class="i"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+  <div class="pr-compare">
+    <div class="wrap reveal">
+      <h2 class="h2" data-ko="무엇을 &lt;span class=&quot;serif&quot;&gt;쓰는지&lt;/span&gt;">What each one <span class="serif">uses</span></h2>
+      <div class="tbl-scroll" tabindex="0" aria-label="Feature table, scroll horizontally on small screens">
+        <table class="tbl"><thead><tr><th scope="col"></th><th scope="col" class="pro" data-ko="플레이그라운드">Playground</th><th scope="col" data-ko="비">Rain</th><th scope="col" data-ko="권총">Pistol</th><th scope="col" data-ko="기관총">Machine gun</th><th scope="col" data-ko="활">Bow</th><th scope="col" data-ko="근접 무기">Melee</th><th scope="col" data-ko="이펙트 갤러리">Effect gallery</th></tr></thead><tbody>
+<tr><td data-ko="HD 햅틱">HD haptics</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
+<tr><td data-ko="적응형 트리거">Adaptive trigger</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><span class="dash" aria-label="No">—</span></td></tr>
+<tr><td data-ko="컨트롤러 스피커">Controller speaker</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><span class="dash" aria-label="No">—</span></td><td><span class="dash" aria-label="No">—</span></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
+<tr><td data-ko="왼손 / 오른손 구분">Left / right hand</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
+<tr><td data-ko="블루투스 (일반 진동)">Works on Bluetooth (rumble)</td><td class="pro"><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td><td><svg class="i" aria-label="Yes"><use href="#i-check"/></svg></td></tr>
+        </tbody></table>
+      </div>
+    </div>
+  </div>
+  <div class="pr-faq">
+    <div class="wrap reveal">
+      <h2 class="h2" data-ko="자주 묻는 &lt;span class=&quot;serif&quot;&gt;질문&lt;/span&gt;">Common <span class="serif">questions</span></h2>
+      <div class="faq">
+        <div class="qa open">
+          <button type="button" aria-expanded="true"><span data-ko="어떤 브라우저에서 되나요?">Which browsers work?</span><span class="ic"><svg class="i plus"><use href="#i-plus"/></svg><svg class="i minus"><use href="#i-minus"/></svg></span></button>
+          <div class="ans"><p data-ko="데스크톱 Chrome과 Edge입니다. 컨트롤러와 직접 통신하는 WebHID를 지원하기 때문입니다. Safari와 Firefox는 지원하지 않습니다.">Desktop Chrome and Edge. They support WebHID, which talks to the controller directly. Safari and Firefox do not.</p></div>
+        </div>
+        <div class="qa">
+          <button type="button" aria-expanded="false"><span data-ko="왜 블루투스가 아니라 USB인가요?">Why USB and not Bluetooth?</span><span class="ic"><svg class="i plus"><use href="#i-plus"/></svg><svg class="i minus"><use href="#i-minus"/></svg></span></button>
+          <div class="ans"><p data-ko="HD 햅틱은 오디오로 전달되는데, 브라우저는 USB로 연결했을 때만 컨트롤러 오디오에 접근할 수 있습니다. 블루투스에서도 모두 동작하지만 일반 진동으로 바뀝니다.">HD haptics travel as audio, and browsers can only reach the controller audio over USB. On Bluetooth everything still works, with classic rumble instead.</p></div>
+        </div>
+        <div class="qa">
+          <button type="button" aria-expanded="false"><span data-ko="왜 마이크 권한을 묻나요?">Why does it ask for the microphone?</span><span class="ic"><svg class="i plus"><use href="#i-plus"/></svg><svg class="i minus"><use href="#i-minus"/></svg></span></button>
+          <div class="ans"><p data-ko="Chrome은 미디어 권한을 받기 전까지 오디오 장치 이름을 숨깁니다. DualSense 출력 장치를 찾으려고 한 번 묻고 바로 닫습니다. 녹음은 하지 않습니다.">Chrome hides audio device names until a media permission is granted. We ask once to find the DualSense output and close the stream immediately. Nothing is recorded.</p></div>
+        </div>
+        <div class="qa">
+          <button type="button" aria-expanded="false"><span data-ko="DualSense가 꼭 있어야 하나요?">Do I need a DualSense?</span><span class="ic"><svg class="i plus"><use href="#i-plus"/></svg><svg class="i minus"><use href="#i-minus"/></svg></span></button>
+          <div class="ans"><p data-ko="그게 핵심이지만 필수는 아닙니다. 일반 게임패드는 일반 진동으로, 키보드로도 플레이할 수 있습니다.">It is the point, but not required. Any standard gamepad gets rumble, and the keyboard works too.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="page p-resources" data-page="guide">
+  <div class="rs-hero">
+    <p class="eyebrow" data-ko="가이드">Guide</p>
+    <h1 class="rs-title" data-ko="무엇을 &lt;span class=&quot;serif&quot;&gt;도와드릴까요?&lt;/span&gt;">How can we <span class="serif">help?</span></h1>
+    <p class="rs-lede" data-ko="설정, 문제 해결, 그리고 손이 느끼는 원리.">Setup, troubleshooting and how the feel is made.</p>
+    <label class="rs-search" aria-label="Search the guide">
+      <svg class="i"><use href="#i-search"/></svg>
+      <input type="search" class="rs-input" placeholder="Search the guide, e.g. &ldquo;Steam&rdquo;" autocomplete="off" spellcheck="false">
+      <button type="button" class="rs-clear" aria-label="Clear search"><svg class="i"><use href="#i-x"/></svg></button>
+      <span class="rs-kbd" aria-hidden="true">Ctrl K</span>
+    </label>
+    <div class="rs-pop">
+      <span data-ko="자주 찾는 것:">Popular:</span>
+      <button type="button" class="rs-chip">Steam</button>
+      <button type="button" class="rs-chip">Bluetooth</button>
+      <button type="button" class="rs-chip">Trigger</button>
+      <button type="button" class="rs-chip">Silent</button>
+    </div>
+  </div>
+  <div class="rs-cats">
+    <div class="wrap">
+      <div class="rs-grid reveal">
+        <button type="button" class="rs-cat" data-k="start connect usb webhid setup" data-art="start">
+          <span class="rs-ico"><svg class="i"><use href="#i-activity"/></svg></span>
+          <h3 data-ko="시작하기">Getting started</h3>
+          <p data-ko="연결하고, HD 햅틱 켜고, 플레이.">Connect, turn on HD haptics, play.</p>
+          <span class="rs-count"><span data-ko="읽기">Read</span> <svg class="i"><use href="#i-arrow-right"/></svg></span>
+        </button>
+        <button type="button" class="rs-cat" data-k="haptics audio channels voice coil" data-art="hd">
+          <span class="rs-ico"><svg class="i"><use href="#i-vibrate"/></svg></span>
+          <h3 data-ko="HD 햅틱">HD haptics</h3>
+          <p data-ko="보이스코일이 무엇이고 어떻게 움직이는지.">What the voice coils are and how we drive them.</p>
+          <span class="rs-count"><span data-ko="읽기">Read</span> <svg class="i"><use href="#i-arrow-right"/></svg></span>
+        </button>
+        <button type="button" class="rs-cat" data-k="trigger r2 resistance" data-art="triggers">
+          <span class="rs-ico"><svg class="i"><use href="#i-crosshair"/></svg></span>
+          <h3 data-ko="적응형 트리거">Adaptive triggers</h3>
+          <p data-ko="딸깍, 경사, 진동, 벽 — 네 가지 모드.">Click, ramp, buzz and wall — the four modes.</p>
+          <span class="rs-count"><span data-ko="읽기">Read</span> <svg class="i"><use href="#i-arrow-right"/></svg></span>
+        </button>
+        <button type="button" class="rs-cat" data-k="steam input ds4windows driver" data-art="steam">
+          <span class="rs-ico"><svg class="i"><use href="#i-shield-check"/></svg></span>
+          <h3 data-ko="Steam과 드라이버">Steam & drivers</h3>
+          <p data-ko="다른 프로그램이 컨트롤러를 먼저 잡을 때.">When something grabs the controller first.</p>
+          <span class="rs-count"><span data-ko="읽기">Read</span> <svg class="i"><use href="#i-arrow-right"/></svg></span>
+        </button>
+        <button type="button" class="rs-cat" data-k="bluetooth wireless rumble" data-art="bt">
+          <span class="rs-ico"><svg class="i"><use href="#i-radio"/></svg></span>
+          <h3 data-ko="블루투스 vs USB">Bluetooth vs USB</h3>
+          <p data-ko="케이블 없이 무엇이 달라지는지.">What changes without a cable.</p>
+          <span class="rs-count"><span data-ko="읽기">Read</span> <svg class="i"><use href="#i-arrow-right"/></svg></span>
+        </button>
+        <button type="button" class="rs-cat" data-k="privacy microphone data cookies ads" data-art="privacy">
+          <span class="rs-ico"><svg class="i"><use href="#i-lock"/></svg></span>
+          <h3 data-ko="개인정보">Privacy</h3>
+          <p data-ko="마이크 권한, 저장, 광고.">Microphone prompt, storage, ads.</p>
+          <span class="rs-count"><span data-ko="읽기">Read</span> <svg class="i"><use href="#i-arrow-right"/></svg></span>
+        </button>
+      </div>
+      <div class="rs-empty rs-empty-cats"><svg class="i"><use href="#i-search"/></svg><div>No categories match <b class="rs-q"></b></div></div>
+    </div>
+  </div>
+  <div class="rs-at">
+    <div class="wrap">
+      <div class="rs-cols">
+        <div class="rs-arts reveal">
+          <p class="rs-k" data-ko="많이 읽은 글">MOST READ</p>
+          <h2 class="rs-h2" data-ko="인기 &lt;span class=&quot;serif&quot;&gt;글&lt;/span&gt;">Popular <span class="serif">articles</span></h2>
+          <ul class="rs-list">
+<li><button type="button" class="rs-art" data-k="start hd haptics chrome" data-art="hd"><span class="n">01</span><span class="t" data-ko="Chrome에서 HD 햅틱 켜기">Turn on HD haptics in Chrome</span><svg class="i"><use href="#i-arrow-up-right"/></svg></button></li>
+<li><button type="button" class="rs-art" data-k="silent windows steam troubleshoot" data-art="silent"><span class="n">02</span><span class="t" data-ko="Windows에서 진동이 안 날 때 확인할 것">Haptics are silent on Windows: what to check</span><svg class="i"><use href="#i-arrow-up-right"/></svg></button></li>
+<li><button type="button" class="rs-art" data-k="steam input" data-art="steam"><span class="n">03</span><span class="t" data-ko="Steam Input이 컨트롤러를 막을 때">Steam Input is blocking the controller</span><svg class="i"><use href="#i-arrow-up-right"/></svg></button></li>
+<li><button type="button" class="rs-art" data-k="trigger modes" data-art="triggers"><span class="n">04</span><span class="t" data-ko="트리거 모드 네 가지의 원리">How the four trigger modes work</span><svg class="i"><use href="#i-arrow-up-right"/></svg></button></li>
+<li><button type="button" class="rs-art" data-k="auto haptics audio" data-art="auto"><span class="n">05</span><span class="t" data-ko="소리를 촉감으로 바꾸는 법">Turning sound into touch</span><svg class="i"><use href="#i-arrow-up-right"/></svg></button></li>
+<li><button type="button" class="rs-art" data-k="bluetooth" data-art="bt"><span class="n">06</span><span class="t" data-ko="블루투스로 플레이하기">Playing over Bluetooth</span><svg class="i"><use href="#i-arrow-up-right"/></svg></button></li>
+          </ul>
+          <div class="rs-empty rs-empty-arts"><svg class="i"><use href="#i-search"/></svg><div>No articles match <b class="rs-q"></b>. Try &ldquo;Steam&rdquo; or &ldquo;trigger&rdquo;.</div></div>
+        </div>
+        <div class="rs-tuts reveal">
+          <p class="rs-k" data-ko="따라 하기">GUIDED</p>
+          <h2 class="rs-h2" data-ko="튜토리얼">Tutorials</h2>
+          <div class="rs-tlist">
+            <button type="button" class="rs-tut" data-k="beginner start" data-art="start">
+              <span class="rs-lvl b">BEGINNER</span>
+              <h4 data-ko="처음 5분">Your first five minutes</h4>
+              <span class="rs-meta"><svg class="i"><use href="#i-clock"/></svg>4 min</span>
+            </button>
+            <button type="button" class="rs-tut" data-k="surfaces footsteps" data-art="surfaces">
+              <span class="rs-lvl m">INTERMEDIATE</span>
+              <h4 data-ko="바닥 8종의 차이 느끼기">Feel the difference between eight surfaces</h4>
+              <span class="rs-meta"><svg class="i"><use href="#i-clock"/></svg>6 min</span>
+            </button>
+            <button type="button" class="rs-tut" data-k="advanced report bit" data-art="bit">
+              <span class="rs-lvl a">ADVANCED</span>
+              <h4 data-ko="숨은 비트 하나가 진동을 막는 이유">Why one hidden bit silences the coils</h4>
+              <span class="rs-meta"><svg class="i"><use href="#i-clock"/></svg>8 min</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rs-sup">
+    <div class="wrap">
+      <div class="rs-card reveal">
+        <div class="rs-team"><span class="rs-ico"><svg class="i"><use href="#i-github"/></svg></span></div>
+        <div class="rs-copy">
+          <h3 data-ko="버그를 &lt;span class=&quot;serif&quot;&gt;찾으셨나요?&lt;/span&gt;">Found a <span class="serif">bug?</span></h3>
+          <p data-ko="컨트롤러 종류, 연결 방식, 브라우저를 적어 이슈로 남겨 주세요.">Open an issue with your controller, connection and browser.</p>
+        </div>
+        <a class="btn btn-primary" href="https://github.com/andonghun/fun-haptic/issues" target="_blank" rel="noopener"><span data-ko="이슈 남기기">Open an issue</span> <svg class="i"><use href="#i-arrow-right"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="page p-changelog" data-page="changelog">
+  <div class="cl-hero">
+    <p class="eyebrow" data-ko="업데이트">Changelog</p>
+    <h1 class="cl-title" data-ko="Pixel Haptics의 &lt;span class=&quot;serif&quot;&gt;새 소식&lt;/span&gt;.">What&rsquo;s <span class="serif">new</span> in Pixel Haptics.</h1>
+    <p class="cl-lede" data-ko="새 체험, 개선, 수정.">New experiences, improvements and fixes.</p>
+    <div class="cl-actions">
+      <a class="btn btn-ghost" href="https://github.com/andonghun/fun-haptic" target="_blank" rel="noopener"><svg class="i"><use href="#i-github"/></svg><span data-ko="GitHub에서 보기">Watch on GitHub</span></a>
+    </div>
+  </div>
+  <div class="cl-timeline">
+    <div class="cl-list">
+      <article class="rel active reveal">
+        <div class="rel-meta"><span class="rel-ver">v0.5</span><span class="rel-date">Nov 2, 2026</span></div>
+        <div class="rel-rail"><span class="rel-dot"></span></div>
+        <div class="rel-entry"><div class="rel-card">
+          <div class="rel-tags"><span class="tag mint">New</span></div>
+          <h2 class="rel-title" data-ko="플레이그라운드">Playground</h2>
+          <p class="rel-desc" data-ko="바닥 8종과 허수아비 6개가 있는 횡스크롤 들판. 걷고, 달리고, 대시하고, 점프하고, 무기 7종으로 싸웁니다.">A side-scrolling field with eight surfaces and six straw dummies. Walk, run, dash and jump, and fight with seven weapons.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="잔상과 함께 손을 가로지르는 대시">Dash with after-images and a sweep across your hands</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="달리다 멈추면 미끄러짐">Skid to a halt from a run</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="동작마다 정해진 히트스톱과 화면 흔들림">Hit-stop and screen shake taken from each move</span></li></ul>
+        </div></div>
+      </article>
+      <article class="rel reveal">
+        <div class="rel-meta"><span class="rel-ver">v0.4</span><span class="rel-date">Nov 2, 2026</span></div>
+        <div class="rel-rail"><span class="rel-dot"></span></div>
+        <div class="rel-entry"><div class="rel-card">
+          <div class="rel-tags"><span class="tag mint">New</span><span class="tag sky">Graphics</span></div>
+          <h2 class="rel-title" data-ko="pixelfx 픽셀아트">Pixel art with pixelfx</h2>
+          <p class="rel-desc" data-ko="오픈소스 pixelfx 라이브러리로 픽셀아트 전환. 어떤 이펙트든 촉감으로 바꾸는 자동 햅틱 추가.">Rebuilt in pixel art on the open-source pixelfx library, with auto-haptics that turn any effect into touch.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="갤러리에 이펙트 244개">244 effects in the gallery</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="캐릭터 동작의 타격 타이밍 그대로 반영">Character moves keep their scripted hits</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="메뉴에 실시간 미리보기">Live previews on the menu</span></li></ul>
+        </div></div>
+      </article>
+      <article class="rel reveal">
+        <div class="rel-meta"><span class="rel-ver">v0.3</span><span class="rel-date">Oct 18, 2026</span></div>
+        <div class="rel-rail"><span class="rel-dot"></span></div>
+        <div class="rel-entry"><div class="rel-card">
+          <div class="rel-tags"><span class="tag sky">Improved</span></div>
+          <h2 class="rel-title" data-ko="1인칭 체험실">First-person rooms</h2>
+          <p class="rel-desc" data-ko="비, 권총, 소총, 활, 발소리, 굴리기를 1인칭으로. 자이로 조준 지원.">Rain, pistol, rifle, bow, footsteps and tilt in first person, with gyro aiming.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="손 안의 소리는 컨트롤러 스피커로">In-hand sounds moved to the controller speaker</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="비 체험에 우산과 천둥">Umbrella and thunder in the rain room</span></li></ul>
+        </div></div>
+      </article>
+      <article class="rel reveal">
+        <div class="rel-meta"><span class="rel-ver">v0.2</span><span class="rel-date">Oct 17, 2026</span></div>
+        <div class="rel-rail"><span class="rel-dot"></span></div>
+        <div class="rel-entry"><div class="rel-card">
+          <div class="rel-tags"><span class="tag amber">Experiment</span></div>
+          <h2 class="rel-title" data-ko="작은 모험">A small adventure</h2>
+          <p class="rel-desc" data-ko="기능별 스테이지 7개가 있는 허브 섬. 사람들은 스테이지를 깨는 것보다 직접 느끼고 싶어한다는 걸 배웠습니다.">A hub island with seven stages built around each feature. It taught us that people want to feel things, not clear stages.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="검 막기와 패리">Sword guard and parry</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="도끼 던지기와 회수">Axe throw and recall</span></li></ul>
+        </div></div>
+      </article>
+      <article class="rel older" hidden>
+        <div class="rel-meta"><span class="rel-ver">v0.1</span><span class="rel-date">Oct 17, 2026</span></div>
+        <div class="rel-rail"><span class="rel-dot"></span></div>
+        <div class="rel-entry"><div class="rel-card">
+          <div class="rel-tags"><span class="tag red">Fix</span></div>
+          <h2 class="rel-title" data-ko="드디어 보이스코일까지 닿은 진동">Haptics finally reach the coils</h2>
+          <p class="rel-desc" data-ko="구형 진동 호환 비트가 켜져 있으면 컨트롤러가 오디오 햅틱을 무시했습니다. 이제 HD 햅틱이 꺼져 있을 때만 구형 진동을 보냅니다.">The controller ignored audio haptics while a classic-rumble compatibility bit was set. We now send rumble only when HD haptics are off.</p>
+          <ul class="bullets"><li><svg class="i"><use href="#i-check"/></svg><span data-ko="3·4번 채널이 왼손·오른손 코일">Channels 3 and 4 drive the left and right coil</span></li><li><svg class="i"><use href="#i-check"/></svg><span data-ko="WebHID로 적응형 트리거">Adaptive triggers over WebHID</span></li></ul>
+        </div></div>
+      </article>
+    </div>
+    <button class="btn btn-ghost cl-more" type="button" data-ko="이전 기록 더 보기">Load older releases</button>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="#home"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="8" height="8" fill="#6ee7c8"/><rect x="13" y="3" width="8" height="8" fill="#edf1f0" opacity=".9"/><rect x="3" y="13" width="8" height="8" fill="#edf1f0" opacity=".5"/><rect x="13" y="13" width="8" height="8" fill="#6ee7c8" opacity=".55"/></svg>Pixel Haptics</a>
+        <p data-ko="DualSense를 손끝으로 느끼는 무료 브라우저 놀이터.">A free browser playground for feeling your DualSense.</p>
+        <div class="socials">
+          <a href="https://github.com/andonghun/fun-haptic" target="_blank" rel="noopener" aria-label="GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col"><h4 data-ko="플레이">PLAY</h4><a href="play/" data-ko="플레이그라운드">Playground</a><a href="#experiences" data-ko="체험">Experiences</a><a href="#changelog" data-ko="업데이트">Changelog</a></div>
+        <div class="footer-col"><h4 data-ko="가이드">GUIDE</h4><a href="#guide" data-ko="시작하기">Getting started</a><a href="#guide" data-ko="문제 해결">Troubleshooting</a><a href="#experiences" data-ko="자주 묻는 질문">FAQ</a></div>
+        <div class="footer-col"><h4 data-ko="크레딧">CREDITS</h4><a href="https://github.com/patch-gg/pixelfx" target="_blank" rel="noopener">pixelfx (MIT)</a><a href="https://kenney.nl" target="_blank" rel="noopener">Kenney (CC0)</a></div>
+        <div class="footer-col"><h4 data-ko="법적 고지">LEGAL</h4><a href="#guide" data-art-link="privacy" data-ko="개인정보처리방침">Privacy</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><span data-ko="DualSense는 Sony Interactive Entertainment의 상표입니다. 이 사이트는 Sony와 관련이 없습니다.">DualSense is a trademark of Sony Interactive Entertainment. This site is not affiliated with Sony.</span><span class="status" data-ko="무료 · 오픈소스">Free · open source</span></div>
+    <div class="wordmark" aria-hidden="true">Pixel Haptics</div>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"><svg class="i"><use href="#i-circle-check"/></svg><span></span></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Article"><div class="scrim"></div><div class="panel"><button class="close" type="button" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button><p class="eyebrow" id="drEyebrow">Guide</p><div id="drBody"></div></div></div>
+
 <script>
-(function(){ var l; try{ l = localStorage.getItem('hq_lang'); }catch(e){} if(!l) l = /^ko/i.test(navigator.language || '') ? 'ko' : 'en';
-  function set(v){ l = v; document.documentElement.lang = v; document.getElementById('lang').textContent = v === 'ko' ? 'English' : '한국어'; try{ localStorage.setItem('hq_lang', v); }catch(e){} }
-  set(l); document.getElementById('lang').onclick = function(){ set(l === 'ko' ? 'en' : 'ko'); }; })();
+(function(){
+  var PAGES=['home','experiences','guide','changelog'];
+  var io=('IntersectionObserver' in window)?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12}):null;
+  function show(id){
+    if(PAGES.indexOf(id)<0) id='home';
+    document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('on',p.dataset.page===id)});
+    document.querySelectorAll('[data-nav]').forEach(function(a){a.classList.toggle('active',a.dataset.nav===id)});
+    document.getElementById('mobile-menu').classList.remove('open');
+    window.scrollTo(0,0);
+    var page=document.querySelector('.page[data-page="'+id+'"]');
+    page.querySelectorAll('.reveal:not(.in)').forEach(function(el){io?io.observe(el):el.classList.add('in')});
+    document.dispatchEvent(new CustomEvent('pageshow:'+id));
+  }
+  function route(){var h=(location.hash||'#home').slice(1).split('/')[0];show(h)}
+  // Hash navigation works inside a sandboxed iframe; intercept clicks so a missing hashchange never blocks routing.
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="#"]');
+    if(a){var h=a.getAttribute('href').slice(1);if(PAGES.indexOf(h)>=0){e.preventDefault();try{history.pushState(null,'','#'+h)}catch(_){}show(h)}}
+    var t=e.target.closest('[data-toast]');
+    if(t){e.preventDefault();toast(t.getAttribute('data-toast'))}
+  });
+  window.addEventListener('popstate',route);
+  window.addEventListener('hashchange',route);
+  var burger=document.querySelector('.nav-burger');
+  burger.addEventListener('click',function(){var m=document.getElementById('mobile-menu');var o=m.classList.toggle('open');burger.setAttribute('aria-expanded',o)});
+  var tt;window.toast=function(msg){var el=document.getElementById('toast');el.querySelector('span').textContent=msg;el.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){el.classList.remove('show')},2200)};
+  window.__show=show;
+  document.addEventListener('DOMContentLoaded',route);
+  if(document.readyState!=='loading') route();
+})();
+</script>
+<script>
+(function(){
+  var root=document.querySelector('.p-resources'); if(!root) return;
+  var box=root.querySelector('.rs-search'), input=root.querySelector('.rs-input');
+  var chips=[].slice.call(root.querySelectorAll('.rs-chip'));
+  var cats=[].slice.call(root.querySelectorAll('.rs-cat'));
+  var arts=[].slice.call(root.querySelectorAll('.rs-art'));
+  var tuts=[].slice.call(root.querySelectorAll('.rs-tut'));
+  function hay(el){return (el.textContent+' '+(el.dataset.k||'')).toLowerCase()}
+  function match(el,terms){var h=hay(el);return terms.every(function(t){return h.indexOf(t)>=0})}
+  function filter(){
+    var q=input.value.trim(), terms=q.toLowerCase().split(/\s+/).filter(Boolean);
+    box.classList.toggle('has',!!q);
+    var nc=0,na=0;
+    cats.forEach(function(c){var ok=!terms.length||match(c,terms);c.classList.toggle('rs-hide',!ok);if(ok)nc++});
+    arts.forEach(function(a){var ok=!terms.length||match(a,terms);a.parentNode.classList.toggle('rs-hide',!ok);if(ok)na++});
+    tuts.forEach(function(t){t.classList.toggle('rs-hide',!!terms.length&&!match(t,terms))});
+    root.querySelectorAll('.rs-q').forEach(function(b){b.textContent='“'+q+'”'});
+    root.querySelector('.rs-empty-cats').classList.toggle('show',!nc);
+    root.querySelector('.rs-grid').classList.toggle('rs-hide',!nc);
+    root.querySelector('.rs-empty-arts').classList.toggle('show',!na);
+    chips.forEach(function(c){c.classList.toggle('on',c.textContent.toLowerCase()===q.toLowerCase())});
+  }
+  input.addEventListener('input',filter);
+  input.addEventListener('keydown',function(e){if(e.key==='Escape'){input.value='';filter();input.blur()}});
+  root.querySelector('.rs-clear').addEventListener('click',function(e){e.preventDefault();input.value='';filter();input.focus()});
+  chips.forEach(function(c){c.addEventListener('click',function(){input.value=c.classList.contains('on')?'':c.textContent;filter();input.focus()})});
+  document.addEventListener('keydown',function(e){
+    if(!root.classList.contains('on')) return;
+    var typing=/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'');
+    if(((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K'))||(e.key==='/'&&!typing)){
+      e.preventDefault();input.focus();input.select();
+      box.scrollIntoView({block:'center',behavior:'smooth'});
+    }
+  });
+  
+  
+  
+  
+})();
+(function(){
+  var root=document.querySelector('.p-changelog');
+  if(!root) return;
+  
+  
+
+  // load older
+  var more=root.querySelector('.cl-more');
+  more.addEventListener('click',function(){
+    var older=root.querySelectorAll('.rel.older[hidden]');
+    older.forEach(function(r,i){
+      r.hidden=false;
+      setTimeout(function(){r.classList.add('shown')},60+i*140);
+    });
+    more.disabled=true;
+    more.innerHTML='<svg class="i"><use href="#i-circle-check"/></svg>You’re all caught up';
+    toast(document.documentElement.lang==='ko'?'이전 기록 '+older.length+'개':'Loaded '+older.length+' older releases');
+    setTimeout(update,120);
+  });
+
+  // active dot nearest viewport center
+  var ticking=false;
+  function update(){
+    ticking=false;
+    if(!root.classList.contains('on')) return;
+    var mid=window.innerHeight/2,best=null,bd=1e9;
+    root.querySelectorAll('.rel:not([hidden])').forEach(function(r){
+      var c=r.querySelector('.rel-card').getBoundingClientRect();
+      var d=(mid>=c.top&&mid<=c.bottom)?0:Math.min(Math.abs(c.top-mid),Math.abs(c.bottom-mid));
+      if(d<bd){bd=d;best=r}
+    });
+    root.querySelectorAll('.rel').forEach(function(r){r.classList.toggle('active',r===best)});
+  }
+  window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(update)}},{passive:true});
+  window.addEventListener('resize',update);
+  document.addEventListener('pageshow:changelog',function(){setTimeout(update,50)});
+})();
+</script>
+<script>
+(function(){
+  var $=function(s,c){return (c||document).querySelector(s)}, $$=function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- language: Korean browsers get Korean, everyone else English; the nav button switches for this visit ---- */
+  var EN={};
+  $$('[data-ko]').forEach(function(el,i){el.dataset.i=i;EN[i]=el.innerHTML});
+  function setLang(l){
+    document.documentElement.lang=l;
+    $$('[data-ko]').forEach(function(el){el.innerHTML=l==='ko'?el.dataset.ko:EN[el.dataset.i]});
+    $('#langBtn').textContent=l==='ko'?'English':'한국어';
+    var inp=$('.rs-input'); if(inp) inp.placeholder=l==='ko'?'가이드 검색, 예: “Steam”':'Search the guide, e.g. “Steam”';
+    document.title=l==='ko'?'Pixel Haptics — 브라우저에서 DualSense를 느껴보세요':'Pixel Haptics — feel your DualSense in the browser';
+    finding(cur); trigMode(curMode);
+  }
+  $('#langBtn').addEventListener('click',function(){setLang(document.documentElement.lang==='ko'?'en':'ko')});
+  var L=function(en,ko){return document.documentElement.lang==='ko'?ko:en};
+
+  /* ---- home: experience tabs drive the live preview ---- */
+  var FIND={
+    playground:['Footsteps that change with the floor, a sweep across your palms on a dash, and a hit-stop thud when a weapon lands.','바닥에 따라 바뀌는 발소리, 대시할 때 손바닥을 쓸고 가는 느낌, 무기가 맞는 순간 멈칫하는 쿵.'],
+    rain:['Hundreds of tiny taps spread over both palms; an umbrella turns them into a low drumming.','양손에 흩어지는 수백 개의 작은 톡톡. 우산을 펴면 낮게 두드리는 소리로 바뀝니다.'],
+    pistol:['A clean click in R2, then a hard kick, then the impact arriving in your right hand.','R2의 깔끔한 딸깍, 강한 반동, 그리고 오른손에 도착하는 명중감.'],
+    rifle:['The trigger buzzes under your finger twelve times a second until it overheats and locks.','과열돼서 잠길 때까지 손가락 밑에서 초당 12번 떨리는 트리거.'],
+    bow:['Resistance that builds with the draw, a tremble at full pull, then the string ringing left and right.','당길수록 쌓이는 저항, 끝까지 당기면 떨림, 그리고 좌우로 울리는 시위.'],
+    melee:['A swish that crosses your hands before contact, then a hit whose weight matches the swing.','맞기 전에 손을 가로지르는 바람 소리, 그리고 휘두른 무게만큼의 타격.'],
+    gallery:['Whatever lights up the screen lights up your hands: bursts hit, glows hum, colour sets the pitch.','화면에서 빛나는 것이 손에서도 빛납니다. 터지면 치고, 빛나면 웅웅거리고, 색이 음높이를 정합니다.']
+  };
+  var NAMES={playground:['Playground','플레이그라운드'],rain:['Rain','비'],pistol:['Pistol','권총'],rifle:['Machine gun','기관총'],bow:['Bow','활'],melee:['Melee','근접 무기'],gallery:['Effect gallery','이펙트 갤러리']};
+  var cur='playground';
+  function finding(id){var f=FIND[id];$('[data-k=finding]').textContent=L(f[0],f[1]);$('[data-k=title]').textContent=L(NAMES[id][0],NAMES[id][1])}
+  $$('.p-home .task').forEach(function(b){b.addEventListener('click',function(){
+    cur=b.dataset.x; $$('.p-home .task').forEach(function(t){var on=t===b;t.classList.toggle('on',on);t.setAttribute('aria-selected',on)});
+    var sw=$$('.p-home .swap'); sw.forEach(function(s){s.classList.add('fade')});
+    setTimeout(function(){finding(cur);sw.forEach(function(s){s.classList.remove('fade')})},180);
+    if(window.__pv) window.__pv.main(cur);
+  })});
+
+  /* ---- trigger modes: draw the resistance curve ---- */
+  var MODES={click:['Resistance rises, then breaks at the click — the pistol.','저항이 올라가다 딸깍 끊깁니다 — 권총.'],ramp:['Heavier the further you pull — the bow.','당길수록 무거워집니다 — 활.'],buzz:['The trigger vibrates under your finger — the machine gun.','손가락 밑에서 트리거가 떨립니다 — 기관총.'],wall:['A hard stop partway down — an overheated barrel.','중간에서 딱 막힙니다 — 과열된 총열.']};
+  var curMode='click';
+  function trigMode(m){
+    curMode=m; var d='';
+    for(var i=0;i<=60;i++){var x=i*5,u=i/60,y;
+      if(m==='click') y=u<0.55?80-u*110:(u<0.6?80-0.55*110+(u-0.55)*900:12);
+      else if(m==='ramp') y=80-Math.pow(u,1.6)*72;
+      else if(m==='buzz') y=u<0.25?80:46+Math.sin(u*120)*14;
+      else y=u<0.5?80-u*20:6;
+      y=Math.max(4,Math.min(82,y)); d+=(i?'L':'M')+x+' '+y.toFixed(1)}
+    $('#trigPath').setAttribute('d',d); $('#trigNote').textContent=L(MODES[m][0],MODES[m][1]);
+    $$('#trigModes .role').forEach(function(b){b.classList.toggle('on',b.dataset.mode===m)});
+  }
+  $$('#trigModes .role').forEach(function(b){b.addEventListener('click',function(){trigMode(b.dataset.mode)})});
+
+  /* ---- surfaces ---- */
+  var SURF=[['Grass','풀','#4f9a3c'],['Wood','나무','#9a6232'],['Steel','철판','#7d889a'],['Stone','돌','#76737f'],['Gravel','자갈','#8c7d6a'],['Snow','눈','#c9d6e6'],['Water','물','#3a78b0'],['Sand','모래','#d4b070']];
+  var st=$('#surfTiles');
+  SURF.forEach(function(s,i){var b=document.createElement('button');b.type='button';b.className='surf'+(i?'':' on');b.style.background='linear-gradient(180deg,rgba(7,9,10,0),rgba(7,9,10,.65)),'+s[2];b.innerHTML='<span data-ko="'+s[1]+'">'+s[0]+'</span>';
+    b.addEventListener('click',function(){$$('.surf').forEach(function(x){x.classList.toggle('on',x===b)});toast(L('Try it in the Playground: walk onto '+s[0].toLowerCase(),'플레이그라운드에서 '+s[1]+' 위를 걸어 보세요'))});st.appendChild(b)});
+  $$('.surf [data-ko]').forEach(function(el){el.dataset.i='s'+el.textContent;EN['s'+el.textContent]=el.innerHTML});
+
+  /* ---- weapon chips, rain timeline, proof numbers ---- */
+  $$('.p-home .model').forEach(function(b){b.addEventListener('click',function(){$$('.p-home .model').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')})})});
+  var runs=$$('.p-home .sched .run'),si=0,stimer=null;
+  function tick(){runs.forEach(function(r,j){r.classList.toggle('lit',j<si);r.classList.toggle('now',j===si-1)});si++;if(si>runs.length+2)si=0}
+  function fmt(n){return String(n)}
+  function countUp(el,to){if(reduce||!to){el.textContent=fmt(to);return}var t0=null;function step(t){if(!t0)t0=t;var k=Math.min(1,(t-t0)/1400),e=1-Math.pow(1-k,3);el.textContent=Math.round(to*e);if(k<1)requestAnimationFrame(step)}requestAnimationFrame(step)}
+  var proofDone=false;
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;
+    if(e.target.classList.contains('proof')&&!proofDone){proofDone=true;$$('.proof [data-count]').forEach(function(b){countUp(b,+b.dataset.count)})}
+    if(e.target.classList.contains('sched')&&!stimer){tick();stimer=setInterval(tick,900)}})},{threshold:.4});
+    io.observe($('.p-home .proof'));io.observe($('.p-home .sched'))}
+
+  /* ---- FAQ accordion (experiences page) ---- */
+  var qas=$$('.p-xp .qa');
+  function setOpen(qa,open){var ans=$('.ans',qa),btn=$('button',qa);qa.classList.toggle('open',open);btn.setAttribute('aria-expanded',open);
+    if(open){ans.style.height=ans.scrollHeight+'px'}else{ans.style.height=ans.scrollHeight+'px';ans.offsetHeight;ans.style.height='0px'}}
+  qas.forEach(function(qa){var ans=$('.ans',qa);ans.addEventListener('transitionend',function(){if(qa.classList.contains('open'))ans.style.height='auto'});
+    if(qa.classList.contains('open'))ans.style.height='auto';
+    $('button',qa).addEventListener('click',function(){var w=!qa.classList.contains('open');qas.forEach(function(o){if(o!==qa&&o.classList.contains('open'))setOpen(o,false)});setOpen(qa,w)})});
+
+  /* ---- guide articles in a side drawer ---- */
+  var ART={
+    start:['Getting started','시작하기',
+      '<ol><li>Use desktop Chrome or Edge.</li><li>Connect the DualSense with a USB cable.</li><li>Open <b>Play</b> and press <b>Connect DualSense</b>; pick the controller in the browser prompt.</li><li>Press <b>Turn on HD haptics</b> and choose the DualSense audio output. Allow the microphone prompt once (nothing is recorded).</li><li>Run the two-hand test: you should feel a buzz travel from left to right.</li></ol><p>No DualSense? Any standard gamepad works with rumble, and the keyboard and mouse work too.</p>',
+      '<ol><li>데스크톱 Chrome 또는 Edge를 쓰세요.</li><li>DualSense를 USB 케이블로 연결합니다.</li><li><b>플레이</b>를 열고 <b>DualSense 연결</b>을 누른 뒤 브라우저 창에서 컨트롤러를 고릅니다.</li><li><b>HD 햅틱 켜기</b>를 누르고 DualSense 오디오 출력을 고릅니다. 마이크 권한은 한 번만 허용하면 됩니다(녹음하지 않음).</li><li>양손 테스트로 왼쪽에서 오른쪽으로 흐르는 진동을 확인하세요.</li></ol><p>DualSense가 없어도 일반 게임패드는 일반 진동으로, 키보드와 마우스로도 플레이할 수 있습니다.</p>'],
+    hd:['What are HD haptics?','HD 햅틱이란?',
+      '<p>Older pads spin weighted motors: they can only buzz harder or softer. The DualSense has a <b>voice coil actuator</b> in each grip, closer to a small speaker than a motor. It plays a waveform, so it can draw a short tap, a gritty crunch or a deep thud.</p><p>Over USB the controller appears as a 4-channel audio device. Channels 1 and 2 are the speaker and headphones; <b>channels 3 and 4 drive the left and right coil</b>. Pixel Haptics sends waveforms straight to those two channels from the browser.</p>',
+      '<p>예전 패드는 추가 달린 모터를 돌려서 세게, 약하게만 떨 수 있었습니다. DualSense는 손잡이마다 <b>보이스코일 액추에이터</b>가 있어서 모터보다 작은 스피커에 가깝습니다. 파형을 재생하기 때문에 짧은 톡, 거친 자글자글, 묵직한 쿵을 그릴 수 있습니다.</p><p>USB로 연결하면 컨트롤러가 4채널 오디오 장치로 잡힙니다. 1·2번은 스피커와 헤드폰, <b>3·4번이 왼손·오른손 코일</b>입니다. Pixel Haptics는 브라우저에서 이 두 채널로 파형을 직접 보냅니다.</p>'],
+    triggers:['The four trigger modes','트리거 모드 네 가지',
+      '<ul><li><b>Click</b> — resistance builds and breaks at a point, like a real trigger sear. Used by the pistol.</li><li><b>Ramp</b> — resistance grows with the pull. Used by the bow.</li><li><b>Buzz</b> — the trigger motor vibrates at a set frequency. Used by the machine gun.</li><li><b>Wall</b> — a firm stop partway down. Used when the gun overheats.</li></ul><p>The browser sends these settings to the controller over WebHID in an output report, next to the lightbar colour.</p>',
+      '<ul><li><b>딸깍</b> — 저항이 쌓이다가 한 지점에서 끊깁니다. 권총.</li><li><b>경사</b> — 당길수록 저항이 커집니다. 활.</li><li><b>진동</b> — 트리거 모터가 정해진 주파수로 떱니다. 기관총.</li><li><b>벽</b> — 중간에서 단단히 막힙니다. 총이 과열됐을 때.</li></ul><p>브라우저는 이 설정을 라이트바 색과 함께 WebHID 출력 리포트로 컨트롤러에 보냅니다.</p>'],
+    steam:['Steam Input is blocking the controller','Steam Input이 컨트롤러를 막을 때',
+      '<p>Steam can take over a DualSense to translate it for other games. While it does, the browser may connect but the haptics stay silent.</p><ol><li>Quit Steam completely (tray icon, Exit), or</li><li>In Steam, open Settings, Controller, and turn off PlayStation controller support for the desktop.</li><li>Also close DS4Windows or similar tools.</li><li>Unplug, plug back in, and reconnect on the Play page.</li></ol>',
+      '<p>Steam은 다른 게임용으로 DualSense를 가로채 변환할 수 있습니다. 그동안에는 브라우저가 연결돼도 진동이 나지 않을 수 있습니다.</p><ol><li>Steam을 완전히 종료하거나(트레이 아이콘, 종료)</li><li>Steam 설정, 컨트롤러에서 데스크톱용 PlayStation 컨트롤러 지원을 끕니다.</li><li>DS4Windows 같은 도구도 끄세요.</li><li>케이블을 뺐다 다시 꽂고 플레이 페이지에서 다시 연결합니다.</li></ol>'],
+    bt:['Playing over Bluetooth','블루투스로 플레이하기',
+      '<p>Everything works over Bluetooth except the voice-coil audio: browsers cannot reach the controller audio wirelessly. Pixel Haptics falls back to the classic rumble motors, still split left and right, and keeps the adaptive triggers and lightbar.</p>',
+      '<p>블루투스에서도 보이스코일 오디오를 빼고 모두 동작합니다. 브라우저가 무선으로는 컨트롤러 오디오에 접근할 수 없기 때문입니다. 이때는 좌우로 나뉜 일반 진동 모터로 대신하고, 적응형 트리거와 라이트바는 그대로 씁니다.</p>'],
+    privacy:['Privacy','개인정보처리방침',
+      '<p>Pixel Haptics runs entirely in your browser. We do not run accounts or collect personal data.</p><ul><li><b>Microphone prompt</b>: Chrome hides audio device names until a media permission is granted. We request it once to find the DualSense output and stop the stream immediately. Nothing is recorded or sent.</li><li><b>Saved settings</b>: vibration strength, volume and language are stored only in your browser\'s local storage.</li><li><b>Ads</b>: this site may show ads from Google AdSense, which can use cookies to serve and measure ads. You can manage personalised ads at google.com/settings/ads.</li></ul>',
+      '<p>Pixel Haptics는 전부 브라우저 안에서 동작합니다. 계정을 운영하지 않고 개인정보를 수집하지 않습니다.</p><ul><li><b>마이크 권한</b>: Chrome은 미디어 권한을 받기 전까지 오디오 장치 이름을 숨깁니다. DualSense 출력 장치를 찾으려고 한 번 요청하고 바로 스트림을 닫습니다. 녹음하거나 전송하지 않습니다.</li><li><b>저장되는 설정</b>: 진동 세기, 볼륨, 언어는 이 브라우저의 로컬 저장소에만 저장됩니다.</li><li><b>광고</b>: 이 사이트는 Google AdSense 광고를 보여줄 수 있으며, 광고 제공과 측정에 쿠키를 쓸 수 있습니다. 맞춤 광고는 google.com/settings/ads 에서 관리할 수 있습니다.</li></ul>'],
+    silent:['Haptics are silent on Windows','Windows에서 진동이 안 날 때',
+      '<ol><li>Is it on USB? Bluetooth only gives classic rumble.</li><li>Quit Steam or turn off Steam Input (see the Steam article).</li><li>In Windows Sound settings, open the DualSense output, then Properties, Advanced, and pick a <b>4-channel</b> format.</li><li>Make sure that device\'s volume is not muted.</li><li>Reconnect and run the two-hand test again.</li></ol>',
+      '<ol><li>USB로 연결했나요? 블루투스는 일반 진동만 됩니다.</li><li>Steam을 끄거나 Steam Input을 끄세요(Steam 글 참고).</li><li>Windows 소리 설정에서 DualSense 출력, 속성, 고급으로 가서 <b>4채널</b> 형식을 고릅니다.</li><li>그 장치의 볼륨이 음소거가 아닌지 확인합니다.</li><li>다시 연결하고 양손 테스트를 해 보세요.</li></ol>'],
+    auto:['Turning sound and light into touch','소리와 빛을 촉감으로 바꾸기',
+      '<p>For footsteps we take a real recording, follow its loudness, and replay that shape on a low carrier tone with a sharp click at the start: the step keeps its character but becomes something a palm can feel.</p><p>For the 244 pixel effects we measure the light each frame: a sudden rise becomes a hit, a steady glow becomes a hum, its left-right position picks the hand, and warm colours play lower than cold ones.</p>',
+      '<p>발소리는 실제 녹음의 크기 변화를 따라가서, 그 모양을 낮은 기본음 위에 다시 그리고 시작에 날카로운 클릭을 더합니다. 발소리의 개성은 남기고 손바닥이 느낄 수 있게 바꾸는 겁니다.</p><p>픽셀 이펙트 244개는 매 프레임 빛을 잽니다. 갑자기 밝아지면 타격, 계속 빛나면 허밍, 좌우 위치로 손을 고르고, 따뜻한 색은 낮게, 차가운 색은 높게 울립니다.</p>'],
+    surfaces:['Feel the difference between surfaces','바닥의 차이 느끼기',
+      '<ol><li>Open the Playground and walk slowly onto the wooden deck. Notice the hollow knock in each hand.</li><li>Keep walking onto the brick: it is shorter and harder.</li><li>Push the stick all the way to run; steps come faster and heavier. Release suddenly to feel the skid.</li><li>Jump from a run and land on each floor.</li></ol>',
+      '<ol><li>플레이그라운드에서 나무 데크 위를 천천히 걸어 보세요. 손마다 속이 빈 두드림이 옵니다.</li><li>벽돌로 넘어가면 더 짧고 단단합니다.</li><li>스틱을 끝까지 밀어 달리면 발걸음이 빠르고 무거워집니다. 갑자기 놓으면 미끄러지는 감촉이 옵니다.</li><li>달리다 점프해서 각 바닥에 착지해 보세요.</li></ol>'],
+    bit:['Why one hidden bit silences the coils','숨은 비트 하나가 진동을 막는 이유',
+      '<p>The controller\'s output report has flags that say which fields are valid. Two of them enable the classic rumble compatibility mode. While they are set, the coils follow the rumble values and ignore the audio channels completely — so HD haptics seem dead even though the audio stream is running.</p><p>Pixel Haptics only sets those flags when HD haptics are off, and sends rumble values of zero otherwise.</p>',
+      '<p>컨트롤러 출력 리포트에는 어떤 값이 유효한지 알려주는 플래그가 있습니다. 그중 두 개가 구형 진동 호환 모드를 켭니다. 이 플래그가 켜져 있으면 코일이 구형 진동 값만 따르고 오디오 채널을 완전히 무시합니다. 그래서 오디오는 나가는데 HD 햅틱이 죽은 것처럼 보입니다.</p><p>Pixel Haptics는 HD 햅틱이 꺼져 있을 때만 이 플래그를 켭니다.</p>']
+  };
+  var dr=$('#drawer');
+  function openArt(k){var a=ART[k];if(!a)return;$('#drBody').innerHTML='<h2>'+L(a[0],a[1])+'</h2>'+L(a[2],a[3]);$('#drEyebrow').textContent=L('Guide','가이드');dr.classList.add('open');$('.close',dr).focus()}
+  function closeArt(){dr.classList.remove('open')}
+  $$('[data-art]').forEach(function(b){b.addEventListener('click',function(){openArt(b.dataset.art)})});
+  $$('[data-art-link]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();window.__show&&window.__show('guide');setTimeout(function(){openArt(a.dataset.artLink)},200)})});
+  $('.close',dr).addEventListener('click',closeArt); $('.scrim',dr).addEventListener('click',closeArt);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArt()});
+
+  setLang(/^ko/i.test(navigator.language||'')?'ko':'en');
+  finding('playground'); trigMode('click');
+})();
+
+</script>
+<script type="module">
+// Live pixel previews on the landing page, drawn by the same engine as the game.
+import { createFrame, clearFrame, composite, backdrop, createFx, createAct } from './vendor/pixelfx/src/core/index.js';
+import { effects } from './vendor/pixelfx/src/fx/index.js';
+
+const P = {
+  playground:{act:'moves/sword-combo', x:40}, rain:{fx:'weather/rain', y:170, bg:'sky'}, pistol:{act:'moves/pistol-shots', x:50},
+  rifle:{fx:'projectiles/muzzle-smg', x:140}, bow:{act:'moves/arrow-shot', x:16}, melee:{act:'melee/hammer-smash', x:110},
+  gallery:{cycle:['fire/campfire', 'explosions/big-explosion', 'lightning/plasma-ball', 'ice/frost-nova', 'water/fountain', 'holy/heal', 'pickups/chest-open', 'weather/aurora']}
+};
+class View {
+  constructor(cv, id){ this.cv = cv; this.c = cv.getContext('2d'); this.f = createFrame(320, 180); this.img = this.c.createImageData(320, 180); this.k = 0; this.set(id); }
+  set(id){ this.id = id; this.p = P[id]; this.cur = null; }
+  load(){
+    const p = this.p, id = p.cycle ? p.cycle[this.k++ % p.cycle.length] : (p.act || p.fx), mod = effects[id], m = mod.meta;
+    const y = p.y ?? (p.cycle ? 140 : 150); this.bg = backdrop(p.bg || (p.cycle ? (m.bg || 'dark') : 'ground'), 320, 180, y);
+    const x = p.x ?? (p.cycle ? 160 : m.origin[0] + (320 - m.size[0])/2);
+    if(p.act){ this.cur = createAct(mod, {x, y}); const k = mod.act.poses; this.end = Math.max(m.duration, k[k.length - 1][0]) - Math.min(0, k[0][0]) + 0.6; this.act = true; }
+    else { this.cur = createFx(mod, {x, y}); this.end = p.cycle ? 3.2 : (m.loop ? Infinity : m.duration + 0.6); this.act = false; }
+    this.age = 0;
+  }
+  tick(dt){
+    if(!this.cur || this.age >= this.end) this.load();
+    this.age += dt; this.cur.update(dt); clearFrame(this.f);
+    if(this.act) this.cur.draw(this.f); else { this.cur.draw(this.f, 'back'); this.cur.draw(this.f, 'front'); }
+    composite(this.f, this.img.data, this.bg); this.c.putImageData(this.img, 0, 0);
+  }
+}
+const main = new View(document.getElementById('pvMain'), 'playground');
+const cards = [...document.querySelectorAll('canvas[data-pv]')].map(cv => new View(cv, cv.dataset.pv));
+const visible = new Set([main]);
+const io = new IntersectionObserver(es => es.forEach(e => { const v = e.target === main.cv ? main : cards.find(c => c.cv === e.target); if(e.isIntersecting) visible.add(v); else visible.delete(v); }));
+io.observe(main.cv); cards.forEach(c => io.observe(c.cv));
+window.__pv = { main: id => main.set(id) };
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let last = performance.now();
+function frame(now){
+  const dt = Math.min(0.05, (now - last)/1000); last = now;
+  if(!document.hidden) for(const v of visible) if(v.cv.offsetParent) v.tick(still ? 0 : dt);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
 </script>
 </body>
 </html>
