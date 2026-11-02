@@ -8,10 +8,11 @@ addEventListener('keydown', e => { keys.add(e.code); if(['Space', 'ArrowUp', 'Ar
 addEventListener('keyup', e => keys.delete(e.code));
 addEventListener('blur', () => keys.clear());
 addEventListener('mousemove', e => { if(mouse.locked){ mouse.dx += e.movementX; mouse.dy += e.movementY; } });
-addEventListener('mousedown', e => { if(e.button === 0) mouse.l = true; if(e.button === 2) mouse.r = true; });
+// mouse buttons count only on the game canvas (so clicking UI never fires a weapon)
+addEventListener('mousedown', e => { if(!(mouse.locked || (e.target && e.target.id === 'px'))) return; if(e.button === 0) mouse.l = true; if(e.button === 2) mouse.r = true; });
 addEventListener('mouseup', e => { if(e.button === 0) mouse.l = false; if(e.button === 2) mouse.r = false; });
 document.addEventListener('pointerlockchange', () => { mouse.locked = !!document.pointerLockElement; });
-addEventListener('contextmenu', e => { if(mouse.locked) e.preventDefault(); });
+addEventListener('contextmenu', e => { if(mouse.locked || (e.target && e.target.id === 'px')) e.preventDefault(); });
 
 const DEAD = 0.14, dz = v => Math.abs(v) < DEAD ? 0 : (v - Math.sign(v)*DEAD)/(1 - DEAD);
 const NAMES = ['jump', 'attack', 'dodge', 'interact', 'l1', 'r1', 'pause', 'up', 'down', 'left', 'right', 'back', 'touch', 'wprev', 'wnext'];
@@ -58,11 +59,11 @@ export const IN = {
       if(kx || ky){ const n = Math.hypot(kx, ky); mx = kx/n; my = ky/n; }
       const ax = (K('ArrowRight') ? 1 : 0) - (K('ArrowLeft') ? 1 : 0), ay = (K('ArrowDown') ? 1 : 0) - (K('ArrowUp') ? 1 : 0);
       if(ax) lx = ax; if(ay) ly = ay*0.7;
-      b.jump = b.jump || K('Space'); b.dodge = b.dodge || K('ShiftLeft') || K('ShiftRight'); b.attack = b.attack || K('KeyJ') || (mouse.locked && mouse.l);
+      b.jump = b.jump || K('Space'); b.dodge = b.dodge || K('ShiftLeft') || K('ShiftRight'); b.attack = b.attack || K('KeyJ') || mouse.l;
       b.interact = b.interact || K('KeyE'); b.l1 = b.l1 || K('KeyQ'); b.r1 = b.r1 || K('KeyR'); b.pause = b.pause || K('Escape') || K('KeyP');
       b.up = b.up || K('ArrowUp') || K('KeyW'); b.down = b.down || K('ArrowDown') || K('KeyS'); b.left = b.left || K('ArrowLeft') || K('KeyA'); b.right = b.right || K('ArrowRight') || K('KeyD');
       b.back = b.back || K('Backspace'); b.ok = K('Enter') || K('Space'); b.wprev = b.wprev || K('KeyZ'); b.wnext = b.wnext || K('KeyC') || K('Tab');
-      if((mouse.locked && mouse.r) || K('KeyG')) l2 = 1; if(K('KeyF') || (mouse.locked && mouse.l)) r2 = 1;
+      if(K('KeyG')) l2 = 1; if(K('KeyF') || mouse.r) r2 = 1;
       if(this.source === 'kb' && K('KeyE')){ this.touchRub = 0.8; this.touchDown = true; }
     }
     this.mouseDX = mouse.dx*this.sens; this.mouseDY = mouse.dy*this.sens*(this.invertY ? -1 : 1); mouse.dx = mouse.dy = 0;

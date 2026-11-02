@@ -12,21 +12,21 @@ import { Feel, Light, SURF_RGB } from '../feel.js';
 import { UI } from '../ui.js';
 import { t } from '../i18n.js';
 
-const W = 320, HH = 180, FLOOR = 148, WORLD = 1400;
-const ZONES = [[0, 'grass'], [220, 'wood'], [380, 'metal'], [520, 'stone'], [720, 'gravel'], [860, 'snow'], [1020, 'water'], [1120, 'sand']];
+const W = 320, HH = 180, FLOOR = 148, WORLD = 900;
+const ZONES = [[0, 'wood'], [450, 'stone']];          // a wooden deck, then a brick yard (brick uses the stone footsteps)
 const zoneAt = x => { let k = ZONES[0][1]; for(const [x0, key] of ZONES) if(x >= x0) k = key; return k; };
-const DUMMIES = [300, 470, 640, 800, 960, 1250];
+const DUMMIES = [250, 390, 600, 760];
 const GRAV = 760, WALK = 62, RUN = 128, DASH = 330, JUMP = 250;
 
 // ---- weapons: melee ones play a pixelfx move (pose track + slash effect + scripted hits) -----------------------------
 const MELEE = {
-  sword:  {light:'melee/sword-slash', heavy:'melee/double-slash', weapon:'sword'},
-  hammer: {light:'melee/hammer-smash', heavy:'melee/heavy-cleave', weapon:'hammer'},
-  spear:  {light:'melee/thrust', heavy:'melee/spear-sweep', weapon:'spear'},
-  fists:  {light:'melee/uppercut', heavy:'melee/uppercut', weapon:null}
+  sword:  {combo:['melee/sword-slash', 'melee/double-slash', 'melee/spin-slash'], heavy:'melee/heavy-cleave', weapon:'sword', kind:'blade'},
+  hammer: {combo:['melee/hammer-smash', 'melee/heavy-cleave'], heavy:'moves/ground-pound', weapon:'hammer', kind:'blunt'},
+  spear:  {combo:['melee/thrust', 'melee/spear-sweep', 'melee/thrust'], heavy:'melee/spear-sweep', weapon:'spear', kind:'blade'},
+  fists:  {combo:['melee/uppercut', 'melee/uppercut'], heavy:'moves/earth-stomp', weapon:null, kind:'blunt'}
 };
 const LIST = ['fists', 'sword', 'hammer', 'spear', 'pistol', 'smg', 'bow'];
-const ICON = {fists:'👊', sword:'🗡️', hammer:'🔨', spear:'🔱', pistol:'🔫', smg:'💥', bow:'🏹'};
+
 const AIM = {...READY, weapon:'pistol', crouch:3, lean:2, fx:18, fy:-28, sa:0, bx:12, by:-25, ffx:11, fbx:-9};
 const KICK = {...AIM, lean:0, fx:16, fy:-33, sa:-0.45, by:-28};
 const BOW_REST = {...READY, weapon:'bow', sa:-0.4, fx:12, fy:-20, bx:6, by:-17};
@@ -37,7 +37,7 @@ const BOW_LOOSED = {...BOW_AIM, crouch:3, lean:2, fx:19, bx:-9, by:-32, nocked:f
 // ---- world backdrop: sky + far hills + surface strip, prebuilt once ------------------------------------------------
 const PAL = {
   grass:['#3d7a34', '#4f9a3c', '#6dbb4f', '#2c5a26'], wood:['#7a4a24', '#9a6232', '#b67a40', '#4a2c14'], metal:['#5a6476', '#7d889a', '#a8b2c2', '#3a404c'],
-  stone:['#5d5a66', '#76737f', '#8d8a96', '#43404c'], gravel:['#6f6355', '#8c7d6a', '#a89880', '#4c4238'], snow:['#c9d6e6', '#e4edf7', '#ffffff', '#9fb0c6'],
+  stone:['#7a3a2c', '#9a4a36', '#b8634a', '#4a2018'], gravel:['#6f6355', '#8c7d6a', '#a89880', '#4c4238'], snow:['#c9d6e6', '#e4edf7', '#ffffff', '#9fb0c6'],
   water:['#2a5a8a', '#3a78b0', '#6aa8dc', '#1c3c60'], sand:['#b8945a', '#d4b070', '#ecd096', '#8c6c3c']
 };
 function buildWorld(){
@@ -54,7 +54,7 @@ function buildWorld(){
         else if(gy === 0) col = c[2];
         else if(key === 'wood') col = (x % 16 === 0 || gy % 6 === 5) ? c[3] : (r < 3 ? c[2] : c[1]);
         else if(key === 'metal') col = (x % 20 === 0 || gy % 10 === 9) ? c[3] : ((x + gy) % 7 === 0 ? c[2] : c[1]);
-        else if(key === 'stone') col = ((gy - 1) % 6 === 5 || (x + ((gy/6 | 0) % 2)*8) % 16 === 0) ? c[3] : (r < 2 ? c[2] : c[1]);
+        else if(key === 'stone') col = (gy % 7 === 0 || (x + ((gy/7 | 0) % 2)*9) % 18 === 0) ? c[3] : (r < 2 ? c[2] : r > 13 ? c[0] : c[1]);
         else col = r < 2 ? c[2] : r < 5 ? c[0] : gy > 20 ? c[3] : c[1];
       }
       bg[y*WORLD + x] = col;
@@ -80,31 +80,40 @@ export function makePlayground(stage){
   function hitTarget(g, h, kind){
     g.hit({push:(h.push ?? 2)*P.face*(g.x > P.x ? 1 : -1)*Math.sign(P.face), straw:h.straw ?? 10, y:h.y ?? -26, flash:0.06});
     g.hits++; hits++;
-    const pan = panX(g.x), amp = clamp((h.amp ?? 1)*0.45 + (h.stop ?? 0)*4, 0.5, 1.5);
+    const pan = panX(g.x), amp = clamp((h.amp ?? 1)*0.55 + (h.stop ?? 0)*4 + (atk && atk.heavy ? 0.3 : 0), 0.7, 1.6);
+    kickTrigger(kind === 'bullet' ? 40 : 70, kind === 'bullet' ? 90 : 160);
     freeze = Math.max(freeze, h.stop ?? 0); shake = Math.max(shake, h.shake ?? 0.1); shakeA = h.amp ?? 1;
     H.pulse(420, Math.min(1.4, amp), 0.025, pan); H.pulse(46, amp, 0.12 + (h.stop ?? 0)*2, pan*0.7); if((h.stop ?? 0) >= 0.18) H.pulse(30, amp*0.8, 0.35, 0, 0.04);
     if(kind === 'blade'){ SND.play('metal', {gain:0.7, rate:rnd(0.75, 0.9), pan}); SND.noise({f:900, dur:0.08, gain:0.25, pan}); }
     else if(kind === 'blunt'){ SND.play('heavy', {gain:0.8, rate:0.8, pan}); SND.play('wood', {gain:0.8, rate:0.6, pan}); }
     else if(kind === 'arrow'){ SND.play('wood', {gain:0.9, rate:0.75, pan}); H.play(SND.hapOf('wood', 0), 0.8, 1.3, pan); }
-    else { SND.play('ehurt', {gain:0.5, rate:rnd(0.9, 1.2), pan}); SND.play('wood', {gain:0.4, rate:1.2, pan}); }
+    else { SND.play('wood', {gain:0.6, rate:rnd(1.0, 1.2), pan}); SND.noise({type:'lowpass', f:900, dur:0.08, gain:0.25, pan}); H.play(SND.hapOf('wood', 0), 1.1, 1.0, pan); }
     Light.flash([255, 230, 190], 90);
   }
 
   // ---- melee: start a pixelfx move at the hero ----
+  let comboI = 0, comboT = 0;
   function attack(heavy){
-    const m = MELEE[cur()], id = heavy ? m.heavy : m.light, mod = effects[id];
+    const m = MELEE[cur()]; if(!heavy && comboT <= 0) comboI = 0;
+    const id = heavy ? m.heavy : m.combo[comboI % m.combo.length], mod = effects[id] && effects[id].act ? effects[id] : effects[m.combo[0]];
+    comboI = heavy ? 0 : comboI + 1;
     const fx = PX.createFx(mod, {x:P.x, y:FLOOR + P.y, flip:P.face < 0});
-    const k = mod.act.poses; atk = {mod, fx, t:k[0][0], end:k[k.length - 1][0], hi:0, w:0, reach:mod.act.target.x + 18, x0:P.x, kind:cur() === 'hammer' ? 'blunt' : cur() === 'fists' ? 'blunt' : 'blade'};
+    const k = mod.act.poses, hs = mod.act.hits || [], lastHit = hs.length ? hs[hs.length - 1].t : 0;
+    // chained swings skip most of the wind-up so a combo flows
+    const t0 = comboI > 1 && !heavy ? Math.max(k[0][0], -0.12) : k[0][0];
+    atk = {mod, fx, t:t0, end:k[k.length - 1][0], hi:0, w:0, reach:((mod.act.target || {}).x ?? 60) + 18, x0:P.x, kind:m.kind, heavy, lastHit, queued:false, weapon:m.weapon};
+    if(t0 > k[0][0]) atk.fx.update(0);
     P.vx = 0;
   }
   function updateAttack(dt){
     const a = atk, prev = a.t; a.t += dt; if(a.t >= 0) a.fx.update(prev < 0 ? a.t : dt);
     const hs = a.mod.act.hits;
-    while(a.w < hs.length && hs[a.w].t - 0.2 <= a.t){ a.w++; for(let j = 0; j < 5; j++) H.pulse(80 + j*25, 0.15 + j*0.06, 0.04, (-0.6 + j*0.3)*P.face, j*0.035); SND.noise({f:500, fEnd:2600, q:1.2, dur:0.2, att:0.12, gain:0.16}); }
+    while(a.w < hs.length && hs[a.w].t - 0.2 <= a.t){ a.w++; for(let j = 0; j < 6; j++) H.pulse(90 + j*30, 0.35 + j*0.09, 0.04, (-0.8 + j*0.32)*P.face, j*0.03); SND.noise({f:500, fEnd:2600, q:1.2, dur:0.2, att:0.12, gain:0.22}); }
     while(a.hi < hs.length && hs[a.hi].t <= a.t){ const h = hs[a.hi++]; let any = false;
       for(const g of targets){ const d = (g.x - P.x)*P.face; if(d > -6 && d < a.reach){ hitTarget(g, h, a.kind); any = true; } }
-      if(!any){ H.noise({f:260, dur:0.1, gain:0.2}); } }
-    if(a.t >= a.end){ const q = poseAt(a.mod.act.poses, a.end); P.x += (q.x ?? 0)*P.face; atk = null; }
+      if(!any){ H.pulse(140, 0.45, 0.05, 0.3*P.face); H.noise({f:260, dur:0.1, gain:0.3}); } }
+    if(a.queued && a.t >= a.lastHit + 0.1){ const q = poseAt(a.mod.act.poses, a.t); P.x += clamp(q.x ?? 0, -6, 12)*P.face; atk = null; comboT = 0.5; attack(false); return; }
+    if(a.t >= a.end){ const q = poseAt(a.mod.act.poses, a.end); P.x += clamp(q.x ?? 0, -6, 12)*P.face; atk = null; comboT = 0.45; }
   }
 
   // ---- guns / bow ----
@@ -115,7 +124,8 @@ export function makePlayground(stage){
     const g = nearest(P.face, 300);
     if(kindSmg){ H.pulse(220, 0.85, 0.022, (rate*100 | 0) % 2 ? -0.4 : -0.1); H.pulse(70, 1.1, 0.06); SND.noise({type:'highpass', f:1500, dur:0.04, gain:0.6}); SND.noise({type:'lowpass', f:1100, dur:0.15, gain:0.45}); SND.tone({f:130, fEnd:45, dur:0.12, gain:0.35}); }
     else { H.pulse(330, 1.4, 0.03); H.pulse(48, 1.6, 0.26); H.pulse(130, 1.0, 0.1); SND.noise({type:'highpass', f:1500, dur:0.05, gain:0.8}); SND.noise({type:'lowpass', f:800, dur:0.3, gain:0.7}); SND.tone({f:110, fEnd:40, dur:0.22, gain:0.55}); SND.noise({type:'bandpass', f:420, q:0.4, dur:1.0, att:0.02, gain:0.12, t:0.03}); Light.flash([255, 210, 140], 70); }
-    setTimeout(() => { SND.tone({pad:true, f:rnd(3100, 3700), fEnd:2600, dur:0.1, gain:0.14, type:'triangle'}); }, 280);
+    if(!kindSmg || Math.random() < 0.3) setTimeout(() => { SND.noise({pad:true, type:'bandpass', f:rnd(4200, 5200), q:6, dur:0.025, gain:0.12}); setTimeout(() => SND.noise({pad:true, type:'bandpass', f:rnd(4200, 5200), q:6, dur:0.02, gain:0.06}), 90); }, 300);
+    kickTrigger(kindSmg ? 30 : 80, kindSmg ? 50 : 120);
     if(g){ const d = Math.abs(g.x - P.x), delay = d/2400*1000;
       setTimeout(() => { stage.fx(effects['impacts/hit-spark'], {x:g.x - 8*P.face, y:FLOOR, height:28, flip:P.face < 0, seed:(Math.random()*99) | 0}); hitTarget(g, {push:kindSmg ? 0.8 : 2, straw:kindSmg ? 3 : 10, amp:kindSmg ? 0.5 : 1, stop:kindSmg ? 0 : 0.04, y:-30}, 'bullet'); }, delay); }
   }
@@ -132,7 +142,7 @@ export function makePlayground(stage){
   // ---- hero pose ----
   function pose(dt){
     const w = cur(), sp = Math.abs(P.vx);
-    if(atk) return poseAt(atk.mod.act.poses, Math.max(atk.mod.act.poses[0][0], atk.t));
+    if(atk){ const q = {...poseAt(atk.mod.act.poses, Math.max(atk.mod.act.poses[0][0], atk.t))}; if(atk.weapon) q.weapon = atk.weapon; else { delete q.weapon; delete q.two; } return q; }
     if(w === 'bow'){ const k = bow.draw; return bow.loosedT > 0 ? BOW_LOOSED : k > 0.02 ? lerpPose(BOW_AIM, BOW_DRAWN, k) : BOW_REST; }
     if(w === 'pistol' || w === 'smg'){ const q = kick > 0.5 ? KICK : AIM; if(sp > 5 || !P.ground) return {...q, ...legs(sp)}; return q; }
     const wp = MELEE[w].weapon, base = wp ? {...READY, weapon:wp, sa:-0.85, fx:12, fy:-21} : {...READY};
@@ -196,7 +206,8 @@ export function makePlayground(stage){
       else if(sp <= 5) P.step = 12;
       if(P.dash > 0 && Math.random() < dt*30) H.noise({f:rnd(150, 260), dur:0.04, gain:0.3, pan:0});
       // weapons
-      if(atk) updateAttack(dt);
+      comboT -= dt;
+      if(atk){ if(live && IN.pressed('attack') && MELEE[w] && atk.t > atk.lastHit - 0.15) atk.queued = true; updateAttack(dt); }
       else if(live){
         if(MELEE[w]){ if(IN.pressed('attack')) attack(false); if(IN.r2 < 0.3) armed = true; if(armed && IN.r2 > 0.85){ armed = false; attack(true); } }
         else if(w === 'pistol'){ if(IN.r2 < 0.3) armed = true; if(armed && IN.r2 > 0.62){ armed = false; shoot(false); } if(IN.pressed('attack')) shoot(false); }
@@ -223,8 +234,8 @@ export function makePlayground(stage){
       if(rain){ rain.options.x = cam + 160; rainDrop += dt*40; while(rainDrop >= 1){ rainDrop--; H.pulse(rnd(260, 520), rnd(0.06, 0.18), rnd(0.012, 0.03), rnd(-1, 1)); } }
       this._q = pose(dt);
       this.camera(dt);
-      const key = zoneAt(P.x); if(key !== this._zone){ this._zone = key; UI.zone(t('surf_' + key), SURF_RGB[key]); Light.base = SURF_RGB[key].map(v => v*0.5); }
-      hud(`${ICON[w]} ${t('w_' + w)}`, t('surf_' + key), `${t('hits')} ${hits}`,
+      const key = zoneAt(P.x); if(key !== this._zone){ this._zone = key; UI.zone(t(key === 'stone' ? 'surf_brick' : 'surf_' + key), SURF_RGB[key]); Light.base = SURF_RGB[key].map(v => v*0.5); }
+      hud(t('w_' + w), t(key === 'stone' ? 'surf_brick' : 'surf_' + key), `${t('hits')} ${hits}`,
         `${t('ctl_move')} · ${UI.key('jump')} ${t('ctl_jump')} · ${UI.key('dodge')} ${t('pg_dash')} · ${UI.key('attack')}/<span class="key">R2</span> ${t('pg_attack')} · <span class="key">L1 R1</span> ${t('pg_weapon')} · ${UI.key('interact')} ${t('x_rain')}`);
     },
     camera(dt){
@@ -235,5 +246,7 @@ export function makePlayground(stage){
       cam = c;
     }
   };
-  function swap(){ if(gun){ gun.stop(); gun = null; } bow.draw = 0; bow.peak = 0; trig(); SND.play('swap', {gain:0.7, pad:true}); H.play(SND.hapOf('swap', 0), 1, 1.0); H.pulse(500, 0.7, 0.02); UI.toast(`${ICON[cur()]} ${t('w_' + cur())}`, 700); }
+  // a short buzz in the R2 trigger on impact (then back to the weapon's resistance)
+  function kickTrigger(freq, ms){ DS.out.trigR = TRG.vibration(0, 8, freq); clearTimeout(kickTrigger.t); kickTrigger.t = setTimeout(trig, ms); }
+  function swap(){ if(gun){ gun.stop(); gun = null; } bow.draw = 0; bow.peak = 0; trig(); SND.play('swap', {gain:0.7, pad:true}); H.play(SND.hapOf('swap', 0), 1, 1.0); H.pulse(500, 0.7, 0.02); UI.toast(t('w_' + cur()), 700); }
 }

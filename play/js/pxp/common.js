@@ -17,7 +17,7 @@ export const Sfx = {
     SND.tone({f:big ? 110 : 130, fEnd:40, dur:big ? 0.22 : 0.15, gain:big ? 0.55 : 0.4, pan});
     SND.noise({type:'bandpass', f:420, q:0.4, dur:big ? 1.1 : 0.7, att:0.02, gain:0.12, t:0.03});
   },
-  casing(){ later(260, () => { SND.tone({pad:true, f:rnd(3100, 3700), fEnd:2600, dur:0.1, gain:0.16, type:'triangle'}); later(110, () => SND.tone({pad:true, f:rnd(3300, 3900), dur:0.06, gain:0.07, type:'triangle'})); }); },
+  casing(){ later(300, () => { SND.noise({pad:true, type:'bandpass', f:rnd(4200, 5200), q:6, dur:0.025, gain:0.12}); later(90, () => SND.noise({pad:true, type:'bandpass', f:rnd(4200, 5200), q:6, dur:0.02, gain:0.06})); }); },
   click(){ SND.tone({pad:true, f:1800, dur:0.03, gain:0.12, type:'square'}); H.pulse(500, 0.6, 0.015); }
 };
 export function hud(title, sub, right, ctl){ $('hTitle').textContent = title; $('hSub').innerHTML = sub || ''; $('hRight').innerHTML = right || ''; $('hCtl').innerHTML = ctl || ''; }

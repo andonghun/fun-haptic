@@ -111,8 +111,8 @@ export class ActHaptic {
     H.pulse(420, Math.min(1.4, amp), 0.025, pan); H.pulse(48, amp, 0.12 + (h.stop ?? 0)*2.2, pan*0.6);
     if((h.stop ?? 0) > 0.1) H.pulse(32, amp*0.8, 0.35, 0, 0.05);
     const c = this.cat;
-    if(c === 'gun'){ SND.play('ehurt', {gain:0.5, rate:1.1, pan:pan*0.6}); }
+    if(c === 'gun'){ SND.play('wood', {gain:0.6, rate:1.1, pan:pan*0.6}); }
     else if(c === 'arrow'){ SND.play('wood', {gain:0.9, rate:0.75, pan:pan*0.6}); H.play(SND.hapOf('wood', 0), 0.8, 1.3, pan); }
-    else { SND.play('metal', {gain:0.6 + 0.3*Math.min(1, amp), rate:0.75 + Math.random()*0.15, pan:pan*0.6}); SND.play('ehurt', {gain:0.4, rate:0.9, pan:pan*0.6}); H.play(SND.hapOf('metal', 0), 0.8, 1.2*amp, pan); }
+    else { SND.play('metal', {gain:0.6 + 0.3*Math.min(1, amp), rate:0.75 + Math.random()*0.15, pan:pan*0.6}); H.play(SND.hapOf('metal', 0), 0.8, 1.2*amp, pan); }
   }
 }

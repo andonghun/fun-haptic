@@ -9,7 +9,7 @@ export function translate(root = document){ root.querySelectorAll('[data-t]').fo
 
 let current = null;
 export const UI = {
-  show(id){ document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); current = id; this.focusFirst(); $('foot').style.display = id === 'title' ? '' : 'none'; },
+  show(id){ document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); current = id; this.focusFirst(); $('foot').style.display = 'none'; },
   hide(){ document.querySelectorAll('.screen').forEach(s => s.classList.remove('on')); current = null; },
   get screen(){ return current; },
   items(){ const s = current && $(current); return s ? [...s.querySelectorAll('.btn, input[type=range]')].filter(e => !e.disabled && e.offsetParent !== null) : []; },
