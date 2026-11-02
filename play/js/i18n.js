@@ -1,18 +1,22 @@
 // ko / en strings. t('key', {var}) — {var} placeholders.
 const D = {
   ko: {
-    title: '햅틱 체험관', tagline: 'DualSense의 HD 햅틱과 적응형 트리거, 손끝으로 느껴보세요',
+    title: '픽셀 햅틱', tagline: 'DualSense의 HD 햅틱과 적응형 트리거, 손끝으로 느껴보세요',
     language: 'English', loading: '불러오는 중…', no_pad: '컨트롤러 없음', hd_on: 'HD 햅틱 켜짐', hd_off: 'HD 햅틱 꺼짐',
     tag_hd: 'HD 햅틱', tag_trg: '적응형 트리거', tag_spk: '컨트롤러 스피커', tag_gyro: '모션 센서',
-    x_rain: '비', x_rain_d: '손바닥에 떨어지는 빗방울. 우산을 펴면 빗소리와 감촉이 바뀌고, 천둥이 손을 가로질러 굴러갑니다.',
+    x_rain: '비', x_rain_d: '손바닥에 떨어지는 빗방울. 우산을 펴면 빗소리와 감촉이 바뀌고, 번개가 내리치기 전 손이 지글거립니다.',
     x_pistol: '권총', x_pistol_d: '방아쇠가 중간에서 "딸깍" 끊기며 발사. 묵직한 반동, 강철 표적이 울리는 손맛.',
-    x_rifle: '소총', x_rifle_d: '당기고 있는 동안 방아쇠 자체가 떨립니다. 너무 오래 쏘면 과열되어 방아쇠가 굳어요.',
+    x_rifle: '기관총', x_rifle_d: '당기고 있는 동안 방아쇠 자체가 떨립니다. 너무 오래 쏘면 과열되어 방아쇠가 굳어요.',
     x_bow: '활', x_bow_d: 'R2가 곧 활시위. 당길수록 무거워지고, 끝까지 당기면 팔이 떨리고, 놓으면 시위가 울립니다.',
     x_walk: '발소리', x_walk_d: '풀, 나무, 철판, 자갈, 눈, 돌, 모래, 물 — 왼발은 왼손, 오른발은 오른손으로 느껴지는 바닥.',
     x_tilt: '굴리기', x_tilt_d: '컨트롤러를 기울이면 쟁반 위 쇠구슬·나무공·고무공이 굴러갑니다. 위로 휙 던져 보세요.',
-    x_rain_tip: 'R2로 빗줄기를 세게, L2로 우산을 펴 보세요\n△ 천둥 · 왼쪽 스틱으로 웅덩이를 밟아 보세요', x_rain_int: '빗줄기', x_rain_r2: '빗줄기', x_rain_l2: '우산', x_thunder: '천둥',
-    x_pistol_tip: 'R2를 천천히 당겨 보세요 — 중간에 딸깍 끊기는 지점에서 발사됩니다\nL2 정조준 중엔 컨트롤러를 기울여 미세 조준', x_rifle_tip: 'R2를 끝까지 당기고 있으면 트리거가 함께 떨립니다\n오래 쏘면 과열 — 방아쇠가 굳어요',
-    x_bow_tip: 'R2를 천천히 당겼다가 놓으세요\n당기는 동안 컨트롤러를 기울이면 조준이 따라옵니다', x_draw: '당기기 / 놓기',
+    x_melee: '근접 무기', x_melee_d: '검, 망치, 대검, 창 — 휘두르기 전 칼바람이 손을 가로지르고, 맞는 순간 멈칫하는 손맛.',
+    x_melee_tip: '□ 또는 R2로 휘두르기 · ◀▶ 무기 바꾸기', x_perform: '휘두르기', x_choose: '무기 선택',
+    x_gallery: '이펙트 갤러리', x_gallery_d: '불, 폭발, 번개, 얼음, 마법 — 200개가 넘는 픽셀 이펙트를 전부 손으로 느껴보세요. 빛이 터지면 손도 터집니다.',
+    x_gallery_tip: '◀▶ 이펙트 · ▲▼ 카테고리 · ✕ 다시 보기', x_effect: '이펙트', x_category: '카테고리', x_replay: '다시',
+    x_rain_tip: 'R2로 빗줄기를 세게, L2로 우산을 펴 보세요\n△ 번개', x_rain_int: '빗줄기', x_rain_r2: '빗줄기', x_rain_l2: '우산', x_thunder: '천둥',
+    x_pistol_tip: 'R2를 천천히 당겨 보세요 — 중간에 딸깍 끊기는 지점에서 한 발씩 나갑니다', x_rifle_tip: 'R2를 끝까지 당기고 있으면 트리거가 함께 떨립니다\n오래 쏘면 과열 — 방아쇠가 굳어요',
+    x_bow_tip: 'R2를 천천히 끝까지 당겼다가 놓으세요', x_draw: '당기기 / 놓기',
     x_walk_tip: '왼쪽 스틱으로 걸어 보세요 — 바닥마다 소리와 손의 감촉이 다릅니다', x_run: '달리기',
     x_tilt_tip: '컨트롤러를 기울여 공을 굴려 보세요\n위로 휙 들어 올리면 공이 떠오릅니다', x_tilt_sub: '기울이기 · 휙 던지기', x_tilt_stick: '왼쪽 스틱으로 기울이기', x_recenter: '수평 다시 맞추기',
     hits: '명중', bulls: '정중앙', bullseye: '정중앙!', reload: '재장전', reloading: '재장전 중…', overheat: '과열!', menu: '메뉴',
@@ -34,21 +38,25 @@ const D = {
     webhid_missing: '이 브라우저는 WebHID를 지원하지 않아 DualSense를 직접 연결할 수 없습니다 (Chrome/Edge 데스크톱 권장).',
     pause: '일시정지', resume: '계속하기', to_menu: '체험 목록으로', haptic_level: '진동 세기', volume: '소리 크기', sens: '시점 감도', invert: '시점 상하 반전', gyro: '자이로 조준', snd_out: '컨트롤러 스피커 효과음',
     on: '켜짐', off: '꺼짐', touchpad: '터치패드',
-    footer_credits: '3D 모델: Kenney (CC0) · 효과음: Kenney (CC0)'
+    footer_credits: '픽셀 이펙트: pixelfx (MIT) · 효과음: Kenney (CC0)'
   },
   en: {
-    title: 'Haptic Lab', tagline: 'Feel DualSense HD haptics and adaptive triggers in your fingertips',
+    title: 'Pixel Haptics', tagline: 'Feel DualSense HD haptics and adaptive triggers in your fingertips',
     language: '한국어', loading: 'Loading…', no_pad: 'No controller', hd_on: 'HD haptics on', hd_off: 'HD haptics off',
     tag_hd: 'HD haptics', tag_trg: 'Adaptive trigger', tag_spk: 'Controller speaker', tag_gyro: 'Motion sensor',
     x_rain: 'Rain', x_rain_d: 'Raindrops tapping your palms. Open an umbrella and the sound and feel change; thunder rolls across your hands.',
     x_pistol: 'Pistol', x_pistol_d: 'The trigger breaks with a "click" halfway and fires. Heavy recoil, ringing steel targets.',
-    x_rifle: 'Rifle', x_rifle_d: 'The trigger itself vibrates while you hold it. Fire too long and it overheats — the trigger locks up.',
+    x_rifle: 'Machine gun', x_rifle_d: 'The trigger itself vibrates while you hold it. Fire too long and it overheats — the trigger locks up.',
     x_bow: 'Bow', x_bow_d: 'R2 is the bowstring. It gets heavier as you pull, your arms tremble at full draw, the string rings when you let go.',
     x_walk: 'Footsteps', x_walk_d: 'Grass, wood, steel, gravel, snow, stone, sand, water — left foot in your left hand, right foot in your right.',
     x_tilt: 'Tilt', x_tilt_d: 'Tilt the controller and a steel, wooden and rubber ball roll around a tray. Try tossing them up.',
-    x_rain_tip: 'Pull R2 to make it pour, hold L2 to open the umbrella\n△ thunder · walk through puddles with the left stick', x_rain_int: 'Rain', x_rain_r2: 'Rain', x_rain_l2: 'Umbrella', x_thunder: 'Thunder',
-    x_pistol_tip: 'Squeeze R2 slowly — it fires at the click halfway down\nWhile aiming with L2, tilt the controller to fine-aim', x_rifle_tip: 'Hold R2 all the way and the trigger shakes with every shot\nFire too long and it overheats — the trigger locks',
-    x_bow_tip: 'Pull R2 slowly, then let go\nTilt the controller while drawing to aim', x_draw: 'Draw / release',
+    x_melee: 'Melee', x_melee_d: 'Sword, hammer, cleaver, spear — the swing sweeps across your hands, the hit freezes in them.',
+    x_melee_tip: '□ or R2 to swing · ◀▶ change weapon', x_perform: 'Swing', x_choose: 'Weapon',
+    x_gallery: 'Effect gallery', x_gallery_d: 'Fire, explosions, lightning, ice, magic — feel all 200+ pixel effects. When the light bursts, so do your hands.',
+    x_gallery_tip: '◀▶ effect · ▲▼ category · ✕ replay', x_effect: 'Effect', x_category: 'Category', x_replay: 'Replay',
+    x_rain_tip: 'Pull R2 to make it pour, hold L2 to open the umbrella\n△ lightning', x_rain_int: 'Rain', x_rain_r2: 'Rain', x_rain_l2: 'Umbrella', x_thunder: 'Thunder',
+    x_pistol_tip: 'Squeeze R2 slowly — each shot breaks at the click halfway down', x_rifle_tip: 'Hold R2 all the way and the trigger shakes with every shot\nFire too long and it overheats — the trigger locks',
+    x_bow_tip: 'Pull R2 slowly all the way, then let go', x_draw: 'Draw / release',
     x_walk_tip: 'Walk with the left stick — every surface sounds and feels different', x_run: 'Run',
     x_tilt_tip: 'Tilt the controller to roll the balls\nFlick it upward to toss them', x_tilt_sub: 'Tilt · flick up to toss', x_tilt_stick: 'Left stick tilts', x_recenter: 'Re-level',
     hits: 'Hits', bulls: 'Bullseyes', bullseye: 'Bullseye!', reload: 'Reload', reloading: 'Reloading…', overheat: 'Overheat!', menu: 'Menu',
@@ -70,7 +78,7 @@ const D = {
     webhid_missing: 'This browser has no WebHID, so a DualSense cannot be connected directly (desktop Chrome/Edge recommended).',
     pause: 'Paused', resume: 'Resume', to_menu: 'Back to experiences', haptic_level: 'Vibration', volume: 'Volume', sens: 'Camera speed', invert: 'Invert camera Y', gyro: 'Gyro aim', snd_out: 'Controller speaker effects',
     on: 'On', off: 'Off', touchpad: 'Touchpad',
-    footer_credits: '3D models: Kenney (CC0) · Sound: Kenney (CC0)'
+    footer_credits: 'Pixel effects: pixelfx (MIT) · Sound: Kenney (CC0)'
   }
 };
 let lang = (() => { try{ const s = localStorage.getItem('hq_lang'); if(s) return s; }catch(e){} return /^ko/i.test(navigator.language || '') ? 'ko' : 'en'; })();

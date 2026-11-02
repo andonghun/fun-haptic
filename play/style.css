@@ -5,7 +5,9 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--fg);font:15px/1.5 var(--font);-webkit-font-smoothing:antialiased;user-select:none}
-#game canvas{position:fixed;inset:0;display:block;width:100%;height:100%}
+#px{position:fixed;inset:0;margin:auto;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;image-rendering:pixelated;image-rendering:crisp-edges;background:#000;display:none}
+#px.on{display:block}
+body{background:#07060c}
 .screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
 .screen.on{display:flex}
 .card{background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:var(--r);padding:28px 30px;max-width:620px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.45)}
@@ -28,13 +30,15 @@ small{font-size:13px}
   filter:drop-shadow(0 8px 30px rgba(95,140,255,.45));animation:float 4s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-8px)}}
 .tagline{color:#cfe0ff;margin:12px 0 28px;font-size:18px;text-align:center}
-#title{align-items:flex-start;overflow-y:auto}
+#title{align-items:flex-start;overflow-y:auto;background:radial-gradient(1000px 500px at 50% 0%,rgba(90,70,180,.25),transparent),#07060c}
 .menu-wrap{width:min(1100px,100%);margin:auto;padding:30px 0 60px;display:flex;flex-direction:column;align-items:center}
 .status-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center;margin-bottom:18px}
 .chip{font-size:13px;padding:6px 12px;border-radius:99px;background:rgba(255,255,255,.07);border:1px solid var(--line);color:var(--dim)}
 .chip.ok{color:var(--ok);border-color:rgba(70,224,160,.4)}
-.xp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;width:100%}
-.btn.xp{display:block;text-align:left;padding:18px 18px 16px;margin:0;border-radius:18px;min-height:150px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02))}
+.xp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;width:100%}
+.btn.xp{display:block;text-align:left;padding:0;margin:0;border-radius:14px;overflow:hidden;background:#15131d}
+.btn.xp .pv{display:block;width:100%;aspect-ratio:16/9;image-rendering:pixelated;image-rendering:crisp-edges;background:#000}
+.xp-body{padding:12px 14px 14px}
 .btn.xp .ic{font-size:38px;line-height:1}.btn.xp h3{margin:8px 0 4px;font-size:19px}.btn.xp p{margin:0 0 10px;font-weight:500;font-size:14px;color:#c9d5ec;line-height:1.45}
 .tags{display:flex;gap:6px;flex-wrap:wrap}.tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;background:rgba(95,180,255,.16);color:#9fd0ff}
 .tag.t2{background:rgba(255,180,84,.16);color:#ffcf8a}.tag.t3{background:rgba(180,140,255,.18);color:#d2bcff}.tag.t4{background:rgba(70,224,160,.16);color:#8ff0c4}
@@ -99,3 +103,5 @@ small{font-size:13px}
 .hud-boss{position:absolute;left:50%;top:18px;transform:translateX(-50%);width:min(520px,70vw);text-align:center;font-weight:800;text-shadow:0 2px 8px #000}
 .bbar{height:12px;border-radius:8px;background:rgba(0,0,0,.5);overflow:hidden;border:1px solid rgba(255,255,255,.3);margin-top:4px}.bbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ff5577,#ffb454);transition:width .2s}
 @media (max-width:640px){.card{padding:20px}.hud-ctl{display:none}}
+
+.logo{font-family:'Courier New',monospace;letter-spacing:.02em;text-shadow:4px 4px 0 rgba(0,0,0,.4)}

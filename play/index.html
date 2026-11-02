@@ -6,12 +6,11 @@
 <title>Haptic Quest — 햅틱 퀘스트</title>
 <meta name="description" content="DualSense HD 햅틱을 브라우저에서 체험하는 작은 3D 모험. A tiny 3D adventure you feel through DualSense HD haptics, right in your browser.">
 <link rel="stylesheet" href="style.css">
-<script type="importmap">{"imports":{"three":"../vendor/three/three.module.min.js","three/addons/":"../vendor/three/addons/"}}</script>
 <!-- AdSense: put the site-wide script here once approved, e.g.
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
 </head>
 <body>
-<div id="game"></div>
+<canvas id="px"></canvas>
 
 <section id="boot" class="screen on"><div class="dim" data-t="loading"></div></section>
 
@@ -52,12 +51,9 @@
     <div class="set">
       <span data-t="haptic_level"></span><input type="range" id="pHap" min="0" max="1.6" step="0.1">
       <span data-t="volume"></span><input type="range" id="pVol" min="0" max="1" step="0.05">
-      <span data-t="sens"></span><input type="range" id="pSens" min="0.4" max="2" step="0.1">
     </div>
     <button class="btn" id="pOut"></button>
-    <button class="btn" id="pInvert"></button>
     <button class="btn" id="pLang" data-t="language"></button>
-    <button class="btn" id="pGyro"></button>
     <button class="btn" id="pHub" data-t="to_menu"></button>
   </div>
 </section>
